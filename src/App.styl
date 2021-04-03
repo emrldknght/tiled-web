@@ -1,0 +1,120 @@
+
+$tileRoot = 'https://hydragames.neocities.org/assets/images/World_A2.png'
+$tileDim = 48px;
+
+.App
+  text-align center
+  font-weight 400
+  border .02em solid red
+  font-size 10px
+  .row
+    display flex
+    flex-direction row
+    background-color rgba(255,0,0,.1)
+  .col
+    display flex
+    flex-direction column
+    background-color rgba(0,255,0,.1)
+
+  .cell
+    outline .02em solid rgba(255,0,0,.4)
+    outline-offset -1px
+    // border-top 0
+    // border-left 0
+    box-sizing border-box
+
+    --dim $tileDim
+    width var(--dim)
+    height var(--dim)
+
+    &:hover
+      outline-color lime
+
+    &-map
+      background-image url($tileRoot)
+      background-position: calc(var(--ox) * var(--dim)) calc(var(--oy) * var(--dim));
+      background-color var(--bg-color)
+      &.grass
+        --bg-color: green;
+        --ox -1
+        --oy 0
+      &.water
+        --bg-color: blue;
+        --ox 0
+        --oy 8
+      &.forest
+        --ox 4
+        --oy 4
+
+
+  .tabs-selector
+    border .02em solid red
+    margin .2em
+    [data-tab]
+      cursor pointer
+      min-width 8em
+      &:not(:last-child)
+
+        border-right .02em solid red
+      &.active
+        font-weight bold
+      &:hover
+        background-color rgba(255,255,255,.2)
+  $zoom = 1
+  .map
+    transform: scale($zoom);
+  .tiler
+    transform: scale($zoom);
+    position relative
+    .content
+      background-color violet
+      display grid
+      grid-template-columns 1fr
+      grid-template-rows 1fr
+      grid-template-areas 'main'
+      .info-tooltip
+        position absolute
+        top 0
+        left 0
+        background-color pink
+      .layer
+        outline 1px dotted blue
+        grid-area main
+        &.grid-base
+          background-color rgba(255,255,255,.3)
+          .grid-cell
+            border .02em dotted darkviolet
+
+.App-logo
+  height 40vmin
+  pointer-events none
+
+
+@media (prefers-reduced-motion: no-preference)
+  .App-logo
+    animation App-logo-spin infinite 20s linear
+
+
+
+.App-header
+  background-color #282c34
+  min-height 100vh
+  display flex
+  flex-direction column
+  align-items center
+  justify-content center
+  font-size calc(10px + 2vmin)
+  color white
+
+
+.App-link
+  color #61dafb
+
+
+@keyframes App-logo-spin
+  from
+    transform rotate(0deg)
+  to
+    transform rotate(360deg)
+
+

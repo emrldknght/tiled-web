@@ -1,9 +1,12 @@
-import logo from './logo.svg';
+// import React, { useState, useEffect } from 'react';
 import './App.css';
+import {Editor} from "./Editor";
 
 function App() {
   return (
     <div className="App">
+      <Editor />
+      {/*
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -18,6 +21,7 @@ function App() {
           Learn React
         </a>
       </header>
+      */}
     </div>
   );
 }
