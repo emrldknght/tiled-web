@@ -3,20 +3,30 @@ import {Tabs} from "./components/Tabs";
 import {fetchMapFile} from "./lib/fetchMapFile";
 import {TabsSelector} from "./components/TabsSelector";
 import {MapComponent} from "./components/MapComponent";
+import {TilerComponent} from "./components/TilerComponent";
+
+
+const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
 export function Editor() {
   const [mapData, setMapData] = useState([]);
+  const [tileUrl, setTileUrl] = useState('');
+  const [tileDim, setTileDim] = useState('');
+
   const [tab, setTab] = useState(Tabs.tiler)
+  const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   useEffect(() => {
     async function init() {
       const md = await fetchMapFile();
-      console.log('md', md);
-      if(md && md.mapData) {
-        // console.log('setting map data');
-        setMapData(md.mapData)
+      // console.log('md', md);
+      if(md) {
+        console.log('setting map data');
+        if(md.mapData) setMapData(md.mapData);
+        if(md.tileUrl) setTileUrl(md.tileUrl);
+        if(md.tileDim) setTileDim(md.tileDim);
       } else {
-        console.warn('mapData not defined');
+        console.warn('data error');
       }
     }
     init();
@@ -42,24 +52,19 @@ export function Editor() {
         { (tab === Tabs.mapEditor) &&
         <div className="col">
           <b>Map Editor</b>
-          <MapComponent data={mapData}/>
+          <MapComponent
+            mapData={mapData}
+            tileUrl={tileUrl}
+            tileDim={tileDim}
+          />
         </div>
         }
         { (tab === Tabs.tiler) &&
         <div className="col">
-          <div className="tiler">
-            <b>Tiler</b>
-            <div className="content">
-              <div className="layer">
-                <img
-                  alt='tiling-source'
-                  src='https://hydragames.neocities.org/assets/images/World_A2.png'
-                />
-              </div>
-              <div className="layer grid-base">&nbsp;</div>
-              <div className="info-tooltip">Info:</div>
-            </div>
-          </div>
+          <TilerComponent
+            tileSrc={tileSrc} setTileSrc={setTileSrc}
+            tileUrl={tileUrl} tileDim={tileDim}
+          />
         </div>
         }
       </div>

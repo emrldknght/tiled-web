@@ -1,6 +1,6 @@
 export const fetchMapFile = async () => {
   return new Promise((resolve) => {
-    console.log('fetch data')
+    // console.log('fetch data')
     fetch('map1.json')
       .then(r => {
         // console.log(r);
@@ -13,7 +13,7 @@ export const fetchMapFile = async () => {
 
       })
       .then(j => {
-        console.log('ja', j);
+        // console.log('ja', j);
         resolve(j);
       })
     /*

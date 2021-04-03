@@ -1,6 +1,10 @@
+// $tileRoot = 'https://hydragames.neocities.org/assets/images/World_A2.png'
+// $tileDim = 48px;
 
-$tileRoot = 'https://hydragames.neocities.org/assets/images/World_A2.png'
-$tileDim = 48px;
+:root
+  // --tile-root url('https://hydragames.neocities.org/assets/images/World_A2.png')
+  // --tile-root url('')
+  // --tile-dim 48px
 
 .App
   text-align center
@@ -23,7 +27,7 @@ $tileDim = 48px;
     // border-left 0
     box-sizing border-box
 
-    --dim $tileDim
+    --dim var(--tile-dim)
     width var(--dim)
     height var(--dim)
 
@@ -31,7 +35,7 @@ $tileDim = 48px;
       outline-color lime
 
     &-map
-      background-image url($tileRoot)
+      background-image var(--tile-root)
       background-position: calc(var(--ox) * var(--dim)) calc(var(--oy) * var(--dim));
       background-color var(--bg-color)
       &.grass
@@ -46,7 +50,9 @@ $tileDim = 48px;
         --ox 4
         --oy 4
 
-
+  .t-grid
+    background-color purple
+    opacity .35
   .tabs-selector
     border .02em solid red
     margin .2em
