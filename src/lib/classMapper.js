@@ -1,4 +1,4 @@
 export const classMapper = {
   0: 'grass',
-  1: 'water'
+  1: 'road'
 }

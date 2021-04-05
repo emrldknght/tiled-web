@@ -39,20 +39,18 @@
       background-position: calc(var(--ox) * var(--dim)) calc(var(--oy) * var(--dim));
       background-color var(--bg-color)
       &.grass
-        --bg-color: green;
+        --bg-color green
         --ox -1
         --oy 0
-      &.water
-        --bg-color: blue;
-        --ox 0
-        --oy 8
+      &.road
+        --bg-color brown
+        --ox -1
+        --oy -3
       &.forest
+        --bg-color darkgreen
         --ox 4
         --oy 4
 
-  .t-grid
-    background-color purple
-    opacity .35
   .tabs-selector
     border .02em solid red
     margin .2em
@@ -72,6 +70,8 @@
   .tiler
     transform: scale($zoom);
     position relative
+    // img.tiling-source-img
+      // opacity .3
     .content
       background-color violet
       display grid
@@ -83,14 +83,25 @@
         top 0
         left 0
         background-color pink
+      .t-grid
+        background-color rgba(128, 0, 128, .1)
       .layer
         outline 1px dotted blue
         grid-area main
         &.grid-base
-          background-color rgba(255,255,255,.3)
+          // background-color rgba(255,255,255,.3)
+          z-index 1
           .grid-cell
-            border .02em dotted darkviolet
+            outline .02em dotted black
+            outline-offset -1px
+            background-image var(--tile-root)
+            background-position: calc(var(--ox) * var(--dim)) calc(var(--oy) * var(--dim));
+            &:hover
+              outline-color yellow
 
+  .cell-palette
+    .cell
+      cursor pointer
 .App-logo
   height 40vmin
   pointer-events none
