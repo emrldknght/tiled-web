@@ -45,24 +45,10 @@ export function TGrid(props) {
   const isChecked = (i, j) => activeTiles.includes(cellKey(i, j));
 
   const cells = (j) => [...Array(props.tileSrc.wc).keys()]
-    .map(i => <TGridCell i={i} j={j}  isChecked={isChecked}  handleChange={handleChange} />)
-    /*
-    .map(i => {
+    .map(i => <TGridCell i={i} j={j}  key={`grid_cell_${i}_${j}`}
+      isChecked={isChecked}  handleChange={handleChange} selectTile={props.selectTile}
+    />)
 
-      const p = {
-        '--ox': -i,
-        '--oy': -j,
-      };
-
-      return(
-        <div className='cell grid-cell' data-x={i} key={`grid_cell_${i}_${j}`} style={p}>
-          <div className="col">
-            <span>{`(${i},${j})`}</span>
-            <input type="checkbox"  checked={isChecked(i, j)}  onChange={handleChange.bind(null, i, j)}/>
-          </div>
-        </div>)
-    })
-     */
 
   const gridRows = [...Array(props.tileSrc.hc).keys()]
     .map((i) => <div className='row' key={`grid_row_${i}`}>

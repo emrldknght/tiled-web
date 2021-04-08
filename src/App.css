@@ -18,7 +18,7 @@
   outline: 0.02em solid rgba(255,0,0,0.4);
   outline-offset: -1px;
   box-sizing: border-box;
-  --dim: 48px;
+  --dim: var(--tile-dim);
   width: var(--dim);
   height: var(--dim);
 }
@@ -26,7 +26,7 @@
   outline-color: #0f0;
 }
 .App .cell-map {
-  background-image: url("https://hydragames.neocities.org/assets/images/World_A2.png");
+  background-image: var(--tile-root);
   background-position: calc(var(--ox) * var(--dim)) calc(var(--oy) * var(--dim));
   background-color: var(--bg-color);
 }
@@ -35,12 +35,13 @@
   --ox: -1;
   --oy: 0;
 }
-.App .cell-map.water {
-  --bg-color: #00f;
-  --ox: 0;
-  --oy: 8;
+.App .cell-map.road {
+  --bg-color: #a52a2a;
+  --ox: -1;
+  --oy: -3;
 }
 .App .cell-map.forest {
+  --bg-color: #006400;
   --ox: 4;
   --oy: 4;
 }
@@ -81,15 +82,27 @@
   left: 0;
   background-color: #ffc0cb;
 }
+.App .tiler .content .t-grid {
+  background-color: rgba(128,0,128,0.1);
+}
 .App .tiler .content .layer {
   outline: 1px dotted #00f;
   grid-area: main;
 }
 .App .tiler .content .layer.grid-base {
-  background-color: rgba(255,255,255,0.3);
+  z-index: 1;
 }
 .App .tiler .content .layer.grid-base .grid-cell {
-  border: 0.02em dotted #9400d3;
+  outline: 0.02em dotted #000;
+  outline-offset: -1px;
+  background-image: var(--tile-root);
+  background-position: calc(var(--ox) * var(--dim)) calc(var(--oy) * var(--dim));
+}
+.App .tiler .content .layer.grid-base .grid-cell:hover {
+  outline-color: #ff0;
+}
+.App .cell-palette .cell {
+  cursor: pointer;
 }
 .App-logo {
   height: 40vmin;

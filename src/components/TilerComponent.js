@@ -1,5 +1,6 @@
 import {TImg} from "./tiler/TImg";
 import {TGrid} from "./tiler/TGrid";
+import {useState} from "react";
 
 export function TilerComponent(props) {
 
@@ -7,6 +8,9 @@ export function TilerComponent(props) {
     '--tile-root': `url(${props.tileUrl})`,
     '--tile-dim': `${props.tileDim}px`,
   };
+
+  const [selectedTile, setSelectedTile] = useState(-1);
+  const selectTile = (x, y) => { console.log(`select it x${x}y${y}`) }
 
   /*
   const handleImgRef = async input => {
@@ -54,6 +58,7 @@ export function TilerComponent(props) {
           {(props.tileSrc.loaded) ? (
             <TGrid
               tileSrc={props.tileSrc}
+              selectTile={selectTile}
             />
             ) : <span>Loading...</span>
           }
