@@ -1,11 +1,17 @@
-export function TImg(props) {
+import {connect} from "react-redux";
+import {setTileSrcR} from "../../store/actions";
+import {bindActionCreators} from "redux";
+
+function TImg({tileUrl, tileDim, tileSrc, setTileSrcR }) {
+
+  // if(!tileSrc.loaded) return(<div>Image Loading...</div>);
 
   const updateImD = async (img) => {
     // console.log('uid', img.width);
 
     const w = img.width;
     const h = img.height;
-    const d = props.tileDim;
+    const d = tileDim;
 
     // console.log(w,h,d);
 
@@ -16,12 +22,15 @@ export function TImg(props) {
       hc: h / d,
       loaded: true
     };
-    await props.setTileSrc(prevState => ({...prevState, ...newState}));
+    const updateData = async () => {
+      setTileSrcR(newState);
+    }
+    await updateData();
   }
 
   const onLoadTrigger = async (trigger, img) => {
     // console.log(`loaded! from ${trigger}`, img);
-    if(!props.tileSrc.loaded) {
+    if(!tileSrc.loaded) {
       await updateImD(img);
       // console.log('uid updated!');
     }
@@ -36,17 +45,34 @@ export function TImg(props) {
 
   return(
     <div>
-      {(props.tileUrl && props.tileDim) ? (
+      <div>TU:{JSON.stringify(tileUrl)}</div>
+      {(tileUrl && tileDim) ? (
         <img
           className="tiling-source-img"
           alt='tiling-source'
-          src={props.tileUrl}
+          src={tileUrl}
           ref={handleImgRef}
         />
       ) : (
-        <span>Loading...</span>
+        <span>Img is Loading...</span>
       )
       }
     </div>
   )
 }
+
+function mapStateToProps(state) {
+  return {
+    tileSrc: state.tileSrc,
+    tileUrl: state.tileUrl,
+    tileDim: state.tileDim
+  }
+}
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    setTileSrcR,
+  },
+  dispatch
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(TImg);

@@ -1,4 +1,4 @@
-import {getCellType} from "../lib/getCellType";
+import {getCellType} from "../../lib/getCellType";
 
 export function MapCell(props) {
   const cellType = getCellType(props.data);

@@ -40,7 +40,9 @@ console.log(state);
 
  */
 
-export const store = createStore(reducer);
+export const store = createStore(reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
 const update = () => {
   console.log(':', JSON.stringify(store.getState()));
 }

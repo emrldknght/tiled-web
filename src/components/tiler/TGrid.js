@@ -1,5 +1,6 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {TGridCell} from "./TGridCell";
+import {connect} from "react-redux";
 
 const removeIndex = (array, index) => {
   delete array[index];
@@ -12,21 +13,17 @@ const removeIndex = (array, index) => {
 const cellKey = (i, j) => `k_${i}_${j}`;
 
 
-export function TGrid(props) {
+function TGrid({tileSrc, selectTile}) {
   const [activeTiles, setActiveTiles] = useState([cellKey(2, 0)]);
 
+  if(!tileSrc.loaded) return(<div>Grid Loading...</div>);
 
+  /*
   useEffect(() => {
-    console.log('init grid', props.tileSrc);
-
-    /*
-    const tt = [...Array(props.tileSrc.hc).keys()]
-      .map(row => [...Array(props.tileSrc.wc).keys()])
-      .map(item => false)
-    ;
-     */
+    console.log('init grid', tileSrc);
     // setActiveTiles(tt);
-  }, [props.tileSrc])
+  }, [tileSrc])
+  */
 
   const handleChange = (i, j) => {
     console.log('set', i, j)
@@ -44,13 +41,13 @@ export function TGrid(props) {
 
   const isChecked = (i, j) => activeTiles.includes(cellKey(i, j));
 
-  const cells = (j) => [...Array(props.tileSrc.wc).keys()]
+  const cells = (j) => [...Array(tileSrc.wc).keys()]
     .map(i => <TGridCell i={i} j={j}  key={`grid_cell_${i}_${j}`}
-      isChecked={isChecked}  handleChange={handleChange} selectTile={props.selectTile}
+      isChecked={isChecked}  handleChange={handleChange} selectTile={selectTile}
     />)
 
 
-  const gridRows = [...Array(props.tileSrc.hc).keys()]
+  const gridRows = [...Array(tileSrc.hc).keys()]
     .map((i) => <div className='row' key={`grid_row_${i}`}>
       {cells(i)}
     </div>);
@@ -61,3 +58,19 @@ export function TGrid(props) {
     </div>
   )
 }
+function mapStateToProps(state) {
+  return {
+    tileSrc: state.tileSrc,
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    /*
+    selectTile: data => {
+      dispatch(setTileSrcR(data))
+    }
+     */
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TGrid);

@@ -1,13 +1,14 @@
-import {MapRow} from "./MapRow";
+import {MapRow} from "./map/MapRow";
+import {connect} from "react-redux";
 
-export function MapComponent(props) {
+function MapComponent({ tileUrl, tileDim, mapData }) {
   // const u = props.tileUrl ? `--tile-root: url(${props.tileUrl});` : '';
   const p = {
-    '--tile-root': `url(${props.tileUrl})`,
-    '--tile-dim': `${props.tileDim}px`,
+    '--tile-root': `url(${tileUrl})`,
+    '--tile-dim': `${tileDim}px`,
   };
 
-  const tm = props.mapData.map((row, y) =>
+  const tm = mapData.map((row, y) =>
     <MapRow
       key={`mr_${y}`}
       data={row} y={y}
@@ -16,6 +17,25 @@ export function MapComponent(props) {
 
     <div className="map"
          style={p}
-    >{tm}</div>
+    >
+      <div>From store{JSON.stringify(mapData)}</div>
+      <div className="mapWrapper">{tm}</div>
+    </div>
   )
 }
+
+function mapStateToProps(state) {
+  return {
+    mapData: state.map,
+    tileUrl: state.tileUrl,
+    tileDim: state.tileDim
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapComponent)

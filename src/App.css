@@ -45,6 +45,42 @@
   --ox: 4;
   --oy: 4;
 }
+.App .file-explorer {
+  position: relative;
+  width: max-content;
+}
+.App .file-explorer .burger {
+  text-align: start;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-left: 0.2em;
+  cursor: pointer;
+}
+.App .file-explorer .placeholder {
+  min-width: 1.4em;
+}
+.App .file-explorer .file-list .item {
+  cursor: pointer;
+  padding: 0.5em;
+  padding-left: 1em;
+  position: relative;
+  margin: 0.1em;
+}
+.App .file-explorer .file-list .item:hover {
+  background-color: rgba(255,255,255,0.4);
+}
+.App .file-explorer .file-list .item:before {
+  content: '\00a0';
+  border-left: 4px solid #808080;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.App .file-explorer .file-list .item.active:before {
+  border-color: #f00;
+}
 .App .tabs-selector {
   border: 0.02em solid #f00;
   margin: 0.2em;
@@ -81,6 +117,7 @@
   top: 0;
   left: 0;
   background-color: #ffc0cb;
+  white-space: nowrap;
 }
 .App .tiler .content .t-grid {
   background-color: rgba(128,0,128,0.1);

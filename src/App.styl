@@ -51,6 +51,40 @@
         --ox 4
         --oy 4
 
+  .file-explorer
+    // background-color lightgray
+    position relative
+    width max-content
+    .burger
+      // flex-grow 1
+      text-align start
+      position absolute
+      top 0
+      left 0
+      padding-left .2em
+      cursor pointer
+    .placeholder
+      min-width 1.4em
+    .file-list
+      .item
+        cursor pointer
+        padding .5em
+        padding-left 1em
+        position relative
+        margin .1em
+        &:hover
+          background-color rgba(255,255,255,.4)
+        &:before
+          content '\00a0'
+          border-left 4px solid gray
+          position absolute
+          height 100%
+          top 0
+          left 0
+        &.active
+          &:before
+            border-color red
+
   .tabs-selector
     border .02em solid red
     margin .2em
@@ -83,6 +117,7 @@
         top 0
         left 0
         background-color pink
+        white-space nowrap
       .t-grid
         background-color rgba(128, 0, 128, .1)
       .layer

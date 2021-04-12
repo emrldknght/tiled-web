@@ -2,21 +2,32 @@ import React, {useEffect, useState} from "react";
 import {Tabs} from "./components/Tabs";
 import {fetchMapFile} from "./lib/fetchMapFile";
 import {TabsSelector} from "./components/TabsSelector";
-import {MapComponent} from "./components/MapComponent";
-import {TilerComponent} from "./components/TilerComponent";
+import MapComponent from "./components/MapComponent";
+import TilerComponent from "./components/TilerComponent";
 import {saveJson} from "./lib/saveJson";
-import {CellPalette} from "./components/CellPalette";
+import CellPalette from "./components/CellPalette";
 import {palData} from "./lib/palData";
+import {paletteSelectTile, setMapDataR, setTileDimR, setTileUrlR, spt} from "./store/actions";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {TabContent} from "./components/TabContent";
+import FileExplorer from "./FileExplorer";
+
+import fontawesome from '@fortawesome/fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckSquare, faCoffee, faSave, faFileAlt } from '@fortawesome/fontawesome-free-solid'
+fontawesome.library.add(faCheckSquare, faCoffee, faSave, faFileAlt);
+
 
 
 const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
-export function Editor() {
+function Editor({ setMapDataR, setTileUrlR, setTileDimR }) {
   const [mapData, setMapData] = useState([]);
   const [tileUrl, setTileUrl] = useState('');
   const [tileDim, setTileDim] = useState('');
 
-  const [tab, setTab] = useState(Tabs.tiler)
+  const [tab, setTab] = useState(Tabs.mapEditor)
   const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   const [selectedTile, setSelectedTile] = useState(-1);
@@ -27,9 +38,18 @@ export function Editor() {
       // console.log('md', md);
       if(md) {
         // console.log('setting map data');
-        if(md.mapData) setMapData(md.mapData);
-        if(md.tileUrl) setTileUrl(md.tileUrl);
-        if(md.tileDim) setTileDim(md.tileDim);
+        if(md.mapData) {
+          setMapData(md.mapData);
+          setMapDataR(md.mapData)
+        }
+        if(md.tileUrl) {
+          setTileUrl(md.tileUrl);
+          setTileUrlR(md.tileUrl);
+        }
+        if(md.tileDim) {
+          setTileDim(md.tileDim);
+          setTileDimR(md.tileDim);
+        }
       } else {
         console.warn('data error');
       }
@@ -51,46 +71,67 @@ export function Editor() {
   });
 
   return(
-    <div className="col">
-      <div className="row">
-        <button onClick={saveJson.bind(null, prepareData())}>Save Local File</button>
-      </div>
-      <TabsSelector setActive={setActiveTab} active={tab}/>
-      {/*
-      <div className="row" onClick={setActiveTab}>Tabs selector:
-        <span data-tab={Tabs.mapEditor}>Map editor</span>|
-        <span data-tab={Tabs.tiler}>Tiler</span>
-      </div>
-      */}
-      <div className="row">
-        { (tab === Tabs.mapEditor) &&
+    <div className="row">
+      <FileExplorer />
+      <div className="col">
         <div className="row">
-          <div className="col">
-            <b>Map Editor</b>
-            <MapComponent
-              mapData={mapData}
-              tileUrl={tileUrl}
-              tileDim={tileDim}
-            />
-          </div>
-          <div className="col">
-            <b>Palette</b>
-            <CellPalette data={palData}
-              selectedTile={selectedTile} setSelectedTile={setSelectedTile}
-              tileUrl={tileUrl} tileDim={tileDim}
-            />
-          </div>
+          <button >
+            <FontAwesomeIcon icon="save" />
+            &nbsp;Save
+          </button>
+          <button onClick={saveJson.bind(null, prepareData())}>
+            <FontAwesomeIcon icon="file-alt" />
+            &nbsp;
+            Save Local File
+          </button>
         </div>
-        }
-        { (tab === Tabs.tiler) &&
-        <div className="col">
-          <TilerComponent
-            tileSrc={tileSrc} setTileSrc={setTileSrc}
-            tileUrl={tileUrl} tileDim={tileDim}
-          />
+        <TabsSelector setActive={setActiveTab} active={tab} />
+        <div className="row">
+          <TabContent tabActive={tab} tabName={Tabs.mapEditor}>
+            <div className="row">
+              <div className="col">
+                <b>Map Editor</b>
+                <MapComponent />
+              </div>
+              <div className="col">
+                <b>Palette</b>
+                <CellPalette data={palData}
+                             selectedTile={selectedTile} setSelectedTile={setSelectedTile}
+                />
+              </div>
+            </div>
+          </TabContent>
+          <TabContent tabActive={tab} tabName={Tabs.tiler}>
+            <div className="col">
+              <TilerComponent />
+            </div>
+          </TabContent>
         </div>
-        }
       </div>
     </div>
   )
 }
+
+function mapStateToProps(state) {
+  return {
+
+  }
+}
+/*
+const mapDispatchToProps = dispatch => {
+  return {
+    setMapDataR: data => dispatch(setMapDataR(data)),
+    setTileUrlR: url => dispatch(setTileUrlR(url)),
+    setTileDimR: dim => dispatch(setTileDimR(dim)),
+  }
+}
+ */
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    setMapDataR,
+    setTileUrlR,
+    setTileDimR,
+  },
+  dispatch
+)
+export default connect(mapStateToProps, mapDispatchToProps)(Editor)

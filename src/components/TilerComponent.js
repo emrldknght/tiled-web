@@ -1,15 +1,16 @@
-import {TImg} from "./tiler/TImg";
-import {TGrid} from "./tiler/TGrid";
-import {useState} from "react";
+import TImg from "./tiler/TImg";
+import TGrid from "./tiler/TGrid";
+import {connect} from "react-redux";
+import React from "react";
 
-export function TilerComponent(props) {
+function TilerComponent({tileUrl, tileDim, tileSrc}) {
 
   const p = {
-    '--tile-root': `url(${props.tileUrl})`,
-    '--tile-dim': `${props.tileDim}px`,
+    '--tile-root': `url(${tileUrl})`,
+    '--tile-dim': `${tileDim}px`,
   };
 
-  const [selectedTile, setSelectedTile] = useState(-1);
+  // const [selectedTile, setSelectedTile] = useState(-1);
   const selectTile = (x, y) => { console.log(`select it x${x}y${y}`) }
 
   /*
@@ -55,26 +56,28 @@ export function TilerComponent(props) {
       <b>Tiler</b><input type="checkbox" />
       <div className="content">
         <div className="layer grid-base">
-          {(props.tileSrc.loaded) ? (
-            <TGrid
-              tileSrc={props.tileSrc}
-              selectTile={selectTile}
-            />
-            ) : <span>Loading...</span>
-          }
+          <TGrid selectTile={selectTile} />
         </div>
         <div className="layer tile-base">
-          <TImg
-            tileSrc={props.tileSrc}
-            setTileSrc={props.setTileSrc}
-            tileUrl={props.tileUrl}
-            tileDim={props.tileDim}
-          />
+          <TImg />
         </div>
-        <div className="info-tooltip">Info:
-          {JSON.stringify(props.tileSrc)}
-        </div>
+        <div className="info-tooltip">Info:{JSON.stringify(tileSrc)}</div>
       </div>
     </div>
   )
 }
+
+function mapStateToProps(state) {
+  return {
+    tileSrc: state.tileSrc,
+    tileUrl: state.tileUrl,
+    tileDim: state.tileDim
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TilerComponent);
