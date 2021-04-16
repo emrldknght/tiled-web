@@ -7,7 +7,7 @@ import TilerComponent from "./components/TilerComponent";
 import {saveJson} from "./lib/saveJson";
 import CellPalette from "./components/CellPalette";
 import {palData} from "./lib/palData";
-import {paletteSelectTile, setMapDataR, setTileDimR, setTileUrlR, spt} from "./store/actions";
+import {logout, paletteSelectTile, setMapDataR, setTileDimR, setTileUrlR, spt} from "./store/actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {TabContent} from "./components/TabContent";
@@ -22,7 +22,7 @@ fontawesome.library.add(faCheckSquare, faCoffee, faSave, faFileAlt);
 
 const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
-function Editor({ setMapDataR, setTileUrlR, setTileDimR }) {
+function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
   const [mapData, setMapData] = useState([]);
   const [tileUrl, setTileUrl] = useState('');
   const [tileDim, setTileDim] = useState('');
@@ -84,6 +84,12 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR }) {
             &nbsp;
             Save Local File
           </button>
+          <div style={{ flexGrow: 1 }}>&nbsp;</div>
+          <button onClick={logout} >
+            <FontAwesomeIcon icon="door-closed" />
+            &nbsp;
+            Quit
+          </button>
         </div>
         <TabsSelector setActive={setActiveTab} active={tab} />
         <div className="row">
@@ -131,6 +137,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     setMapDataR,
     setTileUrlR,
     setTileDimR,
+    logout
   },
   dispatch
 )

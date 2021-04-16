@@ -1,11 +1,15 @@
 // import React, { useState, useEffect } from 'react';
 import './App.css';
 import Editor from "./Editor";
+import LoginForm from "./components/LoginForm";
 
 function App() {
   return (
     <div className="App">
-      <Editor />
+      <LoginForm>
+        <Editor />
+      </LoginForm>
+
       {/*
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />

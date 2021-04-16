@@ -1,14 +1,30 @@
 import {createStore} from "redux";
 import {initState} from "./store/initState";
+import {eraseCred, saveCred} from "./lib/creds";
 
 export const PALETTE_SELECT_TILE = 'pst';
 export const SET_TILE_SRC = 'setTileSrc';
+export const AUTH = 'AUTH';
+export const LOGOUT = 'LOGOUT';
 
 const reducer = (state = initState, action) => {
   console.log('ss', JSON.stringify(state), action);
   switch (action.type) {
+    case AUTH:
+      console.log(action);
+      const l = action.payload.login;
+      const p = action.payload.pass;
+      if(l === 'yoba' && p === 'aboy') {
+        console.log('logging');
+        saveCred(l, p)
+        return { ...state, ...{auth: true} }
+      }
+      return state;
+    case LOGOUT:
+      eraseCred();
+      return { ...state, ...{auth: false} }
     case SET_TILE_SRC:
-      return  { ...state, ...{ tileSrc: action.tileSrc }}
+      return  { ...state, ...{ tileSrc: action.tileSrc }};
     case 'spt':
       return {...state, ...{ st: action.id}};
       // return state.st = action.id;
@@ -22,9 +38,9 @@ const reducer = (state = initState, action) => {
       return {...state, ...{map: newMap}};
     case 'setTileUrl':
       // console.log('stu', state, action.url);
-      return { ...state, ...{ tileUrl: action.url } }
+      return { ...state, ...{ tileUrl: action.url } };
     case 'setTileDim':
-      return { ...state, ...{ tileDim: action.dim } }
+      return { ...state, ...{ tileDim: action.dim } };
     case 'at':
       return state;
     default:

@@ -1,6 +1,7 @@
 import {palData} from "../lib/palData";
 
 export const initState = {
+  auth: false,
   tileSrc: { w:0, wc: 0, h: 0, hc: 0, loaded: false },
   palette: {
     selectedTile: -1,
