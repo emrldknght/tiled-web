@@ -1,11 +1,11 @@
-import {Tabs} from "./Tabs";
+import {TabsK} from "./Tabs";
 import {TabsSelectorEl} from "./TabsSelectorEl";
 
 export function TabsSelector(props) {
 
   const t = [
-    {tab: Tabs.mapEditor, text: 'Map editor'},
-    {tab: Tabs.tiler, text: 'Tiler'},
+    {tab: TabsK.mapEditor, text: 'Map editor'},
+    {tab: TabsK.tiler, text: 'Tiler'},
   ]
 
   return(

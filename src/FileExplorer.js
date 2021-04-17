@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Drawer, Icon, Position} from "@blueprintjs/core";
 
 const Path = 'http://localhost/sq';
 const Files = `${Path}/list-files`;
@@ -16,7 +17,7 @@ export default function FileExplorer() {
   const [filesData, setFilesData] = useState([]);
   const [currentFile, setCurrentFile] = useState(null);
 
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     async function getFileList() {
@@ -44,20 +45,25 @@ export default function FileExplorer() {
 
   return(
     <div className="file-explorer col">
-      <div className="burger" onClick={toggleExpand}>
-        <FontAwesomeIcon icon="bars" />
-      </div>
-      {(expanded) ? (
+
+      <Drawer isOpen={expanded} position={Position.LEFT}
+        title="Map Files"
+        icon="git-repo"
+        onClose={toggleExpand}
+        size="15em"
+      >
         <div className="col">
-          <b>Map Files:</b>
-          {/* Current: {currentFile} */}
+          Current: {currentFile}
           <hr/>
           <div className="col file-list">
             {fileItems}
           </div>
         </div>
-      ) : (<div className="placeholder">&nbsp;</div>)
-      }
+      </Drawer>
+
+      <div className="burger" onClick={toggleExpand}>
+        <Icon icon="menu" />
+      </div>
     </div>
   )
 }

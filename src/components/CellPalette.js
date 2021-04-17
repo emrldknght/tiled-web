@@ -1,9 +1,9 @@
 import {connect} from "react-redux";
-import {paletteSelectTile, spt} from "../store/actions";
+import {paletteSelectTile} from "../store/actions";
 import {bindActionCreators} from "redux";
 
-function CellPalette({tileUrl, tileDim, setSelectedTile, selectedTile, data,
-                      st, spt, palette, paletteSelectTile
+function CellPalette({tileUrl, tileDim,
+                      palette, paletteSelectTile
                      }) {
   const p = {
     '--tile-root': `url(${tileUrl})`,
@@ -11,10 +11,9 @@ function CellPalette({tileUrl, tileDim, setSelectedTile, selectedTile, data,
   };
 
   const tapTile = (e) => {
-    const id = e.target.dataset.id;
-    console.log('tap', id);
-    if(id) {
-      setSelectedTile(id)
+    const id = parseInt(e.target.dataset.id);
+    console.log('tap', id, typeof id);
+    if(!isNaN(id)) {
       paletteSelectTile(id);
     }
   }
@@ -24,10 +23,13 @@ function CellPalette({tileUrl, tileDim, setSelectedTile, selectedTile, data,
     return(<div key={`pal-cell-${item}`} data-id={item} className={`cell cell-map ${t}`}>{item}</div>)
   })
    */
-  const k = data.map(item => {
+  const selected = id => (palette.selectedTile === id) ? 'selected' : '';
+  const k = palette.data.map(item => {
     const t = item.type;
     return(<div key={`pal-cell-${item.id}`} data-id={item.id}
-                className={`cell cell-map ${t}`}>{item.id}</div>
+                className={`cell cell-map ${t} ${selected(item.id)}`}
+
+      >{item.id}</div>
     )
   })
 
@@ -39,11 +41,10 @@ function CellPalette({tileUrl, tileDim, setSelectedTile, selectedTile, data,
   return(
     <div className="cell-palette col" style={p}>
       <div className="row">
-        From store {st} : {palette.selectedTile}
         <button onClick={handleClick.bind(null, 1)}>Set!</button>
       </div>
       <div className="row">Palette:</div>
-      <div className="row">{JSON.stringify(data)}</div>
+      <div className="row">{JSON.stringify(palette.data)}</div>
       <div className="row">
         <div className="row" onClick={tapTile}>
           {k}
@@ -51,7 +52,7 @@ function CellPalette({tileUrl, tileDim, setSelectedTile, selectedTile, data,
           <div className="cell cell-map water">B</div>
         </div>
         <div className="row">
-          Controls:{selectedTile}
+          From store : {palette.selectedTile}
         </div>
       </div>
     </div>
@@ -62,14 +63,12 @@ function mapStateToProps(state) {
   return {
     tileUrl: state.tileUrl,
     tileDim: state.tileDim,
-    st: state.st,
     palette: state.palette
   }
 }
 const mapDispatchToProps = (dispatch) => bindActionCreators(
   {
     paletteSelectTile,
-    spt,
   },
   dispatch
 )

@@ -1,3 +1,7 @@
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+
 // $tileRoot = 'https://hydragames.neocities.org/assets/images/World_A2.png'
 // $tileDim = 48px;
 
@@ -20,6 +24,10 @@
     flex-direction column
     background-color rgba(0,255,0,.1)
 
+  .login-form
+    background-color pink
+    width max-content
+    margin 0 auto
   .cell
     outline .02em solid rgba(255,0,0,.4)
     outline-offset -1px
@@ -58,14 +66,15 @@
     .burger
       // flex-grow 1
       text-align start
-      position absolute
-      top 0
-      left 0
-      padding-left .2em
+      // position absolute
+      // top 0
+      // left 0
+      // padding-left .2em
       cursor pointer
+      margin .2em
     .placeholder
       min-width 1.4em
-    .file-list
+.file-list
       .item
         cursor pointer
         padding .5em

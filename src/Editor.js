@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Tabs} from "./components/Tabs";
+import {TabsK} from "./components/Tabs";
 import {fetchMapFile} from "./lib/fetchMapFile";
 import {TabsSelector} from "./components/TabsSelector";
 import MapComponent from "./components/MapComponent";
@@ -13,6 +13,7 @@ import {bindActionCreators} from "redux";
 import {TabContent} from "./components/TabContent";
 import FileExplorer from "./FileExplorer";
 
+import { Button, Tabs, Tab } from "@blueprintjs/core";
 import fontawesome from '@fortawesome/fontawesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faCoffee, faSave, faFileAlt } from '@fortawesome/fontawesome-free-solid'
@@ -27,7 +28,7 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
   const [tileUrl, setTileUrl] = useState('');
   const [tileDim, setTileDim] = useState('');
 
-  const [tab, setTab] = useState(Tabs.mapEditor)
+  const [tab, setTab] = useState(TabsK.mapEditor)
   const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   const [selectedTile, setSelectedTile] = useState(-1);
@@ -59,9 +60,14 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
   }, [])
 
   const setActiveTab = e => {
+    console.log(e);
+    setTab(e)
+    /*
+    return;
     const t = e.target.dataset.tab;
     console.log(t);
     setTab(t);
+     */
   }
 
   const prepareData = () => JSON.stringify({
@@ -75,25 +81,13 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
       <FileExplorer />
       <div className="col">
         <div className="row">
-          <button >
-            <FontAwesomeIcon icon="save" />
-            &nbsp;Save
-          </button>
-          <button onClick={saveJson.bind(null, prepareData())}>
-            <FontAwesomeIcon icon="file-alt" />
-            &nbsp;
-            Save Local File
-          </button>
+          <Button icon="floppy-disk"  text="Save" small/>
+          <Button icon="download" text="Save Local File" small onClick={saveJson.bind(null, prepareData())}/>
           <div style={{ flexGrow: 1 }}>&nbsp;</div>
-          <button onClick={logout} >
-            <FontAwesomeIcon icon="door-closed" />
-            &nbsp;
-            Quit
-          </button>
+          <Button icon="log-out" text="Quit" small onClick={logout}/>
         </div>
-        <TabsSelector setActive={setActiveTab} active={tab} />
-        <div className="row">
-          <TabContent tabActive={tab} tabName={Tabs.mapEditor}>
+        <Tabs id="mainTabs" onChange={setActiveTab} selectedTabId={tab}>
+          <Tab id={TabsK.mapEditor} title="Map Editor" panel={
             <div className="row">
               <div className="col">
                 <b>Map Editor</b>
@@ -106,13 +100,14 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
                 />
               </div>
             </div>
-          </TabContent>
-          <TabContent tabActive={tab} tabName={Tabs.tiler}>
+          }/>
+          <Tab id={TabsK.tiler} title="Tiler" panel={
             <div className="col">
               <TilerComponent />
             </div>
-          </TabContent>
-        </div>
+          }/>
+
+        </Tabs>
       </div>
     </div>
   )
