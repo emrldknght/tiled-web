@@ -7,6 +7,9 @@ export const setMapDataR = data => ({ type: 'setMap' , mapData: data });
 export const setTileUrlR = url => ({ type: 'setTileUrl', url: url });
 export const setTileDimR = dim => ({ type: 'setTileDim', dim: dim });
 
+export const doAuth = (login, pass) => ({ type: AUTH, payload: { login, pass } });
+export const logout = () => ({ type: LOGOUT });
+
 export const spt = (id) => {
   return { type: 'spt', id: id }
 }

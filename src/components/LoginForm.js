@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {useEffect, useState} from "react";
 import {fetchMapFile} from "../lib/fetchMapFile";
 import {getCred} from "../lib/creds";
+import {Button} from "@blueprintjs/core";
 
 function LoginForm({ children, auth, doAuth }) {
 
@@ -34,16 +35,15 @@ function LoginForm({ children, auth, doAuth }) {
 
   return(
     (!auth) ? (
-      <form onSubmit={doAuthW}>
+      <form className="login-form">
         <div className="col">
-          Is Auth : {JSON.stringify(auth)}
-          <label> Login:
-            <input type="text" name="login" value={login} onChange={setLoginV}/>
-          </label>
-          <label> Password:
-            <input type="password" name="pass" value={pass} onChange={setPassV}/>
-          </label>
-          <input type="submit"/>
+          {/* Is Auth : {JSON.stringify(auth)} */}
+          <label htmlFor="login">Login:</label>
+          <input type="text" name="login" value={login} onChange={setLoginV}/>
+          <label htmlFor="pass">Password:</label>
+          <input type="password" name="pass" value={pass} onChange={setPassV}/>
+
+          <Button icon="key" text="Enter" onClick={doAuthW} small />
         </div>
       </form>
     ) : (
