@@ -6,6 +6,7 @@ export const PALETTE_SELECT_TILE = 'pst';
 export const SET_TILE_SRC = 'setTileSrc';
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
+export const SET_MAP_TILE = 'SET_MAP_TILE';
 
 const reducer = (state = initState, action) => {
   console.log('ss', JSON.stringify(state), action);
@@ -32,6 +33,13 @@ const reducer = (state = initState, action) => {
       const pal = { ...state.palette };
       pal.selectedTile = action.id;
       return {...state, ...{palette: pal}};
+    case SET_MAP_TILE:
+      const { x, y, id } = action.payload;
+      // console.log(`(${x},${y})->${id}`);
+      const newState = [...state.map];
+      newState[y][x] = id;
+      // console.log('!', JSON.stringify(newState));
+      return {...state, ...{ map:newState }};
     case 'setMap':
       // const map = [ ...state.map ];
       const newMap = action.mapData;

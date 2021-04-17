@@ -1,4 +1,4 @@
-import {AUTH, LOGOUT, PALETTE_SELECT_TILE, SET_TILE_SRC} from "../store";
+import {AUTH, LOGOUT, PALETTE_SELECT_TILE, SET_MAP_TILE, SET_TILE_SRC} from "../store";
 
 export const setTileSrcR = data => ({ type: SET_TILE_SRC, tileSrc: data });
 export const paletteSelectTile = id => ({ type: PALETTE_SELECT_TILE, id: id });
@@ -11,6 +11,5 @@ export const spt = (id) => {
   return { type: 'spt', id: id }
 }
 
-export const doAuth = (login, pass) => ({ type: AUTH, payload: { login, pass } })
-export const logout = () => ({ type: LOGOUT })
+export const setMapTile = (x, y, id) => ({ type: SET_MAP_TILE, payload: {x, y, id} });
 
