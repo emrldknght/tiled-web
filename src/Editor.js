@@ -1,27 +1,19 @@
 import React, {useEffect, useState} from "react";
 import {TabsK} from "./components/Tabs";
 import {fetchMapFile} from "./lib/fetchMapFile";
-import {TabsSelector} from "./components/TabsSelector";
 import MapComponent from "./components/MapComponent";
 import TilerComponent from "./components/TilerComponent";
 import {saveJson} from "./lib/saveJson";
 import CellPalette from "./components/CellPalette";
 import {palData} from "./lib/palData";
-import {logout, paletteSelectTile, setMapDataR, setTileDimR, setTileUrlR, spt} from "./store/actions";
+import {logout, setMapDataR, setTileDimR, setTileUrlR} from "./store/actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {TabContent} from "./components/TabContent";
 import FileExplorer from "./FileExplorer";
 
 import { Button, Tabs, Tab } from "@blueprintjs/core";
-import fontawesome from '@fortawesome/fontawesome'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckSquare, faCoffee, faSave, faFileAlt } from '@fortawesome/fontawesome-free-solid'
-fontawesome.library.add(faCheckSquare, faCoffee, faSave, faFileAlt);
 
-
-
-const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
+// const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
 function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
   const [mapData, setMapData] = useState([]);
@@ -29,7 +21,7 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
   const [tileDim, setTileDim] = useState('');
 
   const [tab, setTab] = useState(TabsK.mapEditor)
-  const [tileSrc, setTileSrc] = useState(initialTileSrc);
+  // const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   const [selectedTile, setSelectedTile] = useState(-1);
 
@@ -57,7 +49,7 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
     }
     init();
 
-  }, [])
+  }, [setMapDataR, setTileDimR, setTileUrlR])
 
   const setActiveTab = e => {
     console.log(e);

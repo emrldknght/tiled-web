@@ -21,7 +21,7 @@ function MapComponent({ tileUrl, tileDim, mapData, setMapTile, brushId }) {
       showCellInfo={showCellInfo}
     />);
 
-  const setTile = () => { setMapTile(2, 2, 0); }
+  // const setTile = () => { setMapTile(2, 2, 0); }
 
   const pokeTile = (e) => {
     let { x, y } = e.target.dataset;

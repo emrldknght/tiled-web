@@ -2,22 +2,21 @@ import {bindActionCreators} from "redux";
 import {doAuth} from "../store/actions";
 import {connect} from "react-redux";
 import {useEffect, useState} from "react";
-import {fetchMapFile} from "../lib/fetchMapFile";
 import {getCred} from "../lib/creds";
 import {Button} from "@blueprintjs/core";
 
 function LoginForm({ children, auth, doAuth }) {
 
-  const init = async () => {
-    const credentials = await getCred();
-    if(credentials) {
-      doAuth(credentials.login, credentials.pass);
-    }
-  }
-
   useEffect(() => {
+    const init = async () => {
+      console.log('init')
+      const credentials = await getCred();
+      if(credentials) {
+        doAuth(credentials.login, credentials.pass);
+      }
+    }
     init();
-  }, [])
+  }, [doAuth])
 
 
   const [login, setLogin] = useState('yoba');
