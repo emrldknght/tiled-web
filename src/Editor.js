@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {TabsK} from "./components/Tabs";
-import {fetchMapFile} from "./lib/fetchMapFile";
 import MapComponent from "./components/MapComponent";
 import TilerComponent from "./components/TilerComponent";
-import {saveJson} from "./lib/saveJson";
 import CellPalette from "./components/CellPalette";
-import {palData} from "./lib/palData";
-import {logout, setMapDataR, setTileDimR, setTileUrlR} from "./store/actions";
+import {palData} from "./store/palData";
+import {fetchMapFileA, logout, saveMapFile, setMapDataR, setTileDimR, setTileUrlR} from "./store/actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import FileExplorer from "./FileExplorer";
@@ -15,17 +13,14 @@ import { Button, Tabs, Tab } from "@blueprintjs/core";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
-function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
-  const [mapData, setMapData] = useState([]);
-  const [tileUrl, setTileUrl] = useState('');
-  const [tileDim, setTileDim] = useState('');
-
-  const [tab, setTab] = useState(TabsK.mapEditor)
+function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout, saveMapFile }) {
+  const [tab, setTab] = useState(TabsK.tiler)
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   const [selectedTile, setSelectedTile] = useState(-1);
 
   useEffect(() => {
+    /*
     async function init() {
       const md = await fetchMapFile();
       // console.log('md', md);
@@ -47,8 +42,9 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
         console.warn('data error');
       }
     }
-    init();
-
+     */
+    // init();
+    fetchMapFileA();
   }, [setMapDataR, setTileDimR, setTileUrlR])
 
   const setActiveTab = e => {
@@ -62,19 +58,13 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout }) {
      */
   }
 
-  const prepareData = () => JSON.stringify({
-    mapData,
-    tileDim,
-    tileUrl
-  });
-
   return(
     <div className="row">
       <FileExplorer />
       <div className="col">
         <div className="row">
           <Button icon="floppy-disk"  text="Save" small/>
-          <Button icon="download" text="Save Local File" small onClick={saveJson.bind(null, prepareData())}/>
+          <Button icon="download" text="Save Local File" small onClick={saveMapFile}/>
           <div style={{ flexGrow: 1 }}>&nbsp;</div>
           <Button icon="log-out" text="Quit" small onClick={logout}/>
         </div>
@@ -124,7 +114,9 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     setMapDataR,
     setTileUrlR,
     setTileDimR,
-    logout
+    logout,
+    fetchMapFileA,
+    saveMapFile
   },
   dispatch
 )

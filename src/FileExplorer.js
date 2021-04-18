@@ -1,16 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {Drawer, Icon, Position} from "@blueprintjs/core";
+import {fetchPath, Files, Path} from "./lib/api";
 
-const Path = 'http://localhost/sq';
-const Files = `${Path}/list-files`;
 
-const fetchPath = (path) => {
-  return new Promise(resolve => {
-    fetch(path)
-      .then(r => r.json())
-      .then(j => resolve(j));
-  })
-}
 
 export default function FileExplorer() {
   const [filesData, setFilesData] = useState([]);
@@ -29,6 +21,7 @@ export default function FileExplorer() {
   }, [])
 
   const getFile = async item => {
+    console.log('will get');
     const data = await fetchPath(`${Path}/map-file/${item}`);
     console.log('fd', data);
     setCurrentFile(item);

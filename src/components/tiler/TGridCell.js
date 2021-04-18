@@ -13,7 +13,9 @@ export function TGridCell(props) {
     >
       <div className="col">
         <span>{`(${i},${j})`}</span>
-        <input type="checkbox"  checked={props.isChecked(i, j)}  onChange={props.handleChange.bind(null, i, j)}/>
+        <input type="checkbox"
+               checked={props.isChecked}
+               onChange={props.handleChange.bind(null, i, j)}/>
       </div>
     </div>
   )

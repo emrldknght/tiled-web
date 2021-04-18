@@ -2,6 +2,7 @@ import TImg from "./tiler/TImg";
 import TGrid from "./tiler/TGrid";
 import {connect} from "react-redux";
 import React from "react";
+import {bindActionCreators} from "redux";
 
 function TilerComponent({tileUrl, tileDim, tileSrc}) {
 
@@ -53,8 +54,10 @@ function TilerComponent({tileUrl, tileDim, tileSrc}) {
 
   return(
     <div className="tiler" style={p}>
-      <b>Tiler</b><input type="checkbox" />
-      <div className="content">
+      <b>Tiler</b>
+      <input type="checkbox" />
+      <div className="row">
+        <div className="content">
         <div className="layer grid-base">
           <TGrid selectTile={selectTile} />
         </div>
@@ -62,6 +65,11 @@ function TilerComponent({tileUrl, tileDim, tileSrc}) {
           <TImg />
         </div>
         <div className="info-tooltip">Info:{JSON.stringify(tileSrc)}</div>
+      </div>
+        <div className="pal-cell-editor col">
+          <b>Cell editor:</b>
+          <button>Update Cell Data</button>
+        </div>
       </div>
     </div>
   )
@@ -74,10 +82,10 @@ function mapStateToProps(state) {
     tileDim: state.tileDim
   }
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-
-  }
-}
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+  },
+  dispatch
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TilerComponent);

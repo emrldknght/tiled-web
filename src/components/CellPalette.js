@@ -26,7 +26,7 @@ function CellPalette({tileUrl, tileDim,
   const selected = id => (palette.selectedTile === id) ? 'selected' : '';
   const k = palette.data.map(item => {
     const t = item.type;
-    return(<div key={`pal-cell-${item.id}`} data-id={item.id}
+    return(<div key={`pal-cell-${item.cid}`} data-id={item.id}
                 className={`cell cell-map ${t} ${selected(item.id)}`}
 
       >{item.id}</div>

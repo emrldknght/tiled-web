@@ -17,9 +17,9 @@ function TImg({tileUrl, tileDim, tileSrc, setTileSrcR }) {
 
     const newState = {
       w: w,
-      wc: w / d,
+      wc: Math.floor(w / d),
       h: h,
-      hc: h / d,
+      hc: Math.floor(h / d),
       loaded: true
     };
     const updateData = async () => {
@@ -45,7 +45,6 @@ function TImg({tileUrl, tileDim, tileSrc, setTileSrcR }) {
 
   return(
     <div>
-      <div>TU:{JSON.stringify(tileUrl)}</div>
       {(tileUrl && tileDim) ? (
         <img
           className="tiling-source-img"

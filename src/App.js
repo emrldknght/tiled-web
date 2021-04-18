@@ -2,11 +2,19 @@
 import './App.css';
 import Editor from "./Editor";
 import LoginForm from "./components/LoginForm";
+import {Helmet} from "react-helmet";
+import {gs} from "./lib/genStyles";
+import {connect} from "react-redux";
 
-function App() {
+function App({pal}) {
   return (
     <div className="App">
+      <Helmet>
+        <title>SteamQuest Map editor v 0.1</title>
+        <style>{gs(pal)}</style>
+      </Helmet>
       <LoginForm>
+        <div>Styles:{JSON.stringify(gs(pal))}</div>
         <Editor />
       </LoginForm>
 
@@ -29,5 +37,10 @@ function App() {
     </div>
   );
 }
+function mapStateToProps(state) {
+  return {
+    pal: state.palette.data
+  }
+}
 
-export default App;
+export default connect(mapStateToProps)(App);

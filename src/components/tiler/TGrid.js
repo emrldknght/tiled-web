@@ -1,8 +1,9 @@
-import {useState} from "react";
 import {TGridCell} from "./TGridCell";
 import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {paletteAddCell, paletteRemoveCell} from "../../store/actions";
 
-const removeIndex = (array, index) => {
+export const removeIndex = (array, index) => {
   delete array[index];
   array = array.filter(function(element) {
     return element !== undefined
@@ -10,11 +11,15 @@ const removeIndex = (array, index) => {
   return array;
 }
 
-const cellKey = (i, j) => `k_${i}_${j}`;
+export const cellKey = (i, j) => `x${i}y${j}`;
 
+function TGrid({tileSrc, selectTile, palData, activeTiles,
+    paletteAddCell, paletteRemoveCell,
+  }) {
+  // const [activeTiles, setActiveTiles] = useState([cellKey(2, 0)]);
 
-function TGrid({tileSrc, selectTile}) {
-  const [activeTiles, setActiveTiles] = useState([cellKey(2, 0)]);
+  // const activeTiles = palData.map(item => item.cid); // .filter((i) => i);
+  // const setActiveTiles = () => {};
 
   if(!tileSrc.loaded) return(<div>Grid Loading...</div>);
 
@@ -28,14 +33,10 @@ function TGrid({tileSrc, selectTile}) {
   const handleChange = (i, j) => {
     console.log('set', i, j)
     if(isChecked(i, j)) {
-      // console.log('in array');
-      const index = activeTiles.indexOf(cellKey(i, j));
-      if(index !== -1) {
-        const newState = removeIndex(activeTiles, index);
-        setActiveTiles(newState);
-      }
+      //console.log('in array');
+      paletteRemoveCell(cellKey(i , j));
     } else {
-      setActiveTiles(oldState => [...oldState, ...[cellKey(i, j)]])
+      paletteAddCell({ cid: cellKey(i, j), x: i, y: j })
     }
   }
 
@@ -43,7 +44,7 @@ function TGrid({tileSrc, selectTile}) {
 
   const cells = (j) => [...Array(tileSrc.wc).keys()]
     .map(i => <TGridCell i={i} j={j}  key={`grid_cell_${i}_${j}`}
-      isChecked={isChecked}  handleChange={handleChange} selectTile={selectTile}
+      isChecked={isChecked(i, j)}  handleChange={handleChange} selectTile={selectTile}
     />)
 
 
@@ -54,23 +55,38 @@ function TGrid({tileSrc, selectTile}) {
 
   return(
     <div className='t-grid'>
-      {gridRows}
+      <div className="status col" style={{ backgroundColor: 'white'}} >
+        <span>
+          {JSON.stringify(palData)}
+        </span>
+        <span>
+          {JSON.stringify(activeTiles)}
+        </span>
+      </div>
+      <div className="wrapper">
+        {gridRows}
+      </div>
     </div>
   )
 }
 function mapStateToProps(state) {
   return {
     tileSrc: state.tileSrc,
+    palData: state.palette.data,
+    activeTiles: state.palette.data.map(item => item.cid).filter((i) => i),
   }
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    paletteAddCell,
+    paletteRemoveCell,
     /*
     selectTile: data => {
       dispatch(setTileSrcR(data))
     }
      */
-  }
-}
+  },
+  dispatch
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TGrid);
