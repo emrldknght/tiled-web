@@ -15,7 +15,7 @@ export const generateCellStyles = (styles = defaultStyles) => {
     acc + `${item}{${styleToString(styles[item])}}`
   ), '');
 
-  console.log(output);
+  // console.log(output);
 
   return output;
   // return `.App{background-color:purple;}`;

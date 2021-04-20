@@ -31,12 +31,23 @@ function TGrid({tileSrc, selectTile, palData, activeTiles,
   */
 
   const handleChange = (i, j) => {
-    console.log('set', i, j)
+    // console.log('set', i, j)
     if(isChecked(i, j)) {
       //console.log('in array');
       paletteRemoveCell(cellKey(i , j));
     } else {
-      paletteAddCell({ cid: cellKey(i, j), x: i, y: j })
+      // console.log('addWith', JSON.stringify(palData));
+      const ids = palData.map(item => item.id);
+      let newId = Math.max(...ids);
+      newId++;
+      // console.log('newId', newId);
+
+      paletteAddCell({
+        cid: cellKey(i, j), x: i, y: j,
+        id: newId,
+        type: '',
+        bg: ''
+      })
     }
   }
 
@@ -55,6 +66,7 @@ function TGrid({tileSrc, selectTile, palData, activeTiles,
 
   return(
     <div className='t-grid'>
+      {/*
       <div className="status col" style={{ backgroundColor: 'white'}} >
         <span>
           {JSON.stringify(palData)}
@@ -63,6 +75,7 @@ function TGrid({tileSrc, selectTile, palData, activeTiles,
           {JSON.stringify(activeTiles)}
         </span>
       </div>
+      */}
       <div className="wrapper">
         {gridRows}
       </div>

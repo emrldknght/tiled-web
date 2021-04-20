@@ -1,60 +1,32 @@
 import TImg from "./tiler/TImg";
-import TGrid from "./tiler/TGrid";
+import TGrid, {cellKey} from "./tiler/TGrid";
 import {connect} from "react-redux";
 import React from "react";
 import {bindActionCreators} from "redux";
+import {tilerSelectCell} from "../store/actions";
+import CellEditor from "./CellEditor";
 
-function TilerComponent({tileUrl, tileDim, tileSrc}) {
+function TilerComponent({tileUrl, tileDim, tileSrc, palette,
+    tilerSelectCell
+  }) {
 
   const p = {
     '--tile-root': `url(${tileUrl})`,
     '--tile-dim': `${tileDim}px`,
   };
 
-  // const [selectedTile, setSelectedTile] = useState(-1);
-  const selectTile = (x, y) => { console.log(`select it x${x}y${y}`) }
-
-  /*
-  const handleImgRef = async input => {
-    if(!input) return;
-    const img = input;
-
-    img.onload = onLoadTrigger.bind(this, 'onload', img);
-    if(img.complete) await onLoadTrigger('oncomplete', img);
-  }
-  const onLoadTrigger = async (trigger, img) => {
-    console.log(`loaded! from ${trigger}`, img);
-    if(!props.tileSrc.loaded) {
-      await updateImD(img);
-      console.log('uid updated!');
-    }
+  const selectTile = (x, y) => {
+    const cid = cellKey(x, y);
+    console.log(`select it: ${cid}`);
+    tilerSelectCell(cid);
   }
 
-  const updateImD = async (img) => {
-    console.log('uid', img.width);
-
-    const w = img.width;
-    const h = img.height;
-    const d = props.tileDim;
-
-    console.log(w,h,d);
-
-    const newState = {
-      w: w,
-      wc: w / d,
-      h: h,
-      hc: h / d,
-      loaded: true
-    };
-    await props.setTileSrc(prevState => ({...prevState, ...newState}));
-  }
-   */
-
-  // const [showActive, setShowActive] = useState(false);
+  // const cellTemplate = { id: -2, }
 
   return(
     <div className="tiler" style={p}>
       <b>Tiler</b>
+      <div>{JSON.stringify(palette)}</div>
       <input type="checkbox" />
       <div className="row">
         <div className="content">
@@ -66,10 +38,7 @@ function TilerComponent({tileUrl, tileDim, tileSrc}) {
         </div>
         <div className="info-tooltip">Info:{JSON.stringify(tileSrc)}</div>
       </div>
-        <div className="pal-cell-editor col">
-          <b>Cell editor:</b>
-          <button>Update Cell Data</button>
-        </div>
+      <CellEditor />
       </div>
     </div>
   )
@@ -79,11 +48,13 @@ function mapStateToProps(state) {
   return {
     tileSrc: state.tileSrc,
     tileUrl: state.tileUrl,
-    tileDim: state.tileDim
+    tileDim: state.tileDim,
+    palette: state.palette.data,
   }
 }
 const mapDispatchToProps = dispatch => bindActionCreators(
   {
+    tilerSelectCell
   },
   dispatch
 )

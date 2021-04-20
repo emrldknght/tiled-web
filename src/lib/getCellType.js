@@ -1,8 +1,8 @@
-import {classMapper} from "./classMapper";
-
+// import {classMapper} from "./classMapper";
+/*
 export const getCellType = (data) => {
-  return classMapper[data] ?? '';
-  /*
+  // return classMapper[data] ?? '';
+
   switch (data) {
     case 0:
       return 'grass';
@@ -13,5 +13,13 @@ export const getCellType = (data) => {
     default:
       return '';
   }
-  */
+
+}
+ */
+
+
+export const getCT = (types, id) => {
+  const f = types.filter(item => item.id === id) ;
+  const e = f[0] ?? { type: 'error' }
+  return e.type;
 }

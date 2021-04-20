@@ -1,6 +1,7 @@
 import {connect} from "react-redux";
 import {paletteSelectTile} from "../store/actions";
 import {bindActionCreators} from "redux";
+import React from "react";
 
 function CellPalette({tileUrl, tileDim,
                       palette, paletteSelectTile
@@ -33,27 +34,17 @@ function CellPalette({tileUrl, tileDim,
     )
   })
 
-  const handleClick = id => {
-    console.log('handle!');
-    paletteSelectTile(id);
-  }
-
   return(
     <div className="cell-palette col" style={p}>
-      <div className="row">
-        <button onClick={handleClick.bind(null, 1)}>Set!</button>
-      </div>
-      <div className="row">Palette:</div>
-      <div className="row">{JSON.stringify(palette.data)}</div>
-      <div className="row">
+      <b>Palette</b>
+      <div className="col">
         <div className="row" onClick={tapTile}>
           {k}
           <div className="cell cell-map grass">A</div>
           <div className="cell cell-map water">B</div>
         </div>
-        <div className="row">
-          From store : {palette.selectedTile}
-        </div>
+        <div className="row">{JSON.stringify(palette.data)}</div>
+        <div className="row">From store : {palette.selectedTile}</div>
       </div>
     </div>
   )

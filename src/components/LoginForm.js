@@ -9,7 +9,7 @@ function LoginForm({ children, auth, doAuth }) {
 
   useEffect(() => {
     const init = async () => {
-      console.log('init')
+      // console.log('init')
       const credentials = await getCred();
       if(credentials) {
         doAuth(credentials.login, credentials.pass);

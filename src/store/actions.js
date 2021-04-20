@@ -6,7 +6,7 @@ import {
   SAVE_MAP_FILE,
   SET_MAP_TILE,
   SET_TILE_SRC,
-  store
+  store, TILER_SELECT_CELL, TILER_UPDATE_CELL
 } from "../store";
 import {fetchMapFile} from "../lib/fetchMapFile";
 
@@ -19,6 +19,9 @@ export const setMapDataR = data => ({ type: 'setMap' , mapData: data });
 export const setTileUrlR = url => ({ type: 'setTileUrl', url: url });
 export const setTileDimR = dim => ({ type: 'setTileDim', dim: dim });
 
+export const tilerSelectCell = cid => ({ type: TILER_SELECT_CELL, cid });
+export const tilerUpdateCell = (cid, data) => ({ type: TILER_UPDATE_CELL, cid, data });
+
 export const doAuth = (login, pass) => ({ type: AUTH, payload: { login, pass } });
 export const logout = () => ({ type: LOGOUT });
 
@@ -30,7 +33,7 @@ export const setMapTile = (x, y, id) => ({ type: SET_MAP_TILE, payload: {x, y, i
 
 export const fetchMapFileA = async () => {
   const md = await fetchMapFile();
-  console.log('mda', md);
+  // console.log('mda', md);
   if(md) {
     store.dispatch(setMapDataR(md.mapData));
     store.dispatch(setTileUrlR(md.tileUrl));

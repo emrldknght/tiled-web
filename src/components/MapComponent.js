@@ -2,7 +2,7 @@ import {MapRow} from "./map/MapRow";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {setMapTile} from "../store/actions";
-import {useState} from "react";
+import React, {useState} from "react";
 
 function MapComponent({ tileUrl, tileDim, mapData, setMapTile, brushId }) {
   // const u = props.tileUrl ? `--tile-root: url(${props.tileUrl});` : '';
@@ -24,10 +24,13 @@ function MapComponent({ tileUrl, tileDim, mapData, setMapTile, brushId }) {
   // const setTile = () => { setMapTile(2, 2, 0); }
 
   const pokeTile = (e) => {
-    let { x, y } = e.target.dataset;
-    x = parseInt(x);
-    y = parseInt(y);
-    // console.log('poke', e.target, x,y,brushId);
+    let t = e.target;
+    if(!t.classList.contains('cell')) { t = t.parentElement; }
+
+    const { sx, sy } = t.dataset;
+    const x = parseInt(sx);
+    const y = parseInt(sy);
+    console.log('poke', e.target, x,y,brushId);
     if(!isNaN(x) && !isNaN(y)) {
       setMapTile(x, y, brushId);
     }
@@ -42,20 +45,23 @@ function MapComponent({ tileUrl, tileDim, mapData, setMapTile, brushId }) {
     <div className={`map ${showGridK()}`}
          style={p}
     >
-      <div>
-        <label>
-          <input type="checkbox" checked={showGrid}
-          onChange={toggleShowGrid}/>Show Grid
-        </label>
-        <label>
-          <input type="checkbox" checked={showCellInfo}
-                 onChange={toggleShowCellInfo}/>Show Info
-        </label>
-        {/*
-        BID: {brushId}
-        <button onClick={setTile}>Set!</button>
-        From store{JSON.stringify(mapData)}
-         */}
+      <div className="col">
+        <b>Map Editor</b>
+        <div className="row">
+          <label>
+            <input type="checkbox" checked={showGrid}
+            onChange={toggleShowGrid}/>Show Grid
+          </label>
+          <label>
+            <input type="checkbox" checked={showCellInfo}
+                   onChange={toggleShowCellInfo}/>Show Info
+          </label>
+          {/*
+          BID: {brushId}
+          <button onClick={setTile}>Set!</button>
+          From store{JSON.stringify(mapData)}
+           */}
+          </div>
       </div>
       <div className={`mapWrapper`} onClick={pokeTile}>{tm}</div>
     </div>
@@ -64,7 +70,7 @@ function MapComponent({ tileUrl, tileDim, mapData, setMapTile, brushId }) {
 
 function mapStateToProps(state) {
   return {
-    mapData: state.map,
+    mapData: state.mapData,
     tileUrl: state.tileUrl,
     tileDim: state.tileDim,
     brushId: state.palette.selectedTile

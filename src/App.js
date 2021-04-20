@@ -14,7 +14,7 @@ function App({pal}) {
         <style>{gs(pal)}</style>
       </Helmet>
       <LoginForm>
-        <div>Styles:{JSON.stringify(gs(pal))}</div>
+        {/*<div>Styles:{JSON.stringify(gs(pal))}</div>*/}
         <Editor />
       </LoginForm>
 

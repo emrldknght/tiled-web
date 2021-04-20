@@ -1,7 +1,7 @@
 import {TabsK} from "./Tabs";
 import {TabsSelectorEl} from "./TabsSelectorEl";
 
-export function TabsSelector(props) {
+export function TabsSelector({active, setActive}) {
 
   const t = [
     {tab: TabsK.mapEditor, text: 'Map editor'},
@@ -9,13 +9,13 @@ export function TabsSelector(props) {
   ]
 
   return(
-    <div className="tabs-selector col" onClick={props.setActive}>
+    <div className="tabs-selector col" onClick={setActive}>
       {/*<div>Tabs selector:</div>*/}
       <div className="row">
         {
           t.map((i, j) => {
             return(
-              <TabsSelectorEl tab={i.tab} active={props.active} text={i.text} key={`ts_${j}`}/>
+              <TabsSelectorEl tab={i.tab} active={active} text={i.text} key={`ts_${j}`}/>
             )
           })
         }

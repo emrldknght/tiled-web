@@ -3,7 +3,6 @@ import {TabsK} from "./components/Tabs";
 import MapComponent from "./components/MapComponent";
 import TilerComponent from "./components/TilerComponent";
 import CellPalette from "./components/CellPalette";
-import {palData} from "./store/palData";
 import {fetchMapFileA, logout, saveMapFile, setMapDataR, setTileDimR, setTileUrlR} from "./store/actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
@@ -16,8 +15,6 @@ import { Button, Tabs, Tab } from "@blueprintjs/core";
 function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout, saveMapFile }) {
   const [tab, setTab] = useState(TabsK.tiler)
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
-
-  const [selectedTile, setSelectedTile] = useState(-1);
 
   useEffect(() => {
     /*
@@ -48,7 +45,7 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout, saveMapFile }) 
   }, [setMapDataR, setTileDimR, setTileUrlR])
 
   const setActiveTab = e => {
-    console.log(e);
+    // console.log(e);
     setTab(e)
     /*
     return;
@@ -71,16 +68,8 @@ function Editor({ setMapDataR, setTileUrlR, setTileDimR, logout, saveMapFile }) 
         <Tabs id="mainTabs" onChange={setActiveTab} selectedTabId={tab}>
           <Tab id={TabsK.mapEditor} title="Map Editor" panel={
             <div className="row">
-              <div className="col">
-                <b>Map Editor</b>
-                <MapComponent />
-              </div>
-              <div className="col">
-                <b>Palette</b>
-                <CellPalette data={palData}
-                             selectedTile={selectedTile} setSelectedTile={setSelectedTile}
-                />
-              </div>
+              <MapComponent />
+              <CellPalette />
             </div>
           }/>
           <Tab id={TabsK.tiler} title="Tiler" panel={

@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { store } from './store';
 import {disableDevTools} from "./lib/disableDevTools";
 
-console.log('START IT!', process.env);
+// console.log('START IT!', process.env);
 disableDevTools()
 
 ReactDOM.render(

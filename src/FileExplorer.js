@@ -13,7 +13,7 @@ export default function FileExplorer() {
   useEffect(() => {
     async function getFileList() {
       const md = await fetchPath(Files);
-      console.log('md', md);
+      // console.log('md', md);
       setFilesData(md);
     }
     getFileList();

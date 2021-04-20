@@ -4,6 +4,7 @@ import {eraseCred, saveCred} from "./lib/creds";
 import {composeWithDevTools} from "redux-devtools-extension";
 import thunk from 'redux-thunk'
 import {saveJson} from "./lib/saveJson";
+import {Path} from "./lib/api";
 
 export const PALETTE_SELECT_TILE = 'pst';
 export const PALETTE_ADD_CELL = 'PALETTE_ADD_CELL';
@@ -13,20 +14,22 @@ export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
 export const SET_MAP_TILE = 'SET_MAP_TILE';
 export const SAVE_MAP_FILE = 'SAVE_MAP_FILE';
+export const TILER_SELECT_CELL = 'TILER_SELECT_CELL';
+export const TILER_UPDATE_CELL = 'TILER_UPDATE_CELL';
 
 const prepareData = (state) => JSON.stringify({
-  mapData: state.map,
+  mapData: state.mapData,
   tileDim: state.tileDim,
   tileUrl: state.tileUrl
 });
 
 const reducerActions = {
   [AUTH]: (state, action) => {
-    console.log(action);
+    // console.log(action);
     const l = action.payload.login;
     const p = action.payload.pass;
     if(l === 'yoba' && p === 'aboy') {
-      console.log('logging');
+      // console.log('logging');
       saveCred(l, p)
       return { ...state, ...{auth: true} }
     }
@@ -45,11 +48,11 @@ const reducerActions = {
   },
   [PALETTE_ADD_CELL]: (state, action) => {
     const d = action.data;
-    console.log('addCell', d);
+    // console.log('addCell', d);
 
     const p = [...state.palette.data];
     p.push(d);
-    console.log(p);
+    // console.log(p);
 
     const pal = {...state.palette};
     pal.data = p;
@@ -60,29 +63,67 @@ const reducerActions = {
     const id = action.id;
     const p = [...state.palette.data];
 
-    console.log('removeCell', id, p);
+    // console.log('removeCell', id, p);
     const np = p.filter(i => i.cid !== id)
-    console.log(np);
+    // console.log(np);
 
     const pal = {...state.palette};
     pal.data = np;
     return {...state, ...{palette: pal}};
 
   },
+  [TILER_SELECT_CELL]: (state, action) => {
+    const tiler = { ...state.tiler };
+    // console.log('->', action);
+    tiler.selectedCell = action.cid;
+    return { ...state, ...{ tiler: tiler }};
+  },
+  [TILER_UPDATE_CELL]: (state, action) => {
+    // console.log(':>', action);
+    // return state;
+
+    const p = [...state.palette.data];
+    console.log(JSON.stringify(p));
+    let index = -1; // should be 2
+    p.forEach((item, i) => {
+      if(item.cid === action.cid) index = i;
+    })
+    // console.log('index', index);
+
+    const u = {...p[index]};
+    // console.log(u);
+    u[action.data.k] = action.data.v;
+
+    const np = [
+      ...p.slice(0, index),
+      u,
+      ...p.slice(index + 1)
+    ]
+
+    console.log(JSON.stringify(np));
+    // return state;
+
+    const pal = {...state.palette};
+    pal.data = np;
+    return {...state, ...{palette: pal}};
+  },
   [SET_MAP_TILE]: (state, action) => {
     const {x, y, id} = action.payload;
     // console.log(`(${x},${y})->${id}`);
-    const newState = [...state.map];
+    const newState = [...state.mapData];
     newState[y][x] = id;
     // console.log('!', JSON.stringify(newState));
-    return {...state, ...{map: newState}};
+    return {...state, ...{mapData: newState}};
   },
   'setMap': (state, action) => {
     // const map = [ ...state.map ];
     const newMap = action.mapData;
-    return {...state, ...{map: newMap}};
+    return {...state, ...{mapData: newMap}};
   },
-  'setTileUrl': (state, action) => ({ ...state, ...{ tileUrl: action.url } }),
+  'setTileUrl': (state, action) => {
+    const url = `${Path}/tilesets/${action.url}`;
+    return { ...state, ...{ tileUrl: url } }
+  },
   'setTileDim': (state, action) => ({ ...state, ...{ tileDim: action.dim } }),
   'at': (state) => state,
   [SAVE_MAP_FILE]: (state) => {
