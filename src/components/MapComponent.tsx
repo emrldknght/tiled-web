@@ -1,19 +1,16 @@
 import {MapRow} from "./map/MapRow";
-import {connect} from "react-redux";
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
-import {SetMapTile, setMapTile} from "../store/actions";
-import React, {CSSProperties, useState} from "react";
-import {AppState} from "../store/initState";
+import React, {CSSProperties, useContext, useState} from "react";
+import {observer} from "mobx-react";
+import {mAppState} from "../store/mStore";
+import {StoreContext} from "../store/StoreContext";
 
-type Props = {
-  tileUrl: string | null,
-  tileDim: number | null,
-  mapData: number[][],
-  setMapTile: SetMapTile,
-  brushId: number
-}
+export const MapComponent = observer(() => {
+  const state = useContext(StoreContext);
+  const tileUrl = state.tileUrl;
+  const tileDim = state.tileDim;
+  const mapData = state.mapData;
+  const brushId =  state.palette.selectedTile;
 
-function MapComponent({tileUrl, tileDim, mapData, setMapTile, brushId} : Props) {
   // const u = props.tileUrl ? `--tile-root: url(${props.tileUrl});` : '';
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
     '--tile-root': `url(${tileUrl})`,
@@ -47,7 +44,7 @@ function MapComponent({tileUrl, tileDim, mapData, setMapTile, brushId} : Props) 
     const _y = parseInt(y || '');
     console.log('poke', e.target, _x, _y, brushId);
     if (!isNaN(_x) && !isNaN(_y)) {
-      setMapTile(_x, _y, brushId);
+      mAppState.setMapTile(_x, _y, brushId);
     }
   }
 
@@ -81,22 +78,4 @@ function MapComponent({tileUrl, tileDim, mapData, setMapTile, brushId} : Props) 
         <div className={`mapWrapper`} onClick={pokeTile}>{tm}</div>
       </div>
   )
-}
-
-function mapStateToProps(state: AppState) {
-  return {
-    mapData: state.mapData,
-    tileUrl: state.tileUrl,
-    tileDim: state.tileDim,
-    brushId: state.palette.selectedTile
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
-  {
-    setMapTile
-  },
-  dispatch
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(MapComponent)
+})

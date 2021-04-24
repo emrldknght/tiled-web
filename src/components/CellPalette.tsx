@@ -1,21 +1,14 @@
-import {connect} from "react-redux";
-import {PaletteSelectTile, paletteSelectTile} from "../store/actions";
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
-import React, {CSSProperties} from "react";
-import {PalCell} from "../store/palData";
-import {AppState} from "../store/initState";
+import React, {CSSProperties, useContext} from "react";
+import {observer} from "mobx-react";
+import {mAppState} from "../store/mStore";
+import {StoreContext} from "../store/StoreContext";
 
-type Props = {
-  tileUrl: string | null,
-  tileDim: number | null,
-  palette: { selectedTile: number, data: PalCell[] },
-  paletteSelectTile: PaletteSelectTile
-}
+export const CellPalette = observer(() => {
+  const state = useContext(StoreContext);
+  const tileUrl = state.tileUrl;
+  const tileDim = state.tileDim;
+  const palette = state.palette;
 
-function CellPalette({
-                       tileUrl, tileDim,
-                       palette, paletteSelectTile
-                     }: Props) {
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
     '--tile-root': `url(${tileUrl})`,
     '--tile-dim': `${tileDim}px`,
@@ -28,7 +21,7 @@ function CellPalette({
     const id = parseInt(_id);
     console.log('tap', id, typeof id);
     if (!isNaN(id)) {
-      paletteSelectTile(id);
+      mAppState.paletteSelectTile(id);
     }
   }
   /*
@@ -61,21 +54,4 @@ function CellPalette({
         </div>
       </div>
   )
-}
-
-function mapStateToProps(state: AppState) {
-  return {
-    tileUrl: state.tileUrl,
-    tileDim: state.tileDim,
-    palette: state.palette
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
-  {
-    paletteSelectTile,
-  },
-  dispatch
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(CellPalette)
+})

@@ -1,17 +1,14 @@
-import React from "react";
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
-import {connect} from "react-redux";
-import {TilerUpdateCell, tilerUpdateCell} from "../store/actions";
-import {AppState} from "../store/initState";
-import {PalCell} from "../store/palData";
+import React, {useContext} from "react";
+import {PalCell} from "../types";
+import {observer} from "mobx-react";
+import {mAppState} from "../store/mStore";
+import {StoreContext} from "../store/StoreContext";
 
-type Props = {
-    palette: PalCell[],
-    tilerSelectedCell: string | null,
-    tilerUpdateCell: TilerUpdateCell
-}
 
-function CellEditor({palette, tilerSelectedCell, tilerUpdateCell}: Props) {
+export const CellEditor = observer(() => {
+    const state = useContext(StoreContext);
+    const palette = state.palette.data;
+    const tilerSelectedCell = state.tiler.selectedCell;
 
     const selectedCellData = (palette: PalCell[], selected: string | null) => {
         const f = palette.filter(cell => cell.cid === selected);
@@ -30,7 +27,7 @@ function CellEditor({palette, tilerSelectedCell, tilerUpdateCell}: Props) {
         const nv = parseInt(t.value) || t.value;
 
         if(!tilerSelectedCell) return;
-        tilerUpdateCell(tilerSelectedCell, {k: t.name, v: nv});
+        mAppState.tilerUpdateCell(tilerSelectedCell, {k: t.name, v: nv});
     }
 
     return (
@@ -60,20 +57,4 @@ function CellEditor({palette, tilerSelectedCell, tilerUpdateCell}: Props) {
             {/* <button>Update Cell Data</button> */}
         </div>
     )
-}
-
-function mapStateToProps(state: AppState) {
-    return {
-        palette: state.palette.data,
-        tilerSelectedCell: state.tiler.selectedCell
-    }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
-  {
-    tilerUpdateCell
-  },
-  dispatch
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(CellEditor)
+})

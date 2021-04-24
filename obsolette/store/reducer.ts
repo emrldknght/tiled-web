@@ -1,5 +1,6 @@
-import {AppState, initState} from "./initState";
+import {initState} from "../../src/store/initState";
 import {ReducerActions, reducerActions} from "./reducers";
+import {AppState} from "../../src/types";
 
 export const reducer = (state = initState, action: { type: keyof ReducerActions; }): AppState => {
   // console.log('ss', JSON.stringify(state), action);

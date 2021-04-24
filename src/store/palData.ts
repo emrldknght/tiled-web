@@ -1,11 +1,4 @@
-export type PalCell = {
-  id: number,
-  type: string,
-  cid: string,
-  x: number,
-  y: number,
-  bg: string
-}
+import {PalCell} from "../types";
 
 export const palData: PalCell[] = [
   {

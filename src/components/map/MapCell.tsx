@@ -1,16 +1,19 @@
-import {connect} from "react-redux";
 import {getCT} from "../../lib/getCellType";
-import {PalCell} from "../../store/palData";
+import {observer} from "mobx-react";
+import {useContext} from "react";
+import {StoreContext} from "../../store/StoreContext";
+
 
 type Props = {
   id: number,
   x: number,
   y: number,
   showCellInfo: boolean,
-  types: PalCell[]
 }
 
-function MapCell({id, x, y, showCellInfo, types} : Props) {
+export const MapCell = observer(({id, x, y, showCellInfo} : Props) => {
+  const state = useContext(StoreContext);
+  const types = state.palette.data;
   const ct = getCT(types, id);
 
   return (
@@ -30,12 +33,4 @@ function MapCell({id, x, y, showCellInfo, types} : Props) {
 
     </div>
   )
-}
-
-function mapStateToProps(state: { palette: { data: PalCell[]; }; }) {
-  return {
-    types: state.palette.data
-  }
-}
-
-export default connect(mapStateToProps)(MapCell)
+})

@@ -1,16 +1,14 @@
-import {connect} from "react-redux";
-import {SetTileSrcR, setTileSrcR} from "../../store/actions";
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
-import {AppState, TileSrc} from "../../store/initState";
+import {observer} from "mobx-react";
+import {useContext} from "react";
+import {mAppState} from "../../store/mStore";
+import {StoreContext} from "../../store/StoreContext";
 
-type Props = {
-  tileUrl: string | null,
-  tileDim: number | null,
-  tileSrc: TileSrc,
-  setTileSrcR: SetTileSrcR
-}
+export const TImg = observer(() => {
 
-function TImg({tileUrl, tileDim, tileSrc, setTileSrcR}: Props) {
+  const state = useContext(StoreContext);
+  const tileUrl = state.tileUrl;
+  const tileDim = state.tileDim;
+  const tileSrc = state.tileSrc;
 
   // if(!tileSrc.loaded) return(<div>Image Loading...</div>);
 
@@ -31,7 +29,7 @@ function TImg({tileUrl, tileDim, tileSrc, setTileSrcR}: Props) {
       loaded: true
     };
     const updateData = async () => {
-      setTileSrcR(newState);
+      mAppState.setTileSrcR(newState);
     }
     await updateData();
   }
@@ -66,21 +64,4 @@ function TImg({tileUrl, tileDim, tileSrc, setTileSrcR}: Props) {
         }
       </div>
   )
-}
-
-function mapStateToProps(state: AppState) {
-  return {
-    tileSrc: state.tileSrc,
-    tileUrl: state.tileUrl,
-    tileDim: state.tileDim
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
-  {
-    setTileSrcR,
-  },
-  dispatch
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(TImg);
+})

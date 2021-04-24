@@ -6,7 +6,7 @@ export default function FileExplorer() {
   const [filesData, setFilesData] = useState<string[]>([]);
   const [currentFile, setCurrentFile] = useState<string | null>(null);
 
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [error, setError] = useState('Error! Error!');
 
   useEffect(() => {

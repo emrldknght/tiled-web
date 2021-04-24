@@ -1,9 +1,8 @@
-import {AppState, TileSrc} from "./initState";
-import {eraseCred, saveCred} from "../lib/creds";
-import {PalCell} from "./palData";
-import {Path} from "../lib/api";
-import {saveJson} from "../lib/saveJson";
-import {getMapDataFromState} from "../lib/getMapDataFromState";
+import {eraseCred, saveCred} from "../../src/lib/creds";
+import {AppState, PalCell, TileSrc} from "../../src/types";
+import {Path} from "../../src/lib/api";
+import {saveJson} from "../../src/lib/saveJson";
+import {getMapDataFromState} from "../../src/lib/getMapDataFromState";
 import {
   AUTH,
   LOGOUT,

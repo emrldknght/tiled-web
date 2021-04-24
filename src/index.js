@@ -1,19 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import {App} from './App';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from "react-redux";
-import { store } from './store';
 import {disableDevTools} from "./lib/disableDevTools";
+import {mAppState} from "./store/mStore";
+import {StoreContext} from "./store/StoreContext";
 
 // console.log('START IT!', process.env);
 disableDevTools()
 
 ReactDOM.render(
-    <Provider store={store}>
+  <div>
+    <StoreContext.Provider value={mAppState}>
       <App />
-    </Provider>
+    </StoreContext.Provider>
+  </div>
   ,
   document.getElementById('root')
 );

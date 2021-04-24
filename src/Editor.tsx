@@ -1,30 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {TabsK} from "./components/Tabs";
-import MapComponent from "./components/MapComponent";
-import TilerComponent from "./components/TilerComponent";
-import CellPalette from "./components/CellPalette";
-import {
-  fetchMapFileA,
-  logout, saveData,
-  saveMapFile,
-} from "./store/actions";
-import {connect} from "react-redux";
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
+import {MapComponent} from "./components/MapComponent";
+import {TilerComponent} from "./components/TilerComponent";
+import {CellPalette} from "./components/CellPalette";
 import FileExplorer from "./FileExplorer";
 
 import {Button, Tabs, Tab} from "@blueprintjs/core";
-import {AppState} from "./store/initState";
+import {mAppState} from "./store/mStore";
+import {observer} from "mobx-react";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
-type Props = {
-  logout: () => void,
-  saveMapFile: () => void,
-  saveData: () => void
-}
-
-function Editor({logout, saveMapFile, saveData}: Props) {
-  const [tab, setTab] = useState(TabsK.tiler)
+export const Editor = observer(()  => {
+  const [tab, setTab] = useState(TabsK.mapEditor)
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   useEffect(() => {
@@ -52,7 +40,8 @@ function Editor({logout, saveMapFile, saveData}: Props) {
     }
      */
     // init();
-    fetchMapFileA();
+    // fetchMapFileA();
+    mAppState.fetchMapFile()
   }, [])
 
   const setActiveTab = (e: string) => {
@@ -66,15 +55,20 @@ function Editor({logout, saveMapFile, saveData}: Props) {
      */
   }
 
+  const logoutW = () => {
+    // logout();
+    mAppState.logout();
+  }
+
   return (
     <div className="row">
       <FileExplorer/>
       <div className="col">
         <div className="row">
-          <Button icon="floppy-disk" text="Save" small onClick={saveData}/>
-          <Button icon="download" text="Save Local File" small onClick={saveMapFile}/>
+          <Button icon="floppy-disk" text="Save" small onClick={mAppState.saveData}/>
+          <Button icon="download" text="Save Local File" small onClick={mAppState.saveMapFile}/>
           <div style={{flexGrow: 1}}>&nbsp;</div>
-          <Button icon="log-out" text="Quit" small onClick={logout}/>
+          <Button icon="log-out" text="Quit" small onClick={logoutW}/>
         </div>
         <Tabs id="mainTabs" onChange={setActiveTab} selectedTabId={tab}>
           <Tab id={TabsK.mapEditor} title="Map Editor" panel={
@@ -85,7 +79,7 @@ function Editor({logout, saveMapFile, saveData}: Props) {
           }/>
           <Tab id={TabsK.tiler} title="Tiler" panel={
             <div className="col">
-              <TilerComponent/>
+              <TilerComponent />
             </div>
           }/>
 
@@ -93,28 +87,4 @@ function Editor({logout, saveMapFile, saveData}: Props) {
       </div>
     </div>
   )
-}
-
-function mapStateToProps(state: AppState) {
-  return {}
-}
-
-/*
-const mapDispatchToProps = dispatch => {
-  return {
-    setMapDataR: data => dispatch(setMapDataR(data)),
-    setTileUrlR: url => dispatch(setTileUrlR(url)),
-    setTileDimR: dim => dispatch(setTileDimR(dim)),
-  }
-}
- */
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
-  {
-    logout,
-    fetchMapFileA,
-    saveMapFile,
-    saveData
-  },
-  dispatch
-)
-export default connect(mapStateToProps, mapDispatchToProps)(Editor)
+})

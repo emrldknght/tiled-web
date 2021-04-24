@@ -1,5 +1,5 @@
 import {CSSProperties} from "react";
-import {PalCell} from "../store/palData";
+import {PalCell} from "../types";
 
 const styleToString = (style: Style) => {
   return Object.keys(style).reduce((acc, key) => (

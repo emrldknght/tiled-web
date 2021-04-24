@@ -1,10 +1,9 @@
 import {TGridCell} from "./TGridCell";
-import {connect} from "react-redux";
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
-import {PaletteAddCell, paletteAddCell, PaletteRemoveCell, paletteRemoveCell} from "../../store/actions";
-import {AppState, TileSrc} from "../../store/initState";
-import {PalCell} from "../../store/palData";
-import React from "react";
+import {PalCell} from "../../types";
+import React, {useContext} from "react";
+import {observer} from "mobx-react";
+import {mAppState} from "../../store/mStore";
+import {StoreContext} from "../../store/StoreContext";
 
 export const removeIndex = (array: any[], index: number) => {
   delete array[index];
@@ -17,18 +16,20 @@ export const removeIndex = (array: any[], index: number) => {
 export const cellKey = (i: number, j: number) => `x${i}y${j}`;
 
 type Props = {
-  tileSrc: TileSrc,
+  // tileSrc: TileSrc,
   selectTile: (x: number, y: number) => void,
-  palData: PalCell[],
-  activeTiles: string[],
-  paletteAddCell: PaletteAddCell,
-  paletteRemoveCell: PaletteRemoveCell,
+  // palData: PalCell[],
+  // activeTiles: string[],
+  // paletteAddCell: PaletteAddCell,
+  // paletteRemoveCell: PaletteRemoveCell,
 }
 
-function TGrid({
-                 tileSrc, selectTile, palData, activeTiles,
-                 paletteAddCell, paletteRemoveCell,
-               }: Props) {
+export const  TGrid = observer(({ selectTile }: Props) => {
+  const state = useContext(StoreContext);
+  const tileSrc = state.tileSrc;
+  const palData = state.palette.data;
+  const activeTiles = palData.map((item: PalCell) => item.cid).filter((i: string) => i);
+
   // const [activeTiles, setActiveTiles] = useState([cellKey(2, 0)]);
 
   // const activeTiles = palData.map(item => item.cid); // .filter((i) => i);
@@ -46,8 +47,8 @@ function TGrid({
   const handleChange = (i: number, j: number) => {
     // console.log('set', i, j)
     if (isChecked(i, j)) {
-      //console.log('in array');
-      paletteRemoveCell(cellKey(i, j));
+      console.log('in array');
+      mAppState.paletteRemoveCell(cellKey(i, j));
     } else {
       // console.log('addWith', JSON.stringify(palData));
       const ids = palData.map(item => item.id);
@@ -62,7 +63,7 @@ function TGrid({
         bg: ''
       }
 
-      paletteAddCell(newCell)
+      mAppState.paletteAddCell(newCell)
     }
   }
 
@@ -101,27 +102,4 @@ function TGrid({
         </div>
       </div>
   )
-}
-
-function mapStateToProps(state: AppState) {
-  return {
-    tileSrc: state.tileSrc,
-    palData: state.palette.data,
-    activeTiles: state.palette.data.map((item: PalCell) => item.cid).filter((i: string) => i),
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
-  {
-    paletteAddCell,
-    paletteRemoveCell,
-    /*
-    selectTile: data => {
-      dispatch(setTileSrcR(data))
-    }
-     */
-  },
-  dispatch
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(TGrid);
+})

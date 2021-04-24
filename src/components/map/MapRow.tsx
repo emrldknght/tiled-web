@@ -1,4 +1,5 @@
-import MapCell from "./MapCell";
+import {MapCell} from "./MapCell";
+import {observer} from "mobx-react";
 
 type Props = {
   data: number[],
@@ -6,7 +7,7 @@ type Props = {
   showCellInfo: boolean,
 }
 
-export function MapRow(props: Props) {
+export const MapRow = observer((props: Props) => {
   const _row = props.data.map((cell, x) => <MapCell
     key={`mc_${x}_${props.y}`}
     id={cell} x={x} y={props.y}
@@ -15,4 +16,4 @@ export function MapRow(props: Props) {
   return (
     <div className="row">{_row}</div>
   )
-}
+})

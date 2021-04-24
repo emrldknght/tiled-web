@@ -1,5 +1,4 @@
-import {AppState} from "../store/initState";
-import {MapFile} from "./fetchMapFile";
+import {AppState, MapFile} from "../types";
 
 export const getMapDataFromState = (data: AppState): MapFile => {
   let { tileUrl, tileDim, mapData } = data;

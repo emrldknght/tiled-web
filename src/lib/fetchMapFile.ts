@@ -1,8 +1,4 @@
-export type MapFile = {
-  tileUrl: string,
-  tileDim: number,
-  mapData: number[][]
-}
+import {MapFile} from "../types";
 
 export const fetchMapFile = async (): Promise<MapFile> => {
   return new Promise((resolve) => {

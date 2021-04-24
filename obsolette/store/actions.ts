@@ -8,9 +8,8 @@ import {
   SET_TILE_SRC,
   TILER_SELECT_CELL, TILER_UPDATE_CELL
 } from "./actionTypes";
-import {fetchMapFile} from "../lib/fetchMapFile";
-import {TileSrc} from "./initState";
-import {PalCell} from "./palData";
+import {fetchMapFile} from "../../src/lib/fetchMapFile";
+import {PalCell, TileSrc} from "../../src/types";
 import {store} from "../store";
 
 export type SetTileSrcR = (data: TileSrc) => ({ type: typeof SET_TILE_SRC, tileSrc: TileSrc });

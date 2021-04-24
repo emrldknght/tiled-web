@@ -1,29 +1,31 @@
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
-import {DoAuth, doAuth} from "../store/actions";
-import {connect} from "react-redux";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {getCred} from "../lib/creds";
 import {Button} from "@blueprintjs/core";
-import {AppState} from "../store/initState";
+import {mAppState} from "../store/mStore";
+import {observer} from "mobx-react";
+import {StoreContext} from "../store/StoreContext";
 
 type Props = {
   children: JSX.Element,
-  auth: boolean,
-  doAuth: DoAuth
+  // auth: boolean,
+  // doAuth: DoAuth
 }
 
-function LoginForm({children, auth, doAuth}: Props) {
+export const LoginForm = observer(({children}: Props) => {
+
+  const state = useContext(StoreContext);
+  const auth = state.auth;
 
   useEffect(() => {
     const init = async () => {
       // console.log('init')
       const credentials = await getCred();
       if (credentials) {
-        doAuth(credentials.login, credentials.pass);
+        mAppState.login(credentials.login, credentials.pass);
       }
     }
     init();
-  }, [doAuth])
+  }, [])
 
 
   const [login, setLogin] = useState('yoba');
@@ -35,8 +37,8 @@ function LoginForm({children, auth, doAuth}: Props) {
   const doAuthW = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     // console.log(login, pass);
-    await doAuth(login, pass);
     // console.log('ll', auth);
+    await mAppState.login(login, pass);
   }
 
   return (
@@ -56,19 +58,4 @@ function LoginForm({children, auth, doAuth}: Props) {
       </div>
     )
   )
-}
-
-function mapStateToProps(state: AppState) {
-  return {
-    auth: state.auth
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => bindActionCreators(
-  {
-    doAuth
-  },
-  dispatch
-)
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+})
