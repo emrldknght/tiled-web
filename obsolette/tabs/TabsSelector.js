@@ -1,4 +1,4 @@
-import {TabsK} from "../Tabs";
+import {TabsK} from "../../src/components/Tabs";
 import {TabsSelectorEl} from "./TabsSelectorEl";
 
 export function TabsSelector({active, setActive}) {
