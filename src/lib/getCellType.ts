@@ -16,9 +16,9 @@ export const getCellType = (data) => {
 
 }
  */
+import {PalCell} from "../store/palData";
 
-
-export const getCT = (types, id) => {
+export const getCT = (types: PalCell[], id: number) => {
   const f = types.filter(item => item.id === id) ;
   const e = f[0] ?? { type: 'error' }
   return e.type;

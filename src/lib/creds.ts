@@ -1,7 +1,7 @@
 const LOGIN_KEY = 'ty-login';
 const LOGIN_PASS = 'ty-pass'
 
-export const saveCred = (login, pass) => {
+export const saveCred = (login: string, pass: string) => {
   localStorage.setItem(LOGIN_KEY, login);
   localStorage.setItem(LOGIN_PASS, pass);
 }

@@ -1,8 +1,20 @@
-export const palData = [
+export type PalCell = {
+  id: number,
+  type: string,
+  cid: string,
+  x: number,
+  y: number,
+  bg: string
+}
+
+export const palData: PalCell[] = [
   {
     id: -1,
     type: 'empty',
-    cid: 'xEyE'
+    cid: 'xEyE',
+    x: -1,
+    y: -1,
+    bg: 'none'
   },
   {
     id: 0,

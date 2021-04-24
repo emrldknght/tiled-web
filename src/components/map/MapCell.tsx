@@ -1,7 +1,16 @@
 import {connect} from "react-redux";
 import {getCT} from "../../lib/getCellType";
+import {PalCell} from "../../store/palData";
 
-function MapCell({id, x, y, showCellInfo, types}) {
+type Props = {
+  id: number,
+  x: number,
+  y: number,
+  showCellInfo: boolean,
+  types: PalCell[]
+}
+
+function MapCell({id, x, y, showCellInfo, types} : Props) {
   const ct = getCT(types, id);
 
   return (
@@ -23,7 +32,7 @@ function MapCell({id, x, y, showCellInfo, types}) {
   )
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: { palette: { data: PalCell[]; }; }) {
   return {
     types: state.palette.data
   }

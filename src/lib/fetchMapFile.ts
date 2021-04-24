@@ -1,7 +1,14 @@
-export const fetchMapFile = async () => {
+export type MapFile = {
+  tileUrl: string,
+  tileDim: number,
+  mapData: number[][]
+}
+
+export const fetchMapFile = async (): Promise<MapFile> => {
   return new Promise((resolve) => {
     // console.log('fetch data');
-    fetch('map1.json')
+    const p = `map1.json`;
+    fetch(p)
       .then(r => {
         // console.log(r);
         // if(!r.ok) { throw new Error('not ok')}

@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {Drawer, Icon, Position} from "@blueprintjs/core";
+import {Callout, Drawer, Icon, Intent, Position} from "@blueprintjs/core";
 import {fetchPath, Files, Path} from "./lib/api";
 
-
-
 export default function FileExplorer() {
-  const [filesData, setFilesData] = useState([]);
-  const [currentFile, setCurrentFile] = useState(null);
+  const [filesData, setFilesData] = useState<string[]>([]);
+  const [currentFile, setCurrentFile] = useState<string | null>(null);
 
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+  const [error, setError] = useState('Error! Error!');
 
   useEffect(() => {
+    console.log('render files', expanded);
+
     async function getFileList() {
       const md = await fetchPath(Files);
       // console.log('md', md);
@@ -20,7 +21,7 @@ export default function FileExplorer() {
 
   }, [])
 
-  const getFile = async item => {
+  const getFile = async (item: string) => {
     console.log('will get');
     const data = await fetchPath(`${Path}/map-file/${item}`);
     console.log('fd', data);
@@ -30,10 +31,12 @@ export default function FileExplorer() {
 
   const toggleExpand = () => setExpanded(!expanded);
 
-  const fileItems = filesData.map((file, i) => <div
+  const fileItem = (file: string, i: number) => <div
     className={`item ${ (file === currentFile) ? 'active' : '' }`}
     key={`file_${i}`} onClick={getFile.bind(null, file)}>{file}
-  </div>)
+  </div>
+
+  const fileItems = filesData.map((file, i) => fileItem(file, i))
 
   return(
     <div className="file-explorer col">
@@ -44,11 +47,15 @@ export default function FileExplorer() {
         onClose={toggleExpand}
         size="15em"
       >
+        <Callout title="Error" intent={Intent.DANGER} icon="map">
+          {error}
+        </Callout>
         <div className="col">
           Current: {currentFile}
           <hr/>
           <div className="col file-list">
             {fileItems}
+            {fileItem('map3', 7)}
           </div>
         </div>
       </Drawer>
