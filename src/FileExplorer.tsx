@@ -13,7 +13,7 @@ export default function FileExplorer() {
     console.log('render files', expanded);
 
     async function getFileList() {
-      const md = await fetchPath(Files);
+      const md = await fetchPath(Files) as string[];
       // console.log('md', md);
       setFilesData(md);
     }

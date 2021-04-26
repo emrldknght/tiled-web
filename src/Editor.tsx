@@ -8,6 +8,7 @@ import FileExplorer from "./FileExplorer";
 import {Button, Tabs, Tab} from "@blueprintjs/core";
 import {mAppState} from "./store/mStore";
 import {observer} from "mobx-react";
+import {MapDimensionsComponent} from "./components/map/MapDimensions";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
@@ -60,13 +61,16 @@ export const Editor = observer(()  => {
     mAppState.logout();
   }
 
+  const saveDataW = () => mAppState.saveData()
+  const saveMapFileW = () => mAppState.saveMapFile();
+
   return (
     <div className="row">
       <FileExplorer/>
       <div className="col">
         <div className="row">
-          <Button icon="floppy-disk" text="Save" small onClick={mAppState.saveData}/>
-          <Button icon="download" text="Save Local File" small onClick={mAppState.saveMapFile}/>
+          <Button icon="floppy-disk" text="Save" small onClick={saveDataW}/>
+          <Button icon="download" text="Save Local File" small onClick={saveMapFileW}/>
           <div style={{flexGrow: 1}}>&nbsp;</div>
           <Button icon="log-out" text="Quit" small onClick={logoutW}/>
         </div>
@@ -74,7 +78,10 @@ export const Editor = observer(()  => {
           <Tab id={TabsK.mapEditor} title="Map Editor" panel={
             <div className="row">
               <MapComponent/>
-              <CellPalette/>
+              <div className="col">
+                <CellPalette/>
+                <MapDimensionsComponent />
+              </div>
             </div>
           }/>
           <Tab id={TabsK.tiler} title="Tiler" panel={

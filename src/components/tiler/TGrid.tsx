@@ -4,6 +4,7 @@ import React, {useContext} from "react";
 import {observer} from "mobx-react";
 import {mAppState} from "../../store/mStore";
 import {StoreContext} from "../../store/StoreContext";
+import { newOrderedArray as getArray } from '../../lib/dimensions';
 
 export const removeIndex = (array: any[], index: number) => {
   delete array[index];
@@ -68,11 +69,6 @@ export const  TGrid = observer(({ selectTile }: Props) => {
   }
 
   const isChecked = (i: number, j: number) => activeTiles.includes(cellKey(i, j));
-
-  const getArray = (l: number) => {
-    // @ts-ignore
-    return [...Array(l).keys()];
-  }
 
   const cells = (j: number) => getArray(tileSrc.wc)
       .map((i: number) => <TGridCell i={i} j={j} key={`grid_cell_${i}_${j}`}
