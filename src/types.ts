@@ -34,3 +34,21 @@ export type MapFile = {
   tileDim: number,
   mapData: number[][]
 }
+export type ApiError = {
+  error: string
+}
+
+export type ApiAnswer = ApiError | MapFile;
+
+export function isApiError(answer: ApiAnswer): answer is ApiError {
+  return (answer as ApiError).error !== undefined;
+}
+
+export type Character = {
+  Strength: number,
+  Dexterity: number,
+  Constitution: number,
+  Intelligence: number,
+  Wisdom: number,
+  Charisma: number,
+}

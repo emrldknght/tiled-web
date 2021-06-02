@@ -244,6 +244,32 @@
       width: min-content;
     }
   }
+
+  .charEd {
+    background-color: moccasin;
+    .flex-center() {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    label.stat {
+      // border: .2em dotted red;
+      width: 30em;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-rows: auto;
+      .stat-name {
+        font-weight: bold;
+        .flex-center();
+      }
+      .stat-bonus {
+        .flex-center();
+      }
+      input[type="number"] {
+        width: 5em;
+      }
+    }
+  }
 }
 
 .file-list {
