@@ -44,6 +44,17 @@
     margin: 0 auto;
   }
 
+  .error {
+    background-color: @red1;
+    color: white;
+    border-radius: .4em;
+    padding: .4em;
+    width: max-content;
+    &:empty {
+      display: none;
+    }
+  }
+
   @cell-outline: .02em solid rgba(255, 0, 0, .4);
 
   .cell {
@@ -268,6 +279,101 @@
       input[type="number"] {
         width: 5em;
       }
+    }
+    .slots {
+      display: grid;
+      --grid-dim: 3em;
+      grid-template-rows: repeat(5, var(--grid-dim));
+      grid-template-columns: repeat(11, var(--grid-dim));
+    }
+    .char-slot {
+      --dim: 4em;
+      border: .02em dotted black;
+      // width: var(--dim);
+      // height: var(--dim);
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(122,122,122, .2);
+      }
+
+      &.mainHand {
+        grid-column: 1 / 3;
+        grid-row: 1 / 6;
+      }
+      &.body {
+        grid-column: 3 / 6;
+        grid-row: 1 / 4;
+        border-left: 0;
+      }
+      &.offHand {
+        grid-column: 6 / 8;
+        grid-row: 1 / 4;
+        border-left: 0;
+      }
+      &.head {
+        grid-column: 8 / 10;
+        grid-row: 1 / 3;
+        border-left: 0;
+      }
+      &.hands {
+        grid-column: 8 / 10;
+        grid-row: 3 / 4;
+        border-left: 0;
+        border-top: 0;
+      }
+      &.shoulders {
+        grid-column: 10 / 12;
+        grid-row: 1 / 4;
+        border-left: 0;
+      }
+      &.filler {
+
+        grid-column: 3 / 6;
+        grid-row: 4 / 6;
+        border-left: 0;
+        border-top: 0;
+      }
+      &.girdle {
+        grid-column: 6 / 8;
+        grid-row: 4 / 6;
+        border-left: 0;
+        border-top: 0;
+      }
+      &.ringLeft {
+        grid-column: 8 / 9;
+        grid-row: 4 / 5;
+        border-left: 0;
+        border-top: 0;
+      }
+      &.ringRight {
+        grid-column: 8 / 9;
+        grid-row: 5 / 6;
+        border-left: 0;
+        border-top: 0;
+      }
+      &.neck {
+        grid-column: 9 / 10;
+        grid-row: 4 / 6;
+        border-left: 0;
+        border-top: 0;
+      }
+      &.feet {
+        grid-column: 10 / 12;
+        grid-row: 4 / 6;
+        border-left: 0;
+        border-top: 0;
+      }
+    }
+    button {
+      border: .2em solid gold;
+      color: gold;
+      background-color: #282c34;
+      &:active {
+        background-color: #3c3c44;
+      }
+      margin: .1em;
     }
   }
 }

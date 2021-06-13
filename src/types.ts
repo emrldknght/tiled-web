@@ -1,3 +1,5 @@
+import {Character} from "./types/Character";
+
 export type MapData = number[][];
 export type PalCell = {
   id: number,
@@ -38,17 +40,8 @@ export type ApiError = {
   error: string
 }
 
-export type ApiAnswer = ApiError | MapFile;
+export type ApiAnswer = ApiError | MapFile | Character | string[];
 
 export function isApiError(answer: ApiAnswer): answer is ApiError {
   return (answer as ApiError).error !== undefined;
-}
-
-export type Character = {
-  Strength: number,
-  Dexterity: number,
-  Constitution: number,
-  Intelligence: number,
-  Wisdom: number,
-  Charisma: number,
 }
