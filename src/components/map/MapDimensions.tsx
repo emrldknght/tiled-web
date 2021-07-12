@@ -41,7 +41,7 @@ function Panel({ active, handleClick, order }: PanelProps) {
   )
 }
 
-export const MapDimensionsComponent = observer(() => {
+export const MapDimensionsComponent = observer(function MapDimensionsComponent () {
   const state = useContext(StoreContext);
   const mapData = state.mapData;
   const w = mapData.length; // .length || 1;

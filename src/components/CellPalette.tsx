@@ -3,7 +3,7 @@ import {observer} from "mobx-react";
 import {mAppState} from "../store/mStore";
 import {StoreContext} from "../store/StoreContext";
 
-export const CellPalette = observer(() => {
+export const CellPalette = observer(function CellPalette() {
   const state = useContext(StoreContext);
   const tileUrl = state.tileUrl;
   const tileDim = state.tileDim;

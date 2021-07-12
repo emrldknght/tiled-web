@@ -1,4 +1,6 @@
 export const TabsK = {
   mapEditor: 'map-editor',
-  tiler: 'tiler'
+  tiler: 'tiler',
+  charEditor: 'char-editor',
+  itemEditor: 'item-editor'
 }

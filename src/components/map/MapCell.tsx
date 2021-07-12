@@ -11,7 +11,7 @@ type Props = {
   showCellInfo: boolean,
 }
 
-export const MapCell = observer(({id, x, y, showCellInfo} : Props) => {
+export const MapCell = observer(function MapCell({id, x, y, showCellInfo} : Props) {
   const state = useContext(StoreContext);
   const types = state.palette.data;
   const ct = getCT(types, id);

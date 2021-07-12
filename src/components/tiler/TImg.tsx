@@ -3,7 +3,7 @@ import {useContext} from "react";
 import {mAppState} from "../../store/mStore";
 import {StoreContext} from "../../store/StoreContext";
 
-export const TImg = observer(() => {
+export const TImg = observer(function TImg() {
 
   const state = useContext(StoreContext);
   const tileUrl = state.tileUrl;

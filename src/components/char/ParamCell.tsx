@@ -10,8 +10,12 @@ export function ParamCell({item, val, bonus, incParam, redParam, handleKey}: Par
       <span className="stat-name">{item}:</span>
       <input type="number" value={val} onChange={handleKey} name={item}/>
       <div className="col">
-        <button onClick={incParam.bind(null, item)}>+</button>
-        <button onClick={redParam.bind(null, item)}>-</button>
+        <button onClick={incParam.bind(null, item)}>
+          &#129045;
+        </button>
+        <button onClick={redParam.bind(null, item)}>
+          &#129047;
+        </button>
       </div>
       <span className="stat-bonus">{(bonus > 0) ? '+' : ''}{bonus}</span>
     </label>

@@ -6,9 +6,10 @@ import {gs} from "./lib/genStyles";
 import React, {useContext} from "react";
 import {observer} from "mobx-react";
 import {StoreContext} from "./store/StoreContext";
+import {StoreView} from "./components/StoreView";
 
 
-export const App = observer(() => {
+export const App = observer(function App() {
   const state = useContext(StoreContext);
   const pal = state.palette.data
 
@@ -18,8 +19,8 @@ export const App = observer(() => {
           <title>SteamQuest Map editor v 0.1</title>
           <style>{gs(pal)}</style>
         </Helmet>
+        <StoreView/>
         {/*
-          <StoreView/>
           <div style={{ border: '1px solid lime' }}>{gs(pal)}</div>
         */}
         <LoginForm>

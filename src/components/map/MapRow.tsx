@@ -7,7 +7,7 @@ type Props = {
   showCellInfo: boolean,
 }
 
-export const MapRow = observer((props: Props) => {
+export const MapRow = observer(function MapRow(props: Props) {
   const _row = props.data.map((cell, x) => <MapCell
     key={`mc_${x}_${props.y}`}
     id={cell} x={x} y={props.y}

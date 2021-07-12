@@ -1,10 +1,23 @@
-import {PalCell, TileSrc} from "../types";
+import {ApiError, AppState, isApiError, MapFile, PalCell, TileSrc} from "../types";
 import {palData} from "./palData";
-import {action, makeObservable, observable} from "mobx";
+import {action, configure, makeObservable, observable, toJS} from "mobx";
 import {eraseCred, saveCred} from "../lib/creds";
-import {fetchMapFile} from "../lib/fetchMapFile";
-import {Path} from "../lib/api";
+import {fetchMap, Path, postData} from "../lib/api";
+import {saveJson} from "../lib/saveJson";
+import {PanelMode} from "../components/map/MapDimensions";
+import {getAction} from "../lib/dimensions";
 
+configure({ enforceActions: 'always' })
+
+const prepareData = (state: AppState) => {
+  const data = {
+    mapData: state.mapData,
+    tileDim: state.tileDim,
+    tileUrl: (state.tileUrl || '').replace(/^.*([\\/:])/, '')
+    // tileUrl: (state.tileUrl || '').replace(/^.*(\\|\/|\:)/, '')
+  }
+  return JSON.stringify(data);
+};
 
 export type MAppStateT = {
   auth: boolean,
@@ -19,84 +32,90 @@ export type MAppStateT = {
   mapData: number[][],
   tiler: {
     selectedCell: string | null
-  }
+  },
+  error?: string,
 }
 
 class MAppState implements MAppStateT {
-  auth = false;
-  tileSrc = { w:0, wc: 0, h: 0, hc: 0, loaded: false };
-  palette = {
+  @observable auth = false;
+  @observable tileSrc = { w:0, wc: 0, h: 0, hc: 0, loaded: false };
+  @observable palette = {
     selectedTile: -1,
     data: palData
   };
-  st = -3;
-  tileUrl: string | null = null;
-  tileDim: number | null = null;
-  mapData: number[][] = [];
-  tiler: {
+  @observable st = -3;
+  @observable tileUrl: string | null = null;
+  @observable tileDim: number | null = null;
+  @observable mapData: number[][] = [];
+  @observable tiler: {
     selectedCell: string | null
   } = { selectedCell: null }
+
+  @observable error: string = '';
+
   constructor() {
-    makeObservable(this, {
-      auth: observable,
-      tileSrc: observable,
-      palette: observable,
-      tileUrl: observable,
-      tileDim: observable,
-      mapData: observable,
-      tiler: observable,
-      login: action,
-      setMap: action,
-      setTileUrl: action,
-      setTileDim: action,
-      // fetchMapFile
-      tilerSelectCell: action,
-      setTileSrcR: action,
-      paletteAddCell: action,
-      paletteRemoveCell: action,
-      tilerUpdateCell: action,
-      setMapTile: action,
-      paletteSelectTile: action,
-    })
+    makeObservable(this);
   }
+  @action
   login(login: string, pass: string) {
+    // console.log('login!');
     if(login === 'yoba' && pass === 'aboy') {
       // console.log('logging');
       saveCred(login, pass)
       this.auth = true;
     }
   }
+  @action
   logout() {
     eraseCred();
     this.auth = false;
   }
+
+  @action
   setMap(data: number[][]) {
     this.mapData = data as number[][];
   }
+
+  @action
   setTileUrl(url: string) {
     this.tileUrl = `${Path}/tilesets/${url}`;
   }
+
+  @action
   setTileDim(dim: number) {
     this.tileDim = dim;
   }
-  async fetchMapFile() {
-    const md = await fetchMapFile();
-    // console.log('mda', md);
+
+  async fetchMapFile(mapId: string) {
+    const md: MapFile | ApiError = await fetchMap(mapId);// fetchMapFile();
+    console.log('mda', md);
+    if(isApiError(md)) {
+      this.error = md.error;
+      return;
+    }
     if(md) {
       this.setMap(md.mapData);
       this.setTileUrl(md.tileUrl);
       this.setTileDim(md.tileDim);
     }
   }
+
+  @action
   tilerSelectCell(cid: string) {
     this.tiler.selectedCell = cid;
   }
+
+  @action
   setTileSrcR(data: TileSrc) {
     this.tileSrc = data;
   }
+
+  @action
   paletteAddCell(cell: PalCell) {
     this.palette.data.push(cell);
   }
+
+  @action
   paletteRemoveCell(cid: string) {
     // const np = this.palette.data.filter(i => i.cid !== cid)
     const ind = this.palette.data.findIndex(i => i.cid === cid);
@@ -104,6 +123,8 @@ class MAppState implements MAppStateT {
       this.palette.data.splice(ind, 1);
     }
   }
+
+  @action
   tilerUpdateCell(cid: string, data: { k: string ; v: string | number; }) {
     const ind = this.palette.data.findIndex(i => i.cid === cid);
     if(ind !== -1) {
@@ -113,18 +134,38 @@ class MAppState implements MAppStateT {
       (l[k] as string | number) = v;
     }
   }
+
+  @action
   setMapTile(x: number, y: number, id: number) {
     console.log('smt', x, y, id);
     this.mapData[y][x] = id;
   }
+
+  @action
   paletteSelectTile(id: number) {
     this.palette.selectedTile = id;
   }
+
   saveMapFile() {
+    const content = prepareData(toJS(this));
+    console.log('save->', content);
+    saveJson(content);
+  }
+
+  async saveData() {
+    const content = prepareData(toJS(this));
+    console.log('post->', content);
+
+    const a = await postData(`${Path}/map-file/map1`, content);
+    console.log('answer', a);
 
   }
-  saveData() {
 
+  @action
+  mapExpand(mode: PanelMode, dimActive: number) {
+    let action = getAction(dimActive, mode);
+    console.log(action, typeof action);
+    if(typeof action === 'function') action(this.mapData);
   }
 }
 

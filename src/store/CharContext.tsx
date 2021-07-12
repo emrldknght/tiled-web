@@ -1,4 +1,4 @@
-import {action, makeObservable, observable} from "mobx";
+import {action, computed, makeObservable, observable} from "mobx";
 import {createContext} from "react";
 import {ApiError, isApiError} from "../types";
 import {fetchChar, Path, postData} from "../lib/api";
@@ -57,6 +57,17 @@ export class CharAppState implements Character {
     Dexterity: 1,
     Intelligence: 1,
     Wisdom: 1,
+  }
+
+  @observable selectedSlot: keyof CharSlots | null = null;
+
+  @computed get selectedSlotData() {
+    return (this.selectedSlot) ? this.Slots[this.selectedSlot] : null;
+  }
+
+  @action
+  selectSlot(slot: keyof CharSlots | null) {
+    this.selectedSlot = slot;
   }
 
   @observable Slots: CharSlots = emptySlots;

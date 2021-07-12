@@ -1,8 +1,9 @@
 import {ReactNode} from "react";
 
-export function Col({ children }: { children: ReactNode }) {
+type Props = { children: ReactNode, className?: string }
+export function Col({ children, className = '' }: Props) {
   return(
-    <div className="col">
+    <div className={`col ${className}`}>
       {children}
     </div>
   )

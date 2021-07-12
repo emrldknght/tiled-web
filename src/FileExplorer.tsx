@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Callout, Drawer, Icon, Intent, Position} from "@blueprintjs/core";
-import {fetchPath, Files, Path} from "./lib/api";
+import {fetchFileList, fetchPath, Path} from "./lib/api";
+import {ApiError, isApiError} from "./types";
 
 export default function FileExplorer() {
   const [filesData, setFilesData] = useState<string[]>([]);
@@ -10,12 +11,15 @@ export default function FileExplorer() {
   const [error, setError] = useState('Error! Error!');
 
   useEffect(() => {
-    console.log('render files', expanded);
+    console.log('render files');
 
     async function getFileList() {
-      const md = await fetchPath(Files) as string[];
-      // console.log('md', md);
-      setFilesData(md);
+      const md: string[] | ApiError = await fetchFileList();
+      if(isApiError(md)) {
+        setError(md.error)
+      } else {
+        setFilesData(md);
+      }
     }
     getFileList();
 

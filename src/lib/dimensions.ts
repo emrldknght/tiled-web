@@ -3,6 +3,9 @@ import {PanelMode} from "../components/map/MapDimensions";
 
 const newArray = (n: number): undefined[] => [...Array(n)];
 
+/**
+ * return array [1, 2, ..., n]
+ */
 export const newOrderedArray = (n: number): number[] => [...Array(n).keys()];
 
 const newRow = (l: number): Array<-1> => newArray(l).map(() => -1);

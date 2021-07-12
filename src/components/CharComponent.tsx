@@ -4,12 +4,19 @@ import {CharContext, charAppState, CharAppState, getProps} from "../store/CharCo
 
 import {ParamCell} from "./char/ParamCell";
 import {CharStats} from "../types/CharStats";
+import {InventorySlots} from "./char/InventorySlots";
 import {CharSlots} from "../types/CharSlots";
-import {SlotComponent} from "./char/SlotComponent";
+import {WeaponDisplayComponent} from "./weapons/WeaponDisplayComponent";
+import {Row} from "./Row";
+import {Col} from "./Col";
+import {Field} from "./Field";
+import {IEContext, itemEditorState} from "./items/ItemEditor";
 
-export const CharComponent = observer(() => {
+export const CharComponent = observer(function CharComponent() {
   const state = useContext(CharContext);
   // const Str = state.Stats.Strength;
+  const ss = charAppState.selectedSlot;
+  const ssd = charAppState.selectedSlotData;
 
   useEffect(() => {
     charAppState.fetchCharFile(1)
@@ -34,7 +41,7 @@ export const CharComponent = observer(() => {
     charAppState.setParam(p, v - 1)
   }
 
-  const stats = getProps(charAppState.Stats).map((item: string) => {
+  const stats = getProps(state.Stats).map((item: string) => {
     const val = state.Stats[item as keyof CharStats];
     // if(typeof val === 'number') {
     const bonus = CharAppState.getParamBonus(val);
@@ -61,37 +68,42 @@ export const CharComponent = observer(() => {
      */
   }
 
-  const selectSlotItem = (id: number) => {
-    console.log('ssi', id);
+  const selectSlotItem = (id: number, slot: keyof CharSlots) => {
+    console.log('ssi', id, slot);
+    if(ss === slot) {
+      charAppState.selectSlot(null);
+    } else {
+      charAppState.selectSlot(slot);
+    }
   }
-
-  const slots = getProps(charAppState.Slots).map((item:string) => {
-    const val = state.Slots[item as keyof CharSlots];
-    return (
-        <SlotComponent item={item} val={val} key={item} selectItem={selectSlotItem}/>
-      )
-  })
 
   return(
     <div className="charEd">
       <b>Character Editor</b>
       <div>{JSON.stringify(state)}</div>
-      <div className="row">
-        <div className="col">
-          <label className="stat"> ID:
-            <input value={state.ID} readOnly/>
-          </label>
-          <label className="stat"> Name:
-            <input value={state.Name} readOnly/>
-          </label>
+      <Row>
+        <Col>
+
+            <Field className="stat" name="ID"
+              value={state.ID}
+            />
+            <Field className="stat" name="Name"
+              value={state.Name}
+            />
+
           {stats}
           <button onClick={saveData}>Save</button>
-        </div>
-        <div className="slots col">
-          {slots}
-          <div className="char-slot filler">&nbsp;</div>
-        </div>
-      </div>
+        </Col>
+        <Col>
+          <InventorySlots charSlots={state.Slots} select={selectSlotItem} />
+          <div>
+            {(ssd && ssd.itemData) ? (
+              <WeaponDisplayComponent data={ssd.itemData} />
+              ) : ''
+            }
+          </div>
+        </Col>
+      </Row>
     </div>
   )
 })

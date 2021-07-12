@@ -5,7 +5,7 @@ import {mAppState} from "../store/mStore";
 import {StoreContext} from "../store/StoreContext";
 
 
-export const CellEditor = observer(() => {
+export const CellEditor = observer(function CellEditor() {
     const state = useContext(StoreContext);
     const palette = state.palette.data;
     const tilerSelectedCell = state.tiler.selectedCell;

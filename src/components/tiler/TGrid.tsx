@@ -25,7 +25,7 @@ type Props = {
   // paletteRemoveCell: PaletteRemoveCell,
 }
 
-export const  TGrid = observer(({ selectTile }: Props) => {
+export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
   const state = useContext(StoreContext);
   const tileSrc = state.tileSrc;
   const palData = state.palette.data;

@@ -11,7 +11,7 @@ type Props = {
   // doAuth: DoAuth
 }
 
-export const LoginForm = observer(({children}: Props) => {
+export const LoginForm = observer(function LoginForm ({children}: Props) {
 
   const state = useContext(StoreContext);
   const auth = state.auth;

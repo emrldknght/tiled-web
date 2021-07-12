@@ -10,6 +10,7 @@
   // --tile-root url('https://hydragames.neocities.org/assets/images/World_A2.png')
   // --tile-root url('')
   // --tile-dim 48px
+  --color-gold: gold;
 }
 
 @common-border: .3em double @vermilion1;
@@ -26,6 +27,21 @@
     outline: 0;
   }
 
+  /*
+  button {
+    background-color: olivedrab;
+    color: white;
+    border: 0;
+  }
+  */
+  .round-button {
+    --dim: 2em;
+    width: var(--dim);
+    height: var(--dim);
+    border-radius: 50%;
+  }
+
+
   .row {
     display: flex;
     flex-direction: row;
@@ -36,6 +52,13 @@
     display: flex;
     flex-direction: column;
     background-color: rgba(255, 255, 255, .1);
+  }
+
+  .hc {
+    align-items: center;
+  }
+  .vc {
+    justify-content: center;
   }
 
   .login-form {
@@ -257,7 +280,7 @@
   }
 
   .charEd {
-    background-color: moccasin;
+    background-color: darkgray;
     .flex-center() {
       display: flex;
       align-items: center;
@@ -269,15 +292,29 @@
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
       grid-template-rows: auto;
+      margin: .2em;
+      padding: .4em;
+      outline: .01em solid gold;
       .stat-name {
         font-weight: bold;
         .flex-center();
+        // font-size: 1.2em;
       }
       .stat-bonus {
         .flex-center();
       }
       input[type="number"] {
-        width: 5em;
+        align-self: center;
+        // background-color: rgba(255,255,255,.0);
+        font-size: 1.5em;
+        width: 3em;
+        text-align: center;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
       }
     }
     .slots {
@@ -367,14 +404,127 @@
       }
     }
     button {
-      border: .2em solid gold;
+      border: 0;
+      outline: .01em solid gold;
+      outline-offset: -.3em;
       color: gold;
       background-color: #282c34;
+      padding: .5em;
       &:active {
+        background-color: #3c3c44;
+      }
+      &:hover {
         background-color: #3c3c44;
       }
       margin: .1em;
     }
+  }
+  .weapons-ed {
+    button {
+      &.active {
+        background-color: black;
+        color: white;
+      }
+    }
+  }
+  .weapon-display, .armor-display {
+    label {
+      margin: .2em;
+      display: flex;
+      flex-direction: column;
+      padding: .2em;
+      max-width: 7em;
+      outline: .01em solid gold;
+    }
+  }
+  .weapon-edit {
+    label {
+      margin: .2em;
+      display: flex;
+      flex-direction: column;
+      padding: .2em;
+      max-width: 9em;
+      outline: .01em solid gold;
+    }
+    label.damage-dice {
+      position: relative;
+      &:after {
+        content: '\01F3B2';  /* \2685 */
+        position: absolute;
+        font-size: 18px;
+        right: 0;
+        top: 0.6em;
+        // background-color: rgba(97, 218, 251, .5);
+      }
+      .dices-holder {
+        position: absolute;
+        background-color: whitesmoke;
+        top: 100%;
+        &:extend(.App .row);
+        align-items: center;
+        /*
+        display: flex;
+        flex-direction: row;
+         */
+        select {
+          margin: 0;
+          padding: 4px;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          text-indent: 1px;
+          text-overflow: '';
+
+          --dim: 1.5em;
+          /*
+          width: var(--dim);
+          height: var(--dim);
+           */
+          text-align: center;
+          outline: none;
+        }
+      }
+    }
+    label.crit-dice {
+      position: relative;
+      &:after {
+        content: '\01F3B2';
+        position: absolute;
+        font-size: 18px;
+        right: 0;
+        top: 0.6em;
+      }
+      .dices-holder {
+        align-content: center;
+        background-color: whitesmoke;
+        position: absolute;
+        top: 100%;
+        input {
+          width: 3em;
+        }
+      }
+    }
+  }
+
+  .item-editor {
+    border: @common-border;
+  }
+  .items-list {
+    width: max-content;
+    li {
+      cursor: pointer;
+      &.selected {
+        background-color: #606579;
+        color: white;
+      }
+      &:hover {
+        background-color: #282c34;
+        color: white;
+      }
+      display: grid;
+      grid-template-columns: 1fr .1fr 4fr;
+    }
+    margin: 0 auto;
+    padding: 0;
   }
 }
 

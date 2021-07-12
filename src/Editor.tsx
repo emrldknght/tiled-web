@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {TabsK} from "./components/Tabs";
 import {MapComponent} from "./components/MapComponent";
 import {TilerComponent} from "./components/TilerComponent";
@@ -9,11 +9,21 @@ import {Button, Tabs, Tab} from "@blueprintjs/core";
 import {mAppState} from "./store/mStore";
 import {observer} from "mobx-react";
 import {MapDimensionsComponent} from "./components/map/MapDimensions";
+import {StoreContext} from "./store/StoreContext";
+import {CharComponent} from "./components/CharComponent";
+import {CharContext, charAppState} from "./store/CharContext";
+import {WeaponsComponent} from "./components/WeaponsComponent";
+import {Col} from "./components/Col";
+import {IEContext, ItemEditor, itemEditorState} from "./components/items/ItemEditor";
+import {TopControlPanel} from "./TopControlPanel";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
-export const Editor = observer(()  => {
-  const [tab, setTab] = useState(TabsK.mapEditor)
+
+
+export const Editor = observer(function Editor() {
+  const [tab, setTab] = useState(TabsK.itemEditor);
+  const state = useContext(StoreContext);
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   useEffect(() => {
@@ -42,7 +52,7 @@ export const Editor = observer(()  => {
      */
     // init();
     // fetchMapFileA();
-    mAppState.fetchMapFile()
+    mAppState.fetchMapFile('map1')
   }, [])
 
   const setActiveTab = (e: string) => {
@@ -56,41 +66,73 @@ export const Editor = observer(()  => {
      */
   }
 
-  const logoutW = () => {
-    // logout();
-    mAppState.logout();
-  }
 
-  const saveDataW = () => mAppState.saveData()
-  const saveMapFileW = () => mAppState.saveMapFile();
+
+  // const saveDataW = () => mAppState.saveData()
+  // const saveMapFileW = () => mAppState.saveMapFile();
 
   return (
-    <div className="row">
-      <FileExplorer/>
-      <div className="col">
-        <div className="row">
-          <Button icon="floppy-disk" text="Save" small onClick={saveDataW}/>
-          <Button icon="download" text="Save Local File" small onClick={saveMapFileW}/>
-          <div style={{flexGrow: 1}}>&nbsp;</div>
-          <Button icon="log-out" text="Quit" small onClick={logoutW}/>
-        </div>
-        <Tabs id="mainTabs" onChange={setActiveTab} selectedTabId={tab}>
-          <Tab id={TabsK.mapEditor} title="Map Editor" panel={
-            <div className="row">
-              <MapComponent/>
-              <div className="col">
-                <CellPalette/>
-                <MapDimensionsComponent />
-              </div>
-            </div>
-          }/>
-          <Tab id={TabsK.tiler} title="Tiler" panel={
+    <div className="col">
+      <div className="error">{state.error}</div>
+      <div className="row">
+        <FileExplorer/>
+          {!(state.error) ?
             <div className="col">
-              <TilerComponent />
-            </div>
-          }/>
-
-        </Tabs>
+              <TopControlPanel />
+              {/*
+              <div className="row">
+                <Button icon="floppy-disk" text="Save" small onClick={saveDataW}/>
+                <Button icon="download" text="Save Local File" small onClick={saveMapFileW}/>
+                <div style={{flexGrow: 1}}>&nbsp;</div>
+                <Button icon="log-out" text="Quit" small onClick={logoutW}/>
+              </div>
+              */}
+              <Tabs id="mainTabs" onChange={setActiveTab} selectedTabId={tab}>
+                <Tab id={TabsK.mapEditor} title="Map Editor" panel={
+                  (tab === TabsK.mapEditor)
+                    ?
+                      <div className="row">
+                        <MapComponent/>
+                        <div className="col">
+                          <CellPalette/>
+                          <MapDimensionsComponent />
+                        </div>
+                      </div>
+                    : undefined
+                }/>
+                <Tab id={TabsK.tiler} title="Tiler" panel={
+                  (tab === TabsK.tiler)
+                    ?
+                    <div className="col">
+                      <TilerComponent />
+                    </div>
+                    : undefined
+                }/>
+                <Tab id={TabsK.charEditor} title="Char Editor" panel={
+                  (tab === TabsK.charEditor)
+                    ?
+                    <div className="col">
+                      <CharContext.Provider value={charAppState}>
+                        <CharComponent />
+                      </CharContext.Provider>
+                      <WeaponsComponent />
+                    </div>
+                    : undefined
+                } />
+                <Tab id={TabsK.itemEditor} title="Item Editor" panel={
+                  (tab === TabsK.itemEditor)
+                    ?
+                    <Col>
+                      <IEContext.Provider value={itemEditorState}>
+                        <ItemEditor />
+                      </IEContext.Provider>
+                    </Col>
+                    : undefined
+                } />
+              </Tabs>
+            </div>  :
+            ''
+          }
       </div>
     </div>
   )

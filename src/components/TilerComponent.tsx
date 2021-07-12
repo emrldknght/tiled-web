@@ -6,7 +6,7 @@ import {observer} from "mobx-react";
 import {mAppState} from "../store/mStore";
 import {StoreContext} from "../store/StoreContext";
 
-export const TilerComponent = observer(() => {
+export const TilerComponent = observer(function TilerComponent() {
 
   const state = useContext(StoreContext);
   const tileUrl = state.tileUrl;
