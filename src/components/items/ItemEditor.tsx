@@ -1,8 +1,8 @@
 import {Col} from "../Col";
-import {createContext, useContext, useEffect, useState} from "react";
-import {addNewWeapon, fetchArmor, fetchItems, fetchWeapon, Path, postData} from "../../lib/api";
+import React, {createContext, useContext, useEffect, useState} from "react";
+import {addNewWeapon, fetchItems, fetchWeapon, Path, postData} from "../../lib/api";
 import {isApiError} from "../../types";
-import {Weapon, WeaponP} from "../../types/Weapon";
+import {Weapon} from "../../types/Weapon";
 import {Row} from "../Row";
 import {observer} from "mobx-react";
 import {action, computed, makeObservable, observable, toJS} from "mobx";
@@ -11,7 +11,6 @@ import {Button} from "@blueprintjs/core";
 import {Item, ItemP, ItemType} from "../../types/Item";
 import {Armor, armorDB, armorPList, ArmorType} from "../../types/Armor";
 import {ItemList} from "./ItemList";
-import {ArmorDisplayComponent} from "../armor/ArmorDisplayComponent";
 import {ArmorEditComponent} from "../armor/ArmorEditComponent";
 
 function isWeapon(item: Item): item is Weapon {
@@ -109,6 +108,35 @@ class ItemEditorState {
     }
   }
 
+  @action setIVal<T>(key: string, value: string | number, sid: T) {
+    const k = key as keyof T;
+    // typeof value === 'number' &&
+    if(typeof sid[k] === 'number') {
+      console.log('is number')
+      let v = parseInt(value as string);
+      if(isNaN(v)) v = 0;
+      console.log(v, sid[k]);
+      ((sid[k] as unknown) as number) = v;
+    }
+    if(typeof value === 'string' && typeof sid[k] === 'string') {
+      ((sid[k] as unknown) as string) = value;
+    }
+  }
+
+  @action setKey(key: keyof Weapon | keyof Armor, value: string | number) {
+    console.log('mobx', key, value);
+    if(!this.selectedItemData) return;
+
+    if (isWeapon(this.selectedItemData)) {
+      console.log('isWeapon');
+      this.setIVal<Weapon>(key, value, this.selectedItemData)
+    }
+    if (isArmor(this.selectedItemData)) {
+      console.log('isArmor');
+      this.setIVal<Armor>(key, value, this.selectedItemData)
+    }
+  }
+
   constructor() {
     makeObservable(this);
   }
@@ -144,15 +172,10 @@ class ItemEditorState {
     }
   }
 
-  addItem() {
-
-  }
 }
 
 export const itemEditorState = new ItemEditorState();
 export const IEContext = createContext(itemEditorState);
-
-export type changeHandler = (name: string, value: string) => void;
 
 export const ItemEditor = observer(function ItemEditor() {
 
@@ -190,48 +213,6 @@ export const ItemEditor = observer(function ItemEditor() {
     })
   }
 
-  const changeItem: changeHandler = (name, value) => {
-    switch (name) {
-      case 'name':
-        itemEditorState.setName(value);
-        break;
-      case 'category':
-        itemEditorState.setCategory(value);
-        break;
-      case 'proficiency':
-        itemEditorState.setProficiency(value);
-        break;
-      case 'type':
-        itemEditorState.setType(value);
-        break;
-      case 'damage':
-        itemEditorState.setDamage(value);
-        break;
-      case 'weight':
-        const wv = parseInt(value) || 0;
-        itemEditorState.setWeight(wv);
-        break;
-      case 'cost':
-        const cv = parseInt(value) || 0;
-        itemEditorState.setCost(cv);
-        break;
-      case 'crit_min':
-        const cmv = parseInt(value) || 0;
-        itemEditorState.setCritMin(cmv);
-        break;
-      case 'crit_max':
-        const cMv = parseInt(value) || 0;
-        itemEditorState.setCritMax(cMv);
-        break;
-      case 'crit_mult':
-        const cMuv = parseInt(value) || 0;
-        itemEditorState.setCritMult(cMuv);
-        break;
-      default:
-        console.error(`name : ${name} not supported`);
-    }
-  }
-
   return (
     <Col className="item-editor">
       <b>Item Editor</b>
@@ -248,12 +229,14 @@ export const ItemEditor = observer(function ItemEditor() {
           <hr style={{width: '100%'}}/>
           {/*JSON.stringify(sid)*/}
           {(sid && isWeapon(sid)) &&
-            <WeaponEditComponent data={sid} change={changeItem} save={saveItem}/>
+            <WeaponEditComponent data={sid} />
           }
           {(sid && isArmor(sid)) &&
-            <ArmorEditComponent item={sid} change={changeItem} save={saveItem}/>
+            <ArmorEditComponent item={sid} />
           }
-
+          {(sid) &&
+            <Button onClick={saveItem} text="Save"/>
+          }
         </Col>
       </Row>
       <Row>

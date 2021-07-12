@@ -1,23 +1,28 @@
 import {Armor, ArmorTypeE} from "../../types/Armor";
-import {Field} from "../Field";
+import {Field, FieldL} from "../Field";
 import {Row} from "../Row";
-import React from "react";
+import React, {useContext} from "react";
 import {$enum} from "ts-enum-util";
-import {changeHandler} from "../items/ItemEditor";
+import { IEContext } from "../items/ItemEditor";
 import {Button} from "@blueprintjs/core";
+import {observer} from "mobx-react";
 
-type Props = {item: Armor, change: changeHandler, save: () => void}
-export function ArmorEditComponent({item, change, save }: Props) {
+type Props = { item: Armor }
+export const ArmorEditComponent = observer(function ArmorEditComponent({ item }: Props) {
+  const state = useContext(IEContext);
+
   const handleVal = (e: React.ChangeEvent) => {
     const t = e.target as HTMLSelectElement;
-    console.log('|', t.name, t.value);
-    change(t.name, t.value);
+    const type = t.dataset.t;
+
+    console.log('|', t.name, t.value, type);
+    state.setKey((t.name as keyof Armor), t.value);
   }
 
   const handleList = (e: React.ChangeEvent) => {
     const t = e.target as HTMLSelectElement;
     console.log('->', t.name, t.value);
-    change(t.name, t.value)
+    state.setKey((t.name as keyof Armor), t.value);
   }
 
   const at = $enum(ArmorTypeE).map((item, n) => {
@@ -27,8 +32,9 @@ export function ArmorEditComponent({item, change, save }: Props) {
   return (
     <div className="armor-display col">
       <b>Armor display:</b>
-      <Field name="ID" value={item.id} />
-      <Field name="Name" value={item.name} handler={handleVal}/>
+      <FieldL label="ID" name="id" value={item.id} />
+      <FieldL label="name" name="name" value={item.name}
+              handler={handleVal} type="string"/>
       <Row>
         {/*<Field name="Type" value={item.type} handler={handleVal}/>*/}
         <label>
@@ -37,27 +43,33 @@ export function ArmorEditComponent({item, change, save }: Props) {
             {at}
           </select>
         </label>
-        <Field name="Armor Bonus" value={item.armorBonus} handler={handleVal}/>
+        <FieldL label="Armor Bonus" name="armorBonus" value={item.armorBonus}
+               handler={handleVal} type="number" />
       </Row>
       <Row>
-        <Field name="Max Dex Bonus" value={item.maxDexBonus} handler={handleVal}/>
-        <Field name="Armor Check Penalty" value={item.armorCheckPenalty} handler={handleVal}/>
-        <Field name="Arcane Spell Failure Chance" value={item.arcaneSpellFailureChance} handler={handleVal}/>
-        <Field name="speed" value={item.speed} handler={handleVal}/>
+        <FieldL label="Max Dex Bonus" name="maxDexBonus" value={item.maxDexBonus}
+               handler={handleVal} type="number" />
+        <FieldL label="Armor Check Penalty" name="armorCheckPenalty" value={item.armorCheckPenalty}
+               handler={handleVal} type="number" />
+        <FieldL label="Arcane Spell Failure Chance" name="arcaneSpellFailureChance" value={item.arcaneSpellFailureChance}
+               handler={handleVal} type="number"/>
+        <FieldL label="speed" name="speed" value={item.speed}
+               handler={handleVal} type="string"/>
       </Row>
       <Row>
         <Field
           name="Weight"
           value={item.weight}
           handler={handleVal}
+          type="number"
         />
         <Field
           name="Cost"
           value={item.cost}
           handler={handleVal}
+          type="number"
         />
       </Row>
-      <Button onClick={save} text="Save" />
     </div>
   )
-}
+})

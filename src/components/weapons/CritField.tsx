@@ -1,9 +1,11 @@
 import {Weapon} from "../../types/Weapon";
 import React, {useState} from "react";
 import {Row} from "../Row";
+import {FieldL} from "../Field";
+import {observer} from "mobx-react";
 
 type Props = { item: Weapon, handle: (e: React.ChangeEvent) => void }
-export function CritField({ item, handle }: Props) {
+export const CritField = observer(function CritField({ item, handle }: Props) {
   const min = item.crit_min;
   const max = item.crit_max;
   const mult = item.crit_mult;
@@ -27,17 +29,26 @@ export function CritField({ item, handle }: Props) {
       />
       {(showHolder) &&
         <Row className="dices-holder">
-          <input type="text" name="crit_min" value={min}
-                 onChange={handle}/>
+          <FieldL label="" name="crit_min" value={item.crit_min} type="number" handler={handle}/>
+          {/*
+          <input type="text" name="crit_min" value={item.crit_min}
+                 onChange={handle} data-t="number"/>
+          */}
           -
+          <FieldL label="" name="crit_max" value={item.crit_max} type="number" handler={handle}/>
+          {/*
           <input type="text" name="crit_max" value={max}
-                 onChange={handle}/>
+                 onChange={handle} data-t="number"/>
+          */}
           x
+          <FieldL label="" name="crit_mult" value={item.crit_mult} type="number" handler={handle}/>
+          {/*
           <input type="text" name="crit_mult" value={mult}
                  onChange={handle}/>
+          */}
           <button onClick={hide}>&#10004;</button>
         </Row>
       }
     </label>
   )
-}
+})

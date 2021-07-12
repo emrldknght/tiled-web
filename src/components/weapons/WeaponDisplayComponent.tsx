@@ -1,23 +1,13 @@
-import {CharSlot} from "../../types/CharSlot";
 import {Row} from "../Row";
 import {Weapon} from "../../types/Weapon";
+import {Field} from "../Field";
 
-type FieldProps = {name: string, value: string | number | undefined }
-function Field({name, value}: FieldProps) {
-  return(
-    <label>
-      {name}:
-      <input type="text" value={value}  readOnly={true} />
-    </label>
-  );
-}
-
-type Props = { data: CharSlot };
+type Props = { data: Weapon };
 export function WeaponDisplayComponent({ data }: Props) {
-  const item = data.itemData as Weapon;
+  const item = data;
   return (
     <div className="weapon-display col">
-      Item:
+      <b>Weapon display:</b>
       <Field name="ID" value={item.id} />
       <Field name="Name" value={item.name} />
       <Row>
