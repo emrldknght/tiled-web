@@ -1,28 +1,56 @@
 import {Col} from "../Col";
 import {createContext, useContext, useEffect, useState} from "react";
-import {addNewWeapon, fetchItems, fetchWeapon, Path, postData} from "../../lib/api";
+import {addNewWeapon, fetchArmor, fetchItems, fetchWeapon, Path, postData} from "../../lib/api";
 import {isApiError} from "../../types";
 import {Weapon, WeaponP} from "../../types/Weapon";
 import {Row} from "../Row";
 import {observer} from "mobx-react";
 import {action, computed, makeObservable, observable, toJS} from "mobx";
-import {WeaponEditComponent} from "./WeaponEditComponent";
+import {WeaponEditComponent} from "../weapons/WeaponEditComponent";
 import {Button} from "@blueprintjs/core";
+import {Item, ItemP, ItemType} from "../../types/Item";
+import {Armor, armorDB, armorPList, ArmorType} from "../../types/Armor";
+import {ItemList} from "./ItemList";
+import {ArmorDisplayComponent} from "../armor/ArmorDisplayComponent";
+import {ArmorEditComponent} from "../armor/ArmorEditComponent";
+
+function isWeapon(item: Item): item is Weapon {
+  return item.itemType === 'Weapon';
+}
+function isArmor(item: Item): item is Armor {
+  return item.itemType === 'Armor';
+}
+
 
 class ItemEditorState {
   @observable selectedItem: number | null = null;
-  @observable selectedItemData: Weapon | null = null;
+  @observable selectedItemType: ItemType | null = null;
+  @observable selectedItemData: Item | null = null;
 
-  @action selectItem(id: number) {
+  @action selectItem(id: number, type: ItemType) {
     this.selectedItem = id;
+    this.selectedItemType = type;
 
-    fetchWeapon(id).then(r => {
-      if(isApiError(r)) return;
-      this.setItemData(r);
-    })
+    if(type === 'Weapon') {
+      fetchWeapon(id).then(r => {
+        if (isApiError(r)) return;
+        this.setItemData(r);
+      })
+    }
+    if(type === 'Armor') {
+      const a: Armor | null = armorDB[id];
+      if(!a) return;
+      this.setItemData(a);
+      /*
+      fetchArmor(id).then(r => {
+        if (isApiError(r)) return;
+        this.setItemData(r);
+      })
+       */
+    }
   }
 
-  @action setItemData(data: Weapon) {
+  @action setItemData(data: Item) {
     this.selectedItemData = data;
   }
 
@@ -32,22 +60,25 @@ class ItemEditorState {
     }
   }
   @action setCategory(category: string) {
-    if(this.selectedItemData) {
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
       this.selectedItemData.category = category;
     }
   }
   @action setProficiency(proficiency: string) {
-    if(this.selectedItemData) {
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
       this.selectedItemData.proficiency = proficiency;
     }
   }
   @action setType(type: string) {
-    if(this.selectedItemData) {
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
       this.selectedItemData.type = type;
+    }
+    if(this.selectedItemData && isArmor(this.selectedItemData)) {
+      this.selectedItemData.type = type as ArmorType;
     }
   }
   @action setDamage(val: string) {
-    if(this.selectedItemData) {
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
       this.selectedItemData.damage = val;
     }
   }
@@ -63,17 +94,17 @@ class ItemEditorState {
   }
 
   @action setCritMin(val: number) {
-    if(this.selectedItemData) {
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
       this.selectedItemData.crit_min = val;
     }
   }
   @action setCritMax(val: number) {
-    if(this.selectedItemData) {
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
       this.selectedItemData.crit_max = val;
     }
   }
   @action setCritMult(val: number) {
-    if(this.selectedItemData) {
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
       this.selectedItemData.crit_mult = val;
     }
   }
@@ -83,6 +114,7 @@ class ItemEditorState {
   }
 
   @computed get damageData() {
+    if(!this.selectedItemData || !isWeapon(this.selectedItemData)) return null
     const val = this.selectedItemData?.damage || '1d2';
 
     const dPos = val.indexOf('d');
@@ -97,10 +129,19 @@ class ItemEditorState {
     const id = this.selectedItem;
     const data = toJS(this.selectedItemData);
     console.log('Save Item', this.selectedItem, data);
-    postData(`${Path}/weapon/${id}`, data)
-      .then((j) => {
-        console.log('from fetch', j)
-      })
+
+    if(this.selectedItemData && isWeapon(this.selectedItemData)) {
+      postData(`${Path}/weapon/${id}`, data)
+        .then((j) => {
+          console.log('from fetch', j)
+        })
+    }
+    if(this.selectedItemData && isArmor(this.selectedItemData)) {
+      postData(`${Path}/armor/${id}`, data)
+        .then((j) => {
+          console.log('from fetch', j)
+        })
+    }
   }
 
   addItem() {
@@ -113,18 +154,19 @@ export const IEContext = createContext(itemEditorState);
 
 export type changeHandler = (name: string, value: string) => void;
 
-export const ItemEditor = observer(() => {
+export const ItemEditor = observer(function ItemEditor() {
 
   const state = useContext(IEContext);
   const si = state.selectedItem;
   const sid = state.selectedItemData;
 
-  const initState: WeaponP[] = [];
+  const initState: ItemP[] = [];
   const [items, setItems] = useState(initState);
 
   const getItemsList = () => {
     fetchItems().then(r => {
       if (isApiError(r)) return;
+      r = r.concat(armorPList);
       setItems(r);
     })
   }
@@ -133,9 +175,9 @@ export const ItemEditor = observer(() => {
     getItemsList();
   }, [])
 
-  const selectItem = (id: number) => {
+  const selectItem = (id: number, type: ItemType) => {
     console.log(id);
-    itemEditorState.selectItem(id);
+    itemEditorState.selectItem(id, type);
   }
 
   const saveItem = () => itemEditorState.saveItem();
@@ -190,15 +232,6 @@ export const ItemEditor = observer(() => {
     }
   }
 
-  const itemList = items.map(item =>
-    <li onClick={() => selectItem(item.id)} key={item.id}
-        className={(item.id === state.selectedItem) ? 'selected' : ''}>
-      <span>{item.id}</span>
-      <span>|</span>
-      <span>&nbsp;{item.name}</span>
-    </li>
-  )
-
   return (
     <Col className="item-editor">
       <b>Item Editor</b>
@@ -207,21 +240,25 @@ export const ItemEditor = observer(() => {
         <Col className="hc">
           {/*JSON.stringify(items)*/}
           <Button onClick={addItem} icon="plus" className="round-button"/>
-          <ul className="items-list">
-            {itemList}
-          </ul>
+          <ItemList items={items} selectItem={selectItem} selectedItem={si} />
         </Col>
         <Col>
           Display:
           {si}
           <hr style={{width: '100%'}}/>
           {/*JSON.stringify(sid)*/}
-          {(sid)
-            ? <WeaponEditComponent data={sid} change={changeItem} save={saveItem}/>
-            : 'Please select weapon'
+          {(sid && isWeapon(sid)) &&
+            <WeaponEditComponent data={sid} change={changeItem} save={saveItem}/>
+          }
+          {(sid && isArmor(sid)) &&
+            <ArmorEditComponent item={sid} change={changeItem} save={saveItem}/>
           }
 
         </Col>
+      </Row>
+      <Row>
+        <Col className="hc">1</Col>
+        <Col>2</Col>
       </Row>
     </Col>
   )
