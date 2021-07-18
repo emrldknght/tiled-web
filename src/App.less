@@ -27,6 +27,15 @@
     outline: 0;
   }
 
+  .debug-out {
+    border: 1px dotted red;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    background-color: lightyellow;
+    max-width: 25vw;
+    word-break: break-all;
+  }
+
   /*
   button {
     background-color: olivedrab;
@@ -525,6 +534,40 @@
     }
     margin: 0 auto;
     padding: 0;
+  }
+
+  .spell-wrapper {
+    .spell-selector {
+      border: @common-border;
+      div {
+        cursor: pointer;
+      }
+      div:hover {
+        background-color: #3c3c44;
+        color: whitesmoke;
+      }
+      .selected {
+        background-color: #585865;
+        color: whitesmoke;
+      }
+      padding: .4em;
+    }
+    .spell-editor {
+      border: @common-border;
+      label {
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: 1fr 3fr;
+        padding: .2em;
+        span {
+          grid-row: 1 / 3;
+          background-color: rgba(128,128,128,.2);
+          display: flex;
+          align-items: center;
+          margin: .1em;
+        }
+      }
+    }
   }
 }
 

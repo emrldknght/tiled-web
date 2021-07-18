@@ -1,7 +1,21 @@
-export type SavingThrow = 'Fortitude' | 'Reflex' | 'Will'
-export type STEffect = 'negates' | 'half'
+export enum SavingThrowE {
+    Fortitude = 'Fortitude',
+    Reflex = 'Reflex',
+    Will = 'Will',
+}
+export type SavingThrow = keyof typeof SavingThrowE; // 'Fortitude' | 'Reflex' | 'Will'
+export enum STEffectE {
+    negates = 'negates',
+    half = 'half'
+}
+export type STEffect = keyof typeof  STEffectE; // 'negates' | 'half'
 
-export type SpellComponent = 'V' | 'S' | 'M'
+export enum SpellComponentE {
+    V = 'V',
+    S = 'S',
+    M = 'M'
+}
+export type SpellComponent = keyof typeof SpellComponentE; // 'V' | 'S' | 'M'
 
 export enum SpellSchoolE {
     conjuration = 'conjuration',
@@ -9,23 +23,37 @@ export enum SpellSchoolE {
     illusion = 'illusion'
 }
 
-export type SpellSchool = keyof typeof SpellSchoolE
+export type SpellSchool = keyof typeof SpellSchoolE;
+
+export enum SpellElementalSchoolE {
+    earth = 'earth',
+    fire = 'fire',
+}
+type SpellElementalSchool = keyof typeof SpellElementalSchoolE;
+export enum SpellRangeE {
+    close = 'close',
+    long = 'long',
+    touch = 'touch'
+}
+type SpellRange = keyof typeof SpellRangeE;
+
+export type SavingThrowT = 'none' | `${SavingThrow}` | `${SavingThrow} ${STEffect}`;
 
 export interface Spell {
     id: number,
     nameOf: string,
     school: SpellSchool,
-    elementalSchool?: 'earth' | 'fire',
+    elementalSchool?: SpellElementalSchool,
 
     // casting
     castingTime: number,
     components? : string | SpellComponent[]
-    range: 'close' | 'long' | 'touch'
+    range: SpellRange
     area?: string,
     targets?: string,
     effect?: string,
     duration: string | 'instantaneous',
-    savingThrow: 'none' | `${SavingThrow}` | `${SavingThrow} ${STEffect}`
+    savingThrow: SavingThrowT
     spellResistance: 'no' | 'yes',
     description: string
 }
@@ -86,10 +114,10 @@ const ShadowWalk: Spell = {
 }
 
 export const spellDB: {[key: number]: Spell} = {
-    0: AcidSplash,
-    1: Flare,
-    2: Fireball,
-    3: ShadowWalk
+    1: AcidSplash,
+    2: Flare,
+    12: Fireball,
+    14: ShadowWalk
 }
 
 export type SpellP = Pick<Spell, 'id' | 'nameOf'>
