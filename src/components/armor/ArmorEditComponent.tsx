@@ -4,7 +4,6 @@ import {Row} from "../Row";
 import React, {useContext} from "react";
 import {$enum} from "ts-enum-util";
 import { IEContext } from "../items/ItemEditor";
-import {Button} from "@blueprintjs/core";
 import {observer} from "mobx-react";
 
 type Props = { item: Armor }

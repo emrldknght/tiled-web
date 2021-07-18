@@ -10,7 +10,6 @@ import {WeaponDisplayComponent} from "./weapons/WeaponDisplayComponent";
 import {Row} from "./Row";
 import {Col} from "./Col";
 import {Field} from "./Field";
-import {IEContext, itemEditorState} from "./items/ItemEditor";
 
 export const CharComponent = observer(function CharComponent() {
   const state = useContext(CharContext);

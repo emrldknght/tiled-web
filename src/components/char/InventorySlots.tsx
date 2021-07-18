@@ -1,5 +1,5 @@
 import React from "react";
-import {charAppState, getProps} from "../../store/CharContext";
+import {getProps} from "../../store/CharContext";
 import {CharSlots} from "../../types/CharSlots";
 import {SlotComponent} from "./SlotComponent";
 

@@ -5,7 +5,7 @@ import {TilerComponent} from "./components/TilerComponent";
 import {CellPalette} from "./components/CellPalette";
 import FileExplorer from "./FileExplorer";
 
-import {Button, Tabs, Tab} from "@blueprintjs/core";
+import {Tabs, Tab} from "@blueprintjs/core";
 import {mAppState} from "./store/mStore";
 import {observer} from "mobx-react";
 import {MapDimensionsComponent} from "./components/map/MapDimensions";

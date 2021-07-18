@@ -1,6 +1,6 @@
-import {ApiAnswer, ApiError, ApiOk, MapFile} from "../types";
+import {ApiError, ApiOk, MapFile} from "../types";
 import {Character} from "../types/Character";
-import {Weapon, WeaponP} from "../types/Weapon";
+import {Weapon} from "../types/Weapon";
 import {ItemP} from "../types/Item";
 import {Armor} from "../types/Armor";
 
