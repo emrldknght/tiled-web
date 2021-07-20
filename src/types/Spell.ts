@@ -20,7 +20,8 @@ export type SpellComponent = keyof typeof SpellComponentE; // 'V' | 'S' | 'M'
 export enum SpellSchoolE {
     conjuration = 'conjuration',
     evocation = 'evocation',
-    illusion = 'illusion'
+    illusion = 'illusion',
+    abjuration = 'abjuration'
 }
 
 export type SpellSchool = keyof typeof SpellSchoolE;
@@ -39,6 +40,12 @@ type SpellRange = keyof typeof SpellRangeE;
 
 export type SavingThrowT = 'none' | `${SavingThrow}` | `${SavingThrow} ${STEffect}`;
 
+export enum SpellTypeE {
+    arcane = 'arcane',
+    divine = 'divine'
+}
+export type SpellType = keyof typeof SpellTypeE;
+
 export interface Spell {
     id: number,
     nameOf: string,
@@ -55,12 +62,14 @@ export interface Spell {
     duration: string | 'instantaneous',
     savingThrow: SavingThrowT
     spellResistance: 'no' | 'yes',
-    description: string
+    description: string,
+    type: SpellType
 }
 
 const AcidSplash: Spell = {
     id: 1,
     nameOf: 'Acid Splash',
+    type: 'arcane',
     school: 'conjuration',
     elementalSchool: 'earth',
     castingTime: 1,
@@ -75,6 +84,7 @@ const AcidSplash: Spell = {
 const Flare: Spell = {
     id: 2,
     nameOf: 'Flare',
+    type: 'arcane',
     school: 'evocation',
     castingTime: 1,
     components: 'V',
@@ -88,6 +98,7 @@ const Flare: Spell = {
 const Fireball: Spell = {
     id: 12,
     nameOf: 'Fireball',
+    type: 'arcane',
     school: 'evocation',
     elementalSchool: "fire",
     castingTime: 1,
@@ -102,6 +113,7 @@ const Fireball: Spell = {
 const ShadowWalk: Spell = {
     id: 14,
     nameOf: 'Shadow Walk',
+    type: 'arcane',
     school: 'illusion',
     castingTime: 1,
     components: ['V', 'S', 'M'],

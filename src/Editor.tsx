@@ -16,7 +16,7 @@ import {WeaponsComponent} from "./components/WeaponsComponent";
 import {Col} from "./components/Col";
 import {IEContext, ItemEditor, itemEditorState} from "./components/items/ItemEditor";
 import {TopControlPanel} from "./TopControlPanel";
-import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/SpellEditor";
+import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 

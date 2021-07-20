@@ -1,20 +1,20 @@
 import {
-    SavingThrowE, SavingThrowT,
     Spell,
     SpellComponent, SpellComponentE,
     spellDB,
-    SpellElementalSchoolE, SpellP, SpellRangeE,
-    SpellSchoolE,
-    STEffectE
-} from "../types/Spell";
+    SpellElementalSchoolE, SpellRangeE,
+    SpellSchoolE, SpellTypeE,
+} from "../../types/Spell";
 import {action, makeObservable, observable} from "mobx";
 import React, {createContext, useContext, useEffect} from "react";
 import {observer} from "mobx-react";
-import {EnumSelectField} from "./common/EnumSelectField";
+import {EnumSelectField} from "../common/EnumSelectField";
 import {$enum} from "ts-enum-util";
-import {DebugOut} from "./common/DebugOut";
+import {DebugOut} from "../common/DebugOut";
+import {SpellList} from "./SpellList";
+import {SavingThrowField} from "./SavingThrowField";
 
-class SEState  { // implements Spell
+export class SEState  { // implements Spell
     @observable spellId: number = -1;
     @observable spell: Spell | null = null
 
@@ -41,80 +41,6 @@ class SEState  { // implements Spell
 export const spellEditorState = new SEState();
 export const SpellEditorContext = createContext(spellEditorState);
 
-const spelList: SpellP[] = Object.values(spellDB).map((i) => ({ id: i.id,  nameOf: i.nameOf }))
-
-const SavingThrowF = observer(function SavingThrowF({spell, state}: {spell: Spell, state: SEState}) {
-    const st = spell.savingThrow;
-    function getSTT() {
-        const stA = st?.split(' ') || [];
-        return { T: (stA[0] || ''), E: stA[1] || '' }
-    }
-
-    const handleSavingThrow = (e: React.ChangeEvent) => {
-        const t = e.target as HTMLInputElement;
-        const n = t.name;
-
-        if(n === 'savingThrowNone') {
-            const v = t.checked;
-            console.log(v);
-            if (!v) {
-                state.setSVal('savingThrow', '');
-            } else {
-                state.setSVal('savingThrow', 'none');
-            }
-        }
-
-        const setPart = (v: string, p: 'T' | 'E'  = 'T') => {
-            if(v === 'none') v = '';
-            const stCurrent = getSTT();
-            stCurrent[p] = v;
-            console.log('ss');
-            state.setSVal('savingThrow', `${stCurrent.T} ${stCurrent.E}`)
-        }
-
-        if(n === 'st_T') {
-            let v = t.value;
-            setPart(v, 'T');
-        }
-        if(n === 'st_E') {
-            let v = t.value;
-            setPart(v, 'E');
-        }
-    }
-
-    return (
-      <div>
-          <span>
-            <input type="checkbox" name="savingThrowNone" value="none"
-                onChange={handleSavingThrow}
-                checked={spell.savingThrow === 'none'}
-            />&nbsp;None
-          </span>
-          {(spell.savingThrow !== 'none') && (
-            <div className="col">
-                <input type="text" value={spell.savingThrow} readOnly={true}/>
-                <div className="row">
-                    <label>
-                        <span>T:</span>
-                        <EnumSelectField name="st_T" value={getSTT().T}
-                                         en={SavingThrowE} handleChange={handleSavingThrow}
-                        />
-                    </label>
-                    {(getSTT().T) && (
-                      <label>
-                          <span>E:</span>
-                          <EnumSelectField name="st_E" value={getSTT().E}
-                                           en={STEffectE} handleChange={handleSavingThrow}
-                          />
-                      </label>
-                    )}
-                </div>
-            </div>
-          )}
-      </div>
-    )
-})
-
 export const SpellEditor = observer(function SpellEditor() {
     const state = useContext(SpellEditorContext);
     const spell = state.spell;
@@ -134,11 +60,6 @@ export const SpellEditor = observer(function SpellEditor() {
         // if(state.isKey(key)) {
             state.setSVal(key, val);
         // }
-    }
-
-    const handleSelect = (item: SpellP) => (e: React.MouseEvent) => {
-        console.log('cc', item.id);
-        state.selectItem(item.id)
     }
 
     const handleChangeB = (k: keyof typeof SpellComponentE) => (e: React.ChangeEvent) => {
@@ -190,16 +111,7 @@ export const SpellEditor = observer(function SpellEditor() {
           <h3>Spell editor</h3>
           <DebugOut data={spell} />
           <div className="row">
-              <div className="spell-selector col">
-                  <span>List</span>
-                  {(spelList).map((item, i) =>
-                    <div onClick={handleSelect(item)} key={i}
-                        className={(item.id === state.spellId) ? 'selected' : ''}
-                    >
-                        {item.nameOf}
-                    </div>
-                  )}
-              </div>
+              <SpellList state={ state } />
               <div className="spell-editor col">
                   {(spell) ?
                       <div className="col">
@@ -210,6 +122,11 @@ export const SpellEditor = observer(function SpellEditor() {
                           <label>
                               <span>Name:</span>
                               <input type="text" name="nameOf" value={spell?.nameOf} onChange={handleChange}/>
+                          </label>
+                          <label>
+                              <span>Type:</span>
+                              <EnumSelectField name="type" value={spell.type}
+                                               en={SpellTypeE} handleChange={handleChange} />
                           </label>
                           <label>
                               <span>Description:</span>
@@ -232,16 +149,39 @@ export const SpellEditor = observer(function SpellEditor() {
                               <input name="castingTime" value={spell?.castingTime} onChange={handleChange}/>
                           </label>
                           <label>
+                              <span>Duration:</span>
+                              <input name="duration" value={spell.duration}
+                                onChange={handleChange}
+                              />
+                          </label>
+                          <label>
+                              <span>Area:</span>
+                              <input name="area" value={spell.area}
+                                     onChange={handleChange}
+                              />
+                          </label>
+                          <label>
+                              <span>Targets:</span>
+                              <input name="targets" value={spell.targets}
+                                     onChange={handleChange}
+                              />
+                          </label>
+                          <label>
+                              <span>Effect:</span>
+                              <input name="effect" value={spell.effect}
+                                     onChange={handleChange}
+                              />
+                          </label>
+                          <label>
                               <span>Components:</span>
                               <input value={spell.components} readOnly={true}/>
-
                               <div className="row">
                                 {compBoxes}
                               </div>
                           </label>
                           <label>
                               <span>Saving throw</span>
-                              <SavingThrowF state={state}  spell={spell}/>
+                              <SavingThrowField state={state}  spell={spell}/>
                           </label>
                           <label>
                               <span>Spell resistance:</span>
