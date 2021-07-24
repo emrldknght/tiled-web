@@ -1,5 +1,4 @@
 import {createContext} from "react";
-import {MAppStateT} from "./mStore";
-import {initState} from "./initState";
+import { mAppState, MAppState } from "./mStore";
 
-export const StoreContext = createContext<MAppStateT>(initState)
+export const StoreContext = createContext<MAppState>(mAppState)

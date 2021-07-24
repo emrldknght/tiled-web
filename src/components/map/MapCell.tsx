@@ -11,10 +11,11 @@ type Props = {
   showCellInfo: boolean,
 }
 
-export const MapCell = observer(function MapCell({id, x, y, showCellInfo} : Props) {
+export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Props) {
   const state = useContext(StoreContext);
   const types = state.palette.data;
   const ct = getCT(types, id);
+  const surroundingCells = JSON.stringify(state.getCellR(x, y));
 
   return (
     <div className={`cell cell-map ${ct}`}
@@ -23,9 +24,10 @@ export const MapCell = observer(function MapCell({id, x, y, showCellInfo} : Prop
     >
       {(showCellInfo)
         ? (
-          <span>
+          <span className="col">
             <span>{id} ({x}, {y})</span>
             <span>{JSON.stringify(ct)}</span>
+            <span>{surroundingCells}</span>
           </span>
         )
         : ('')

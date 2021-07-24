@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect} from "react";
 import {TabsK} from "./components/Tabs";
 import {MapComponent} from "./components/MapComponent";
 import {TilerComponent} from "./components/TilerComponent";
@@ -11,19 +11,20 @@ import {observer} from "mobx-react";
 import {MapDimensionsComponent} from "./components/map/MapDimensions";
 import {StoreContext} from "./store/StoreContext";
 import {CharComponent} from "./components/CharComponent";
-import {CharContext, charAppState} from "./store/CharContext";
+import {charAppState, CharContext} from "./store/CharContext";
 import {WeaponsComponent} from "./components/WeaponsComponent";
 import {Col} from "./components/Col";
 import {IEContext, ItemEditor, itemEditorState} from "./components/items/ItemEditor";
 import {TopControlPanel} from "./TopControlPanel";
 import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
+import {LSKeys, useLState} from "./LocalState";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
 
 
 export const Editor = observer(function Editor() {
-  const [tab, setTab] = useState(TabsK.spellEditor);
+  const [tab, setTab] = useLState(TabsK.spellEditor, LSKeys.Tab);
   const state = useContext(StoreContext);
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
 

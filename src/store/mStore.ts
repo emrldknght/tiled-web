@@ -19,24 +19,7 @@ const prepareData = (state: AppState) => {
   return JSON.stringify(data);
 };
 
-export type MAppStateT = {
-  auth: boolean,
-  tileSrc: TileSrc,
-  palette: {
-    selectedTile: number,
-    data: PalCell[]
-  },
-  st: number,
-  tileUrl: string | null,
-  tileDim: number | null,
-  mapData: number[][],
-  tiler: {
-    selectedCell: string | null
-  },
-  error?: string,
-}
-
-class MAppState implements MAppStateT {
+export class MAppState {
   @observable auth = false;
   @observable tileSrc = { w:0, wc: 0, h: 0, hc: 0, loaded: false };
   @observable palette = {
@@ -166,6 +149,10 @@ class MAppState implements MAppStateT {
     let action = getAction(dimActive, mode);
     console.log(action, typeof action);
     if(typeof action === 'function') action(this.mapData);
+  }
+
+  getCellR(x: number, y: number) {
+    return [x, y]
   }
 }
 

@@ -1,8 +1,9 @@
 import {MapRow} from "./map/MapRow";
-import React, {CSSProperties, useContext, useState} from "react";
+import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
 import {mAppState} from "../store/mStore";
 import {StoreContext} from "../store/StoreContext";
+import {LSKeys, useLState} from "../LocalState";
 
 export const MapComponent = observer(function MapComponent() {
   const state = useContext(StoreContext);
@@ -17,8 +18,8 @@ export const MapComponent = observer(function MapComponent() {
     '--tile-dim': `${tileDim}px`,
   };
 
-  const [showGrid, setShowGrid] = useState(true);
-  const [showCellInfo, setShowCellInfo] = useState(true);
+  const [showGrid, setShowGrid] = useLState(true, LSKeys.MapGrid);
+  const [showCellInfo, setShowCellInfo] = useLState(true, LSKeys.MapCellInfo);
 
   const tm = mapData.map((row, y) =>
       <MapRow

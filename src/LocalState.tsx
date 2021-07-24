@@ -1,11 +1,13 @@
 // from https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/
 import React from "react";
 
-export const LSKeys: {[key: string]: string} = {
-    Tab: 'tiled-active-tab'
+export enum LSKeys {
+    Tab = 'tiled-active-tab',
+    MapGrid = 'map-grid',
+    MapCellInfo = 'map-cell-info'
 }
 
-export function useLState(defaultValue: any, key: string) {
+export function useLState(defaultValue: any, key: LSKeys) {
     const [value, setValue] = React.useState(() => {
         const kept = localStorage.getItem(key);
         return kept !== null
