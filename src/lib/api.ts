@@ -1,4 +1,4 @@
-import {ApiError, ApiOk, MapFile} from "../types";
+import {ApiAnswer, ApiError, ApiOk, MapFile} from "../types";
 import {Character} from "../types/Character";
 import {Weapon} from "../types/Weapon";
 import {ItemP} from "../types/Item";
@@ -15,7 +15,9 @@ export const fetchPath = (path: string): Promise<never> => {
   })
 }
 
-export const postData = (path: string, data: any): Promise<Weapon> => {
+// type PostDataType<T> = (path: string, data: T) => Promise<T>;
+
+export const postData = (path: string, data: any): Promise<ApiAnswer> => {
   // console.log(path, data);
   // return axios.post(path, data);
   return  new Promise(resolve => {

@@ -5,7 +5,7 @@ import {
     SpellElementalSchoolE, SpellRangeE,
     SpellSchoolE, SpellTypeE,
 } from "../../types/Spell";
-import {action, makeObservable, observable} from "mobx";
+import {action, makeObservable, observable, toJS} from "mobx";
 import React, {createContext, useContext, useEffect} from "react";
 import {observer} from "mobx-react";
 import {EnumSelectField} from "../common/EnumSelectField";
@@ -13,6 +13,7 @@ import {$enum} from "ts-enum-util";
 import {DebugOut} from "../common/DebugOut";
 import {SpellList} from "./SpellList";
 import {SavingThrowField} from "./SavingThrowField";
+import {Path, postData} from "../../lib/api";
 
 export class SEState  { // implements Spell
     @observable spellId: number = -1;
@@ -36,6 +37,18 @@ export class SEState  { // implements Spell
     isKey(key: string): key is keyof Spell {
         if(!this.spell) return false;
         return (key in this.spell)
+    }
+
+    save() {
+        if(!this.spell || !this.spellId) return;
+
+        const id = this.spellId;
+        const data = toJS(this.spell);
+        console.log('Save Item', id, data);
+        postData(`${Path}/spell/${id}`, data)
+          .then((j) => {
+              console.log('from fetch', j)
+          })
     }
 }
 export const spellEditorState = new SEState();
@@ -156,7 +169,7 @@ export const SpellEditor = observer(function SpellEditor() {
                           </label>
                           <label>
                               <span>Area:</span>
-                              <input name="area" value={spell.area}
+                              <input name="area" value={spell?.area}
                                      onChange={handleChange}
                               />
                           </label>
@@ -209,6 +222,7 @@ export const SpellEditor = observer(function SpellEditor() {
                   }
               </div>
           </div>
+          <button onClick={() => state.save()}>Save</button>
       </div>
     )
 })
