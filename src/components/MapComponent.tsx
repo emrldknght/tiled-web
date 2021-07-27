@@ -11,6 +11,8 @@ export const MapComponent = observer(function MapComponent() {
   const tileDim = state.tileDim;
   const mapData = state.mapData;
   const brushId =  state.palette.selectedTile;
+  const x = state.curX;
+  const y = state.curY;
 
   // const u = props.tileUrl ? `--tile-root: url(${props.tileUrl});` : '';
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
@@ -69,6 +71,7 @@ export const MapComponent = observer(function MapComponent() {
               <input type="checkbox" checked={showCellInfo}
                      onChange={toggleShowCellInfo}/>Show Info
             </label>
+            <div>x: {x} y: {y}</div>
             {/*
           BID: {brushId}
           <button onClick={setTile}>Set!</button>
