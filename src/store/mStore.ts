@@ -36,6 +36,29 @@ export class MAppState {
 
   @observable error: string = '';
 
+  @observable curX = -1;
+  @observable curY = -1;
+  @action
+  setXY(x: number, y: number) {
+    this.curX = x;
+    this.curY = y;
+  }
+  @observable hl: number[][] = [];
+
+  @action
+  setHl(x: number, y: number) {
+    this.resetHl();
+    this.hl[y][x] = 1;
+  }
+  @action resetHl() {
+    const hl = this.mapData.map(row => row.map(cell => 0));
+    this.hl = hl as number[][];
+  }
+
+  isHl(x: number, y: number) {
+    return this.hl[y][x] === 1;
+  }
+
   constructor() {
     makeObservable(this);
   }
@@ -57,6 +80,7 @@ export class MAppState {
   @action
   setMap(data: number[][]) {
     this.mapData = data as number[][];
+    this.resetHl();
   }
 
   @action
