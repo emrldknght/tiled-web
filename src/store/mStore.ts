@@ -173,6 +173,7 @@ export class MAppState {
     let action = getAction(dimActive, mode);
     console.log(action, typeof action);
     if(typeof action === 'function') action(this.mapData);
+    this.resetHl();
   }
 
   getCellR(x: number, y: number) {

@@ -32,7 +32,7 @@
     box-sizing: border-box;
     white-space: pre-wrap;
     background-color: lightyellow;
-    max-width: 25vw;
+    max-width: fit-content;
     word-break: break-all;
   }
 
@@ -99,6 +99,7 @@
     --dim: var(--tile-dim);
     width: var(--dim);
     height: var(--dim);
+
     &.hl {
       outline-style: dashed !important;
       outline-color: yellow !important;
@@ -204,7 +205,7 @@
     border: @common-border;
     transform: scale(@zoom);
     .cell {
-      outline: 0;
+      // outline: 0;
       cursor: pointer;
     }
     &.show-grid {

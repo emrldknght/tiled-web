@@ -5,6 +5,7 @@ import {CellEditor} from "./CellEditor";
 import {observer} from "mobx-react";
 import {mAppState} from "../store/mStore";
 import {StoreContext} from "../store/StoreContext";
+import {DebugOut} from "./common/DebugOut";
 
 export const TilerComponent = observer(function TilerComponent() {
 
@@ -32,7 +33,9 @@ export const TilerComponent = observer(function TilerComponent() {
   return (
     <div className="tiler" style={p}>
       <b>Tiler</b>
-      <div>{JSON.stringify(palette)}</div>
+      <div>
+        <DebugOut data={palette} />
+      </div>
       <input type="checkbox"/>
       <div className="row">
         <div className="content">

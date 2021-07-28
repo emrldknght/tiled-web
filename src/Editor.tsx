@@ -1,14 +1,10 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {TabsK} from "./components/Tabs";
-import {MapComponent} from "./components/MapComponent";
 import {TilerComponent} from "./components/TilerComponent";
-import {CellPalette} from "./components/CellPalette";
 import FileExplorer from "./FileExplorer";
-
 import {Tabs, Tab} from "@blueprintjs/core";
 import {mAppState} from "./store/mStore";
 import {observer} from "mobx-react";
-import {MapDimensionsComponent} from "./components/map/MapDimensions";
 import {StoreContext} from "./store/StoreContext";
 import {CharComponent} from "./components/CharComponent";
 import {charAppState, CharContext} from "./store/CharContext";
@@ -18,6 +14,7 @@ import {IEContext, ItemEditor, itemEditorState} from "./components/items/ItemEdi
 import {TopControlPanel} from "./TopControlPanel";
 import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
 import {LSKeys, useLState} from "./LocalState";
+import {MapEditorComponent} from "./components/MapEditorComponent";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
@@ -26,6 +23,7 @@ import {LSKeys, useLState} from "./LocalState";
 export const Editor = observer(function Editor() {
   const [tab, setTab] = useLState(TabsK.spellEditor, LSKeys.Tab);
   const state = useContext(StoreContext);
+  const [loading, setLoading] = useState(false);
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
   useEffect(() => {
@@ -54,7 +52,11 @@ export const Editor = observer(function Editor() {
      */
     // init();
     // fetchMapFileA();
+    setLoading(true);
     mAppState.fetchMapFile('map1')
+      .then(() => {
+        setLoading(false);
+      })
   }, [])
 
   const setActiveTab = (e: string) => {
@@ -93,13 +95,7 @@ export const Editor = observer(function Editor() {
                 <Tab id={TabsK.mapEditor} title="Map Editor" panel={
                   (tab === TabsK.mapEditor)
                     ?
-                      <div className="row">
-                        <MapComponent/>
-                        <div className="col">
-                          <CellPalette/>
-                          <MapDimensionsComponent />
-                        </div>
-                      </div>
+                    <MapEditorComponent />
                     : undefined
                 }/>
                 <Tab id={TabsK.tiler} title="Tiler" panel={

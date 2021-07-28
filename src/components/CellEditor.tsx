@@ -12,9 +12,8 @@ export const CellEditor = observer(function CellEditor() {
 
     const selectedCellData = (palette: PalCell[], selected: string | null) => {
         const f = palette.filter(cell => cell.cid === selected);
-        const d = f[0] ?? null;
         // if(!tilerSelectedCell) return {}
-        return d;
+        return f[0] ?? null;
     }
     const cd = () => selectedCellData(palette, tilerSelectedCell);
 

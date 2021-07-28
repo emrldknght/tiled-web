@@ -14,13 +14,11 @@ const defaultStyles: Styles = {
 }
 
 export const generateCellStyles = (styles = defaultStyles) => {
-  const output = Object.keys(styles).reduce((acc, item) => (
-    acc + `${item}{${styleToString(styles[item])}}`
-  ), '');
-
   // console.log(output);
 
-  return output;
+  return Object.keys(styles).reduce((acc, item) => (
+    acc + `${item}{${styleToString(styles[item])}}`
+  ), '');
   // return `.App{background-color:purple;}`;
 }
 

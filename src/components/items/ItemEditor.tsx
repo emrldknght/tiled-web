@@ -12,6 +12,7 @@ import {Item, ItemP, ItemType} from "../../types/Item";
 import {Armor, armorDB, armorPList, ArmorType} from "../../types/Armor";
 import {ItemList} from "./ItemList";
 import {ArmorEditComponent} from "../armor/ArmorEditComponent";
+import {DebugOut} from "../common/DebugOut";
 
 function isWeapon(item: Item): item is Weapon {
   return item.itemType === 'Weapon';
@@ -216,7 +217,7 @@ export const ItemEditor = observer(function ItemEditor() {
   return (
     <Col className="item-editor">
       <b>Item Editor</b>
-      {JSON.stringify(state)}
+      <DebugOut data={state} />
       <Row>
         <Col className="hc">
           {/*JSON.stringify(items)*/}

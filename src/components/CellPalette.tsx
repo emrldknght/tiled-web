@@ -2,6 +2,7 @@ import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
 import {mAppState} from "../store/mStore";
 import {StoreContext} from "../store/StoreContext";
+import {DebugOut} from "./common/DebugOut";
 
 export const CellPalette = observer(function CellPalette() {
   const state = useContext(StoreContext);
@@ -49,7 +50,9 @@ export const CellPalette = observer(function CellPalette() {
             <div className="cell cell-map grass">A</div>
             <div className="cell cell-map water">B</div>
           </div>
-          <div className="row">{JSON.stringify(palette.data)}</div>
+          <div className="row">
+            <DebugOut data={palette.data} />
+          </div>
           <div className="row">From store : {palette.selectedTile}</div>
         </div>
       </div>

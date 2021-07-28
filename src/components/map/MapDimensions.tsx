@@ -3,6 +3,7 @@ import {useContext, useState} from "react";
 import {StoreContext} from "../../store/StoreContext";
 import {Button, Divider, Intent} from "@blueprintjs/core";
 import {mAppState} from "../../store/mStore";
+import {DebugOut} from "../common/DebugOut";
 
 const DIM_BUTTONS = [
   'arrow-top-left',
@@ -73,10 +74,7 @@ export const MapDimensionsComponent = observer(function MapDimensionsComponent (
       <b>Map Dimensions:</b>
       <div className="col">
         <div className="row">
-          <span> w : {JSON.stringify(w)}&nbsp;</span>
-          <span> h : {JSON.stringify(h)}&nbsp;</span>
-          <span>{panelMode}&nbsp;</span>
-          <span>{dimActive}&nbsp;</span>
+          <DebugOut data={{w, h, [panelMode]: dimActive }} />
         </div>
         <div className="row">
           <div className="col" style={{justifyContent: 'space-around'}}>

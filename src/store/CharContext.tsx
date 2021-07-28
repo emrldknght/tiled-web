@@ -94,7 +94,7 @@ export class CharAppState implements Character {
   }
   getParam(p: keyof CharStats): number {
     const v = this.Stats[p];
-    return (typeof v === 'number') ? v : 0;
+    return v ?? 0;
   }
   static getParamBonus(param: number): number {
     return Math.floor((param - 10) / 2);
