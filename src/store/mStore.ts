@@ -51,12 +51,58 @@ export class MAppState {
     this.hl[y][x] = 1;
   }
   @action resetHl() {
-    const hl = this.mapData.map(row => row.map(cell => 0));
+    const hl = this.mapData.map(row => row.map(cell => -1));
     this.hl = hl as number[][];
   }
 
   isHl(x: number, y: number) {
-    return this.hl[y][x] === 1;
+    return this.hl[y][x] !== -1;
+  }
+
+  @action setHLC(x: number, y: number, v: number) {
+    this.hl[y][x] = v;
+  }
+
+  @action
+  pokeCell(x: number, y: number) {
+    //set hl
+    const v = this.mapData[y][x];
+
+    const getMinMax = (d: number[] | number[][], v: number) => {
+      const min = Math.max(v - 1, 0);
+      const max = Math.min(d.length - 1, v + 1);
+      return [min, max]
+    }
+    const getH = (x: number, y: number) => this.hl[y][x];
+    // const addH = (x: number, y: number, v: number) => this.hl[y][x] = v;
+    const getV = (x: number, y: number) => this.mapData[y][x];
+
+    this.setHLC(x, y, v);
+
+    const self = this;
+    function getSur(ctx: MAppState, x: number, y: number, v: number) {
+      const [minY, maxY] = getMinMax(ctx.mapData, y);
+      const [minX, maxX] = getMinMax(ctx.mapData[0], x);
+
+      for (let _y = minY; _y <= maxY; _y++) {
+        for (let _x = minX; _x <= maxX; _x++) {
+
+          const isV = getV(_x, _y) === v;
+          const notH = getH(_x, _y) === -1;
+          const notCenter = !(_x === x && _y === y);
+
+          // console.log(_x, _y, 'v', isV, notH);
+
+          if (isV && notH && notCenter) {
+            console.log('set!');
+            self.setHLC(_x, _y, v);
+            getSur(ctx, _x, _y, v);
+          }
+        }
+      }
+    }
+    getSur(this, x, y, v)
+
   }
 
   constructor() {
