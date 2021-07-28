@@ -272,6 +272,28 @@
     }
   }
 
+  .tools-palette {
+    .tool-icon {
+      --dim: 5em;
+      width: var(--dim);
+      height: var(--dim);
+      &:extend(.col);
+      display: flex;
+      flex-direction: column;
+      background-color: whitesmoke;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &.active {
+        outline: .02em dashed black;
+        outline-offset: -4px;
+      }
+      &:hover {
+        background-color: rgb(220, 220, 220);
+      }
+    }
+  }
+
   .cell-palette {
     border: @common-border;
     width: min-content;
