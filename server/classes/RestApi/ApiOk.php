@@ -1,6 +1,6 @@
 <?php
 
-namespace SteamQ;
+namespace SteamQ\RestApi;
 
 class ApiOk extends ApiRequestResult {
     public string $result;

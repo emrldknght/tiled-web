@@ -9,6 +9,8 @@ use Slim\Psr7\UploadedFile;
 use Slim\Views\PhpRenderer;
 
 use SteamQ\Character;
+use SteamQ\CharSlot;
+use SteamQ\Config;
 use SteamQ\DBEntity;
 use SteamQ\RestApi\ApiError;
 use SteamQ\RestApi\ApiOk;
@@ -17,7 +19,7 @@ use SteamQ\Weapon;
 require __DIR__ . '/../vendor/autoload.php';
 
 $app = AppFactory::create();
-$app->setBasePath("/sq");
+$app->setBasePath(Config::$basePath);
 // $app->setBasePath("/server");
 
 
@@ -128,19 +130,26 @@ $app->get('/map-file/{name}', function (Request $request, Response $response, $a
             ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 });
 $app->post('/map-file/{name}', function (Request $request, Response $response, $args) use ($app) {
-    // $path = __DIR__.'/maps';
-    // $name = $args['name'];
+    $path = __DIR__.'/maps';
+    $name = $args['name'];
 
     // concat empty string to get stream content as string
-    // $body = "".$request->getBody()."";
+    $body = "".$request->getBody()."";
 
-    // $j = json_decode($body, true);
+    $j = json_decode($body, true);
     // print_r($j);
 
     // $response->getBody()->write(":".json_encode($j).":".gettype($body));
+    file_put_contents($path.'/'.$name.'.json', $j);
+
+    $answer = [
+        'name' => $name,
+        'data' => $j,
+        'status' => 'ok!'
+    ];
 
     // $response->getBody()->write("");
-    $response->getBody()->write(json_encode(['status' => 'ok!']));
+    $response->getBody()->write(json_encode($answer));
 
     /*
     if (!empty($content['error'])) {
@@ -171,7 +180,7 @@ $app->get('/char/{id}', function (Request $request, Response $response, $args) {
 
     $char = new Character($data);
 
-    $char->Slots->mainHand = new \SteamQ\CharSlot([
+    $char->Slots->mainHand = new CharSlot([
         'itemId' => 1,
         'itemData' => getWeapon(1)
     ]);

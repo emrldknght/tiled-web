@@ -15,11 +15,10 @@ class DBEntity
         // global $settings;
         // var_dump(self::$settings);
 
-        $db = self::$settings['db'];
         self::$pdo = new PDO(
-            "mysql:host=".$db['host'].";dbname=".$db['dbname'],
-            $db['user'],
-            $db['pass']
+            "mysql:host=".Settings::$dbHost.";dbname=".Settings::$dbName,
+            Settings::$dbUser,
+            Settings::$dbPass
         );
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);

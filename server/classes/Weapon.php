@@ -16,6 +16,7 @@ class Weapon
     public string $proficiency;
     public int $weight;
     public int $cost;
+    public string $itemType = 'Weapon';
     public function __construct(array $arr)
     {
         $r = new \ReflectionClass(self::class);
@@ -23,7 +24,7 @@ class Weapon
             $name = $prop->name;
             $n = strtolower($prop->name);
             // var_dump($n);
-            $this->$name = $arr[$n];
+            if(empty($this->$name)) $this->$name = $arr[$n];
         }
     }
 }

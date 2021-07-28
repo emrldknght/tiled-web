@@ -1,6 +1,6 @@
 <?php
 
-namespace SteamQ;
+namespace SteamQ\RestApi;
 
 class ApiError extends ApiRequestResult {
     public string $error;
