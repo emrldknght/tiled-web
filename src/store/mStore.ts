@@ -43,24 +43,25 @@ export class MAppState {
     this.curX = x;
     this.curY = y;
   }
-  @observable hl: number[][] = [];
+  @observable selection: number[][] = [];
 
   @action
   setHl(x: number, y: number) {
     this.resetHl();
-    this.hl[y][x] = 1;
+    this.selection[y][x] = 1;
   }
+
   @action resetHl() {
     const hl = this.mapData.map(row => row.map(cell => -1));
-    this.hl = hl as number[][];
+    this.selection = hl as number[][];
   }
 
   isHl(x: number, y: number) {
-    return this.hl[y][x] !== -1;
+    return this.selection[y][x] !== -1;
   }
 
   @action setHLC(x: number, y: number, v: number) {
-    this.hl[y][x] = v;
+    this.selection[y][x] = v;
   }
 
   @action
@@ -73,7 +74,7 @@ export class MAppState {
       const max = Math.min(d.length - 1, v + 1);
       return [min, max]
     }
-    const getH = (x: number, y: number) => this.hl[y][x];
+    const getH = (x: number, y: number) => this.selection[y][x];
     // const addH = (x: number, y: number, v: number) => this.hl[y][x] = v;
     const getV = (x: number, y: number) => this.mapData[y][x];
 
@@ -228,3 +229,5 @@ export class MAppState {
 }
 
 export const mAppState = new MAppState();
+
+
