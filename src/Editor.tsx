@@ -15,6 +15,8 @@ import {TopControlPanel} from "./TopControlPanel";
 import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
 import {LSKeys, useLState} from "./LocalState";
 import {MapEditorComponent} from "./components/MapEditorComponent";
+import {mockMap} from "./mockMap";
+import {MapContext} from "./components/MapComponent";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
@@ -25,6 +27,8 @@ export const Editor = observer(function Editor() {
   const state = useContext(StoreContext);
   const [loading, setLoading] = useState(false);
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
+
+  const map = useContext(MapContext);
 
   useEffect(() => {
     /*
@@ -52,12 +56,14 @@ export const Editor = observer(function Editor() {
      */
     // init();
     // fetchMapFileA();
+    // map.fetchMapFile('map1')
     setLoading(true);
-    mAppState.fetchMapFile('map1')
-      .then(() => {
-        setLoading(false);
-      })
-  }, [])
+    map.setMap(mockMap);
+    map.setTileDim(48);
+
+    // mAppState.setMap(mockMap);
+    mAppState.setTileDim(48);
+  }, [map])
 
   const setActiveTab = (e: string) => {
     // console.log(e);

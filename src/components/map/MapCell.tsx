@@ -2,6 +2,7 @@ import {getCT} from "../../lib/getCellType";
 import {observer} from "mobx-react";
 import React, {useContext} from "react";
 import {StoreContext} from "../../store/StoreContext";
+import {MapContext} from "../MapComponent";
 
 
 type Props = {
@@ -12,25 +13,33 @@ type Props = {
 }
 
 export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Props) {
-  const state = useContext(StoreContext);
-  const types = state.palette.data;
+  const appState = useContext(StoreContext);
+  const mapState = useContext(MapContext);
+
+  const types = appState.palette.data;
   const ct = getCT(types, id);
-  const surroundingCells = JSON.stringify(state.getCellR(x, y));
+  const surroundingCells = JSON.stringify(appState.getCellR(x, y));
 
   const onCell = (e: React.MouseEvent) => {
     e.stopPropagation();
     // console.log('on', e.currentTarget);
-    state.setXY(x ,y);
-    state.setHl(x, y);
+    mapState.setXY(x ,y);
+    // state.setHl(x, y);
   }
 
-  const isHl = (state.isHl(x ,y)) ? 'hl' : '';
+  const pokeCell = (e: React.MouseEvent) => {
+    // e.stopPropagation()
+    // state.pokeCell(x, y);
+  }
+
+  const isHl = (mapState.isHl(x ,y)) ? 'hl' : '';
 
   return (
     <div className={`cell cell-map ${ct} ${isHl}`}
          data-x={x} data-y={y}
          data-id={id}
          onMouseOver={onCell}
+         onClick={pokeCell}
     >
       {(showCellInfo)
         ? (

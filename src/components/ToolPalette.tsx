@@ -1,8 +1,9 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFill, faPen} from "@fortawesome/free-solid-svg-icons";
+import {faFill, faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import React, {createContext, useContext} from "react";
 import {observer} from "mobx-react";
 import {action, makeObservable, observable} from "mobx";
+import {mAppState} from "../store/mStore";
 
 export enum PalTools {
     Pencil = 'pencil',
@@ -36,6 +37,14 @@ export const ToolPalette = observer(function ToolPalette() {
             state.changeTool(tool as PalToolType);
         }
     }
+    const handleApply = (e: React.MouseEvent) => {
+        const t = e.currentTarget as HTMLDivElement;
+        const tool = t.dataset.tool;
+        console.log(tool);
+        if(tool) {
+            // mAppState.applyTool(tool as PalToolType);
+        }
+    }
 
     return(
         <div className="tools-palette">
@@ -53,6 +62,12 @@ export const ToolPalette = observer(function ToolPalette() {
                 >
                     <FontAwesomeIcon icon={faFill} size="2x"/>
                     <span className="name">Bucket</span>
+                </div>
+                <div className={`tool-icon`} data-tool={'Deselect'}
+                    onClick={handleApply}
+                >
+                   <FontAwesomeIcon icon={faWindowClose} size="2x" />
+                   <span className="name">Deselect</span>
                 </div>
             </div>
         </div>

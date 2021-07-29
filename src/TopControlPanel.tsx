@@ -1,10 +1,11 @@
 import {mAppState} from "./store/mStore";
 import {Button} from "@blueprintjs/core";
 import React from "react";
+import {mapEntity} from "./components/MapComponent";
 
 export function TopControlPanel() {
   const saveDataW = () => mAppState.saveData();
-  const saveMapFileW = () => mAppState.saveMapFile();
+  const saveMapFileW = () => mapEntity.saveMapFile();
   const logoutW = () => {
     // logout();
     mAppState.logout();
