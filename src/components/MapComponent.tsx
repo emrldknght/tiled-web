@@ -1,7 +1,6 @@
 import {MapRow} from "./map/MapRow";
 import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
-import {StoreContext} from "../store/StoreContext";
 import {LSKeys, useLState} from "../LocalState";
 import {ToolPaletteContext} from "./ToolPalette";
 import {DebugOut} from "./common/DebugOut";
@@ -10,7 +9,6 @@ import {RootContext} from "../store/RootStore";
 
 
 export const MapComponent = observer(function MapComponent() {
-  const appState = useContext(StoreContext);
 
   const rootState = useContext(RootContext);
 
@@ -21,7 +19,7 @@ export const MapComponent = observer(function MapComponent() {
 
   // const mapData = state.mapData;
 
-  const brushId =  appState.palette.selectedTile;
+  const brushId = rootState.paletteStore.selectedTile;
   const x = mapState.curX;
   const y = mapState.curY;
 

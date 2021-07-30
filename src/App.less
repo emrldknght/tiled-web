@@ -13,7 +13,7 @@
   --color-gold: gold;
 }
 
-@common-border: .3em double @vermilion1;
+@common-border: .3em double @black;
 
 .App {
   text-align: center;
@@ -54,13 +54,13 @@
   .row {
     display: flex;
     flex-direction: row;
-    background-color: rgba(255, 255, 255, .1);
+    // background-color: rgba(255, 255, 255, .1);
   }
 
   .col {
     display: flex;
     flex-direction: column;
-    background-color: rgba(255, 255, 255, .1);
+    // background-color: rgba(255, 255, 255, .1);
   }
 
   .hc {
@@ -109,7 +109,7 @@
       outline-color: lime;
     }
 
-    &.selected { outline-color: @blue1 }
+    &.selected { outline-color: yellow }
 
     &-map {
       background-image: var(--tile-root);
@@ -273,6 +273,7 @@
   }
 
   .tools-palette {
+    border: @common-border;
     .tool-icon {
       --dim: 5em;
       width: var(--dim);

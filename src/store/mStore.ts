@@ -1,4 +1,4 @@
-import {AppState, PalCell, TileSrc} from "../types";
+import {PalCell, TileSrc} from "../types";
 import {palData} from "./palData";
 import {action, configure, makeObservable, observable, toJS} from "mobx";
 import {eraseCred, saveCred} from "../lib/creds";
@@ -74,20 +74,6 @@ export class MAppState {
   }
 
   @action
-  paletteAddCell(cell: PalCell) {
-    this.palette.data.push(cell);
-  }
-
-  @action
-  paletteRemoveCell(cid: string) {
-    // const np = this.palette.data.filter(i => i.cid !== cid)
-    const ind = this.palette.data.findIndex(i => i.cid === cid);
-    if(ind !== -1) {
-      this.palette.data.splice(ind, 1);
-    }
-  }
-
-  @action
   tilerUpdateCell(cid: string, data: { k: string ; v: string | number; }) {
     const ind = this.palette.data.findIndex(i => i.cid === cid);
     if(ind !== -1) {
@@ -96,11 +82,6 @@ export class MAppState {
       const l = this.palette.data[ind];
       (l[k] as string | number) = v;
     }
-  }
-
-  @action
-  paletteSelectTile(id: number) {
-    this.palette.selectedTile = id;
   }
 
   saveMapFile() {

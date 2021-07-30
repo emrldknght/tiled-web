@@ -1,7 +1,6 @@
 import {getCT} from "../../lib/getCellType";
 import {observer} from "mobx-react";
 import React, {useContext} from "react";
-import {StoreContext} from "../../store/StoreContext";
 import {RootContext} from "../../store/RootStore";
 
 
@@ -13,15 +12,15 @@ type Props = {
 }
 
 export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Props) {
-  const appState = useContext(StoreContext);
+  // const appState = useContext(StoreContext);
 
   const rootState = useContext(RootContext);
 
   const mapState = rootState.mapStore;
 
-  const types = appState.palette.data;
+  const types = rootState.paletteStore.data;
   const ct = getCT(types, id);
-  const surroundingCells = JSON.stringify(appState.getCellR(x, y));
+  // const surroundingCells = JSON.stringify(appState.getCellR(x, y));
 
   const onCell = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -49,7 +48,7 @@ export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Pro
           <span className="col">
             <span>{id} ({x}, {y})</span>
             <span>{JSON.stringify(ct)}</span>
-            <span>{surroundingCells}</span>
+            {/*<span>{surroundingCells}</span>*/}
           </span>
         )
         : ('')

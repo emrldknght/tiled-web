@@ -1,4 +1,4 @@
-import {action, makeAutoObservable, makeObservable, observable, toJS} from "mobx";
+import {action, makeAutoObservable, observable, toJS} from "mobx";
 import {createContext} from "react";
 import {MapEntity} from "./MapStore";
 import {prepareData} from "../lib/prepareData";

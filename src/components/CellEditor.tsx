@@ -3,12 +3,17 @@ import {PalCell} from "../types";
 import {observer} from "mobx-react";
 import {mAppState} from "../store/mStore";
 import {StoreContext} from "../store/StoreContext";
+import {RootContext} from "../store/RootStore";
 
 
 export const CellEditor = observer(function CellEditor() {
     const state = useContext(StoreContext);
-    const palette = state.palette.data;
+    const rootState = useContext(RootContext);
+    const palette = rootState.paletteStore.data;
     const tilerSelectedCell = state.tiler.selectedCell;
+
+
+
 
     const selectedCellData = (palette: PalCell[], selected: string | null) => {
         const f = palette.filter(cell => cell.cid === selected);
