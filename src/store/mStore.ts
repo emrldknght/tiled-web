@@ -3,19 +3,10 @@ import {palData} from "./palData";
 import {action, configure, makeObservable, observable, toJS} from "mobx";
 import {eraseCred, saveCred} from "../lib/creds";
 import {Path, postData} from "../lib/api";
+import {prepareData} from "../lib/prepareData";
 
 
 configure({ enforceActions: 'always' })
-
-const prepareData = (state: AppState) => {
-  const data = {
-    mapData: state.mapData,
-    tileDim: state.tileDim,
-    tileUrl: (state.tileUrl || '').replace(/^.*([\\/:])/, '')
-    // tileUrl: (state.tileUrl || '').replace(/^.*(\\|\/|\:)/, '')
-  }
-  return JSON.stringify(data);
-};
 
 export class MAppState {
   @observable auth = false;

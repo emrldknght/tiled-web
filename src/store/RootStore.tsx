@@ -1,13 +1,16 @@
-import {action, makeAutoObservable, observable, toJS} from "mobx";
+import {action, makeAutoObservable, makeObservable, observable, toJS} from "mobx";
 import {createContext} from "react";
 import {MapEntity} from "./MapStore";
 import {prepareData} from "../lib/prepareData";
 import {saveJson} from "../lib/saveJson";
+import {PaletteStore} from "./PaletteStore";
 
 export class RootStore {
     public userStore: UserStore;
     public todoStore: TodoStore;
     public mapStore: MapEntity;
+
+    public paletteStore: PaletteStore;
 
     @observable test = 1;
 
@@ -19,6 +22,7 @@ export class RootStore {
         this.userStore = new UserStore(this)
         this.todoStore = new TodoStore(this)
         this.mapStore = new MapEntity(this);
+        this.paletteStore = new PaletteStore(this);
 
         makeAutoObservable(this);
     }
@@ -29,6 +33,9 @@ export class RootStore {
         saveJson(content);
     }
 }
+
+
+
 
 export class UserStore {
     private rootStore: RootStore;

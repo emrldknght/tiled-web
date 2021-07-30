@@ -1,6 +1,10 @@
-import {MapEntity} from "../store/MapStore";
+type Data = {
+    mapData: number[][],
+    tileDim: number | null,
+    tileUrl: string | null
+}
 
-export const prepareData = (state: MapEntity) => {
+export const prepareData = (state: Data) => {
     const data = {
         mapData: state.mapData,
         tileDim: state.tileDim,
