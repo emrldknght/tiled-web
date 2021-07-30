@@ -2,7 +2,7 @@ import {getCT} from "../../lib/getCellType";
 import {observer} from "mobx-react";
 import React, {useContext} from "react";
 import {StoreContext} from "../../store/StoreContext";
-import {MapContext} from "../MapComponent";
+import {RootContext} from "../../store/RootStore";
 
 
 type Props = {
@@ -14,7 +14,10 @@ type Props = {
 
 export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Props) {
   const appState = useContext(StoreContext);
-  const mapState = useContext(MapContext);
+
+  const rootState = useContext(RootContext);
+
+  const mapState = rootState.mapStore;
 
   const types = appState.palette.data;
   const ct = getCT(types, id);

@@ -3,7 +3,6 @@ import {faFill, faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import React, {createContext, useContext} from "react";
 import {observer} from "mobx-react";
 import {action, makeObservable, observable} from "mobx";
-import {mAppState} from "../store/mStore";
 
 export enum PalTools {
     Pencil = 'pencil',

@@ -2,7 +2,8 @@ import {observer} from "mobx-react";
 import {useContext, useState} from "react";
 import {Button, Divider, Intent} from "@blueprintjs/core";
 import {DebugOut} from "../common/DebugOut";
-import {MapContext} from "../MapComponent";
+import {RootContext} from "../../store/RootStore";
+
 
 const DIM_BUTTONS = [
   'arrow-top-left',
@@ -42,7 +43,8 @@ function Panel({ active, handleClick, order }: PanelProps) {
 }
 
 export const MapDimensionsComponent = observer(function MapDimensionsComponent () {
-  const mapState = useContext(MapContext);
+  const rootState = useContext(RootContext);
+  const mapState = rootState.mapStore;
 
   const mapData = mapState.mapData;
 

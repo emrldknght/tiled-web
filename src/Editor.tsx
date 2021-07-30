@@ -16,7 +16,7 @@ import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/ma
 import {LSKeys, useLState} from "./LocalState";
 import {MapEditorComponent} from "./components/MapEditorComponent";
 import {mockMap} from "./mockMap";
-import {MapContext} from "./components/MapComponent";
+import {RootContext} from "./store/RootStore";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
@@ -28,7 +28,8 @@ export const Editor = observer(function Editor() {
   const [loading, setLoading] = useState(false);
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
 
-  const map = useContext(MapContext);
+  const rootStore = useContext(RootContext);
+  const map = rootStore.mapStore;
 
   useEffect(() => {
     /*
@@ -85,6 +86,7 @@ export const Editor = observer(function Editor() {
     <div className="col">
       <div className="error">{state.error}</div>
       <div className="row">
+        <RootContext.Provider value={rootStore}>
         <FileExplorer/>
           {!(state.error) ?
             <div className="col">
@@ -145,6 +147,7 @@ export const Editor = observer(function Editor() {
             </div>  :
             ''
           }
+        </RootContext.Provider>
       </div>
     </div>
   )

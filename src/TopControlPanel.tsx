@@ -1,22 +1,24 @@
 import {mAppState} from "./store/mStore";
 import {Button} from "@blueprintjs/core";
-import React from "react";
-import {mapEntity} from "./components/MapComponent";
+import React, {useContext} from "react";
+import {RootContext} from "./store/RootStore";
 
 export function TopControlPanel() {
-  const saveDataW = () => mAppState.saveData();
-  const saveMapFileW = () => mapEntity.saveMapFile();
-  const logoutW = () => {
-    // logout();
-    mAppState.logout();
-  }
+    const rootState = useContext(RootContext);
 
-  return (
-    <div className="row">
-      <Button icon="floppy-disk" text="Save" small onClick={saveDataW}/>
-      <Button icon="download" text="Save Local File" small onClick={saveMapFileW}/>
-      <div style={{flexGrow: 1}}>&nbsp;</div>
-      <Button icon="log-out" text="Quit" small onClick={logoutW}/>
-    </div>
-  )
+    const saveDataW = () => mAppState.saveData();
+    const saveMapFileW = () => rootState.saveMapFile();
+    const logoutW = () => {
+        // logout();
+        mAppState.logout();
+    }
+
+    return (
+        <div className="row">
+            <Button icon="floppy-disk" text="Save" small onClick={saveDataW}/>
+            <Button icon="download" text="Save Local File" small onClick={saveMapFileW}/>
+            <div style={{flexGrow: 1}}>&nbsp;</div>
+            <Button icon="log-out" text="Quit" small onClick={logoutW}/>
+        </div>
+    )
 }

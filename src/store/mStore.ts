@@ -1,12 +1,9 @@
-import {ApiError, AppState, isApiError, MapFile, PalCell, TileSrc} from "../types";
+import {AppState, PalCell, TileSrc} from "../types";
 import {palData} from "./palData";
 import {action, configure, makeObservable, observable, toJS} from "mobx";
 import {eraseCred, saveCred} from "../lib/creds";
-import {fetchMap, Path, postData} from "../lib/api";
-import {saveJson} from "../lib/saveJson";
-import {PanelMode} from "../components/map/MapDimensions";
-import {getAction} from "../lib/dimensions";
-import {mapEntity} from "../components/MapComponent";
+import {Path, postData} from "../lib/api";
+
 
 configure({ enforceActions: 'always' })
 
