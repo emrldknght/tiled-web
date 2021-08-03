@@ -35,7 +35,7 @@ export const CellPalette = observer(function CellPalette() {
   const k = palette.data.map(item => {
     const t = item.type;
     return (<div key={`pal-cell-${item.cid}`} data-id={item.id}
-                 className={`cell cell-map ${t} ${selected(item.id)}`}
+                 className={`cell cell-map ${t} ${selected(item.id)} in-pal`}
 
         >{item.id}</div>
     )
@@ -47,8 +47,8 @@ export const CellPalette = observer(function CellPalette() {
         <div className="col">
           <div className="row" onClick={tapTile}>
             {k}
-            <div className="cell cell-map grass">A</div>
-            <div className="cell cell-map water">B</div>
+            <div className="cell cell-map grass in-pal">A</div>
+            <div className="cell cell-map water in-pal">B</div>
           </div>
           <div className="row">
             <DebugOut data={palette.data} />

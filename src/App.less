@@ -89,8 +89,11 @@
 
   @cell-outline: .02em solid rgba(255, 0, 0, .4);
 
+  .mapWrapper {
+    overflow: hidden;
+  }
   .cell {
-    outline: @cell-outline;
+    /* outline: @cell-outline; */
     outline-offset: -1px;
     // border-top 0
     // border-left 0
@@ -133,6 +136,14 @@
                 @empty-grad-color 20px) */
       ;
         --bg-color: none;
+
+        &:not(.in-pal) {
+
+          // down shift
+          position: relative;
+          top: 10px;
+          background-color: darkcyan;
+        }
       }
       /*
       &.grass {
@@ -151,6 +162,17 @@
         --oy: 4;
       }
        */
+      --inner-dim: var(--dim);
+      &:not(.in-pal):not(.empty):before {
+        content: '';
+        background-color: #5f0505;
+        width: 48px;
+        height: 10px;
+        position: relative;
+        display: block;
+        left: 0;
+        top: 100%;
+      }
     }
   }
 

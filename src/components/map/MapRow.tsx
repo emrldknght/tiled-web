@@ -1,5 +1,6 @@
 import {MapCell} from "./MapCell";
 import {observer} from "mobx-react";
+import {CSSProperties} from "react";
 
 type Props = {
   data: number[],
@@ -13,7 +14,13 @@ export const MapRow = observer(function MapRow(props: Props) {
     id={cell} x={x} y={props.y}
     showCellInfo={props.showCellInfo}
   />)
+
+  const sty: CSSProperties = {
+    zIndex : props.y,
+    position: 'relative'
+  }
+
   return (
-    <div className="row">{_row}</div>
+    <div className="row" style={sty}>{_row}</div>
   )
 })
