@@ -26,14 +26,14 @@ export class MapEntity {
     setMap(data: number[][]) {
         this.mapData = data as number[][];
 
-        console.log('will  reset hl');
+        // console.log('will  reset hl');
         this.resetHl();
     }
 
     @action resetHl() {
-        const hl = this.mapData.map(row => row.map(cell => -1));
+        const hl = this.mapData.map(row => row.map(() => -1));
         this.selection = hl as number[][];
-        console.log(JSON.stringify(this.selection))
+        // console.log(JSON.stringify(this.selection))
     }
 
     @action

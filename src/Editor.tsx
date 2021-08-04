@@ -83,7 +83,7 @@ export const Editor = observer(function Editor() {
   // const saveMapFileW = () => mAppState.saveMapFile();
 
   return (
-    <div className="col">
+    <div className={`col ${loading ? 'loading' : ''}`}>
       <div className="error">{state.error}</div>
       <div className="row">
         <RootContext.Provider value={rootStore}>
