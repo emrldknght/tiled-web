@@ -4,6 +4,7 @@ import {MapEntity} from "./MapStore";
 import {prepareData} from "../lib/prepareData";
 import {saveJson} from "../lib/saveJson";
 import {PaletteStore} from "./PaletteStore";
+import {PalToolType} from "../components/ToolPalette";
 
 export class RootStore {
     public userStore: UserStore;
@@ -31,6 +32,21 @@ export class RootStore {
         const content = prepareData(toJS(this.mapStore));
         console.log('save from root->', content);
         saveJson(content);
+    }
+
+    @action
+    applyTool(tool: PalToolType) {
+        switch (tool) {
+            case "Pencil":
+                break;
+            case "Bucket":
+                break;
+            case "Deselect":
+                this.mapStore.resetHl();
+                break;
+            default:
+                break;
+        }
     }
 }
 

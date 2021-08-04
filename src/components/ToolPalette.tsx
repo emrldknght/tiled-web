@@ -3,10 +3,12 @@ import {faFill, faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import React, {createContext, useContext} from "react";
 import {observer} from "mobx-react";
 import {action, makeObservable, observable} from "mobx";
+import {rootStore} from "../store/RootStore";
 
 export enum PalTools {
     Pencil = 'pencil',
-    Bucket = 'bucket'
+    Bucket = 'bucket',
+    Deselect = 'deselect',
 }
 export type PalToolType = keyof typeof PalTools;
 
@@ -15,6 +17,11 @@ export class ToolPaletteState {
 
     @action changeTool(tool: PalToolType) {
         this.currentTool = tool;
+    }
+
+    @action applyTool(tool: PalToolType) {
+        console.log('Apply:', tool);
+        rootStore.applyTool(tool);
     }
 
     constructor() {
@@ -41,7 +48,7 @@ export const ToolPalette = observer(function ToolPalette() {
         const tool = t.dataset.tool;
         console.log(tool);
         if(tool) {
-            // mAppState.applyTool(tool as PalToolType);
+            state.applyTool(tool as PalToolType);
         }
     }
 
