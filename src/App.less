@@ -109,7 +109,7 @@
     }
 
     &:hover {
-      outline-color: lime;
+      outline: 1px solid pink;
     }
 
     &.selected { outline-color: yellow }
@@ -136,26 +136,16 @@
                 @empty-grad-color 20px) */
       ;
         --bg-color: none;
-
-        &:not(.in-pal) {
-
-          // down shift
-          position: relative;
-          top: 10px;
-          background-color: darkcyan;
-        }
       }
-      /*
+
       &.grass {
         --bg-color: @forest2;
-        --ox: -1;
-        --oy: 0;
+        // --ox: -1;
+        // --oy: 0;
+        background-image: paint(headerHighlight);
       }
-      &.road {
-        --bg-color: brown;
-        --ox: -1;
-        --oy: -3;
-      }
+
+      /*
       &.forest {
         --bg-color: @forest3;
         --ox: 4;
@@ -163,6 +153,25 @@
       }
        */
       --inner-dim: var(--dim);
+    }
+  }
+
+  .show-3d {
+    .cell:not(.in-pal) {
+      // background-color: lightgreen;
+      &.road {
+        // --bg-color: #8c3f3f;
+        // --ox: -1;
+        // --oy: -3;
+        position: relative;
+        top: -1px;
+      }
+      &.empty {
+        // down shift
+        position: relative;
+        top: 10px;
+        background-color: darkcyan;
+      }
       &:not(.in-pal):not(.empty):before {
         content: '';
         background-color: #5f0505;

@@ -3,9 +3,7 @@ import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
 import {LSKeys, useLState} from "../LocalState";
 import {ToolPaletteContext} from "./ToolPalette";
-import {DebugOut} from "./common/DebugOut";
 import {RootContext} from "../store/RootStore";
-
 
 
 export const MapComponent = observer(function MapComponent() {
@@ -37,6 +35,7 @@ export const MapComponent = observer(function MapComponent() {
 
   const [showGrid, setShowGrid] = useLState(true, LSKeys.MapGrid);
   const [showCellInfo, setShowCellInfo] = useLState(true, LSKeys.MapCellInfo);
+  const [show3D, setShow3D] = useLState(true, LSKeys.Map3DView);
 
   const tm = mapData2.map((row, y) =>
       <MapRow
@@ -87,12 +86,15 @@ export const MapComponent = observer(function MapComponent() {
   }
 
   const showGridK = () => (showGrid) ? 'show-grid' : '';
+  const show3DK = () => (show3D) ? 'show-3d' : '';
+
   const toggleShowGrid = () => setShowGrid(!showGrid);
 
   const toggleShowCellInfo = () => setShowCellInfo(!showCellInfo);
+  const toggleShow3D = () => setShow3D(!show3D);
 
   return (
-      <div className={`map ${showGridK()}`}
+      <div className={`map ${showGridK()} ${show3DK()}`}
            style={p}
       >
         <div className="col">
@@ -107,6 +109,10 @@ export const MapComponent = observer(function MapComponent() {
             <label>
               <input type="checkbox" checked={showCellInfo}
                      onChange={toggleShowCellInfo}/>Show Info
+            </label>
+            <label>
+              <input type="checkbox" checked={show3D}
+                onChange={toggleShow3D} /> Show 3D
             </label>
             <div>x: {x} y: {y}</div>
             {/*
