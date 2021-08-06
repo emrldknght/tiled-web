@@ -57,8 +57,8 @@ export const Editor = observer(function Editor() {
      */
     // init();
     // fetchMapFileA();
-    map.fetchMapFile('map1')
     setLoading(true);
+    map.fetchMapFile('map1').then(() => setLoading(false));
     // map.setMap(mockMap);
     // map.setTileDim(48);
 
@@ -87,7 +87,7 @@ export const Editor = observer(function Editor() {
       <div className="error">{state.error}</div>
       <div className="row">
         <RootContext.Provider value={rootStore}>
-        <FileExplorer/>
+          <FileExplorer/>
           {!(state.error) ?
             <div className="col">
               <TopControlPanel />
@@ -149,6 +149,12 @@ export const Editor = observer(function Editor() {
           }
         </RootContext.Provider>
       </div>
+      <footer>
+        <small>
+          application is running in <b>{process.env.NODE_ENV}</b> mode.
+          RAA:"{process.env.REACT_APP_API}"
+        </small>
+      </footer>
     </div>
   )
 })

@@ -4,7 +4,7 @@ import {Weapon} from "../types/Weapon";
 import {ItemP} from "../types/Item";
 import {Armor} from "../types/Armor";
 
-export const Path = 'http://localhost/sq';
+export const Path = process.env.REACT_APP_API; //'http://localhost/sq'; || 'http://oyba.xenn/server'
 export const Files = `${Path}/list-files`;
 
 export const fetchPath = (path: string): Promise<never> => {

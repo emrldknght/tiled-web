@@ -6,6 +6,7 @@ import {saveJson} from "../lib/saveJson";
 import {PaletteStore} from "./PaletteStore";
 import {PalToolType} from "../components/ToolPalette";
 import {PalCell} from "../types";
+import {Path, postData} from "../lib/api";
 
 export class RootStore {
     public userStore: UserStore;
@@ -33,6 +34,14 @@ export class RootStore {
         const content = prepareData(toJS(this.mapStore));
         console.log('save from root->', content);
         saveJson(content);
+    }
+
+    async saveData() {
+        const content = prepareData(toJS(this.mapStore));
+        console.log('post->', content);
+
+        const a = await postData(`${Path}/map-file/map1`, content);
+        console.log('answer', a);
     }
 
     @action

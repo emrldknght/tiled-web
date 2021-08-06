@@ -6,7 +6,7 @@ import {RootContext} from "./store/RootStore";
 export function TopControlPanel() {
     const rootState = useContext(RootContext);
 
-    const saveDataW = () => mAppState.saveData();
+    const saveDataW = () => rootState.saveData();
     const saveMapFileW = () => rootState.saveMapFile();
     const logoutW = () => {
         // logout();
