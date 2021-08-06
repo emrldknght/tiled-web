@@ -1,5 +1,5 @@
 import {Row} from "../Row";
-import {Weapon, WeaponCategory, WeaponProfiency, WeaponType} from "../../types/Weapon";
+import {Weapon, WeaponCategory, WeaponProficiency, WeaponType} from "../../types/Weapon";
 import { FieldL} from "../Field";
 import {$enum} from "ts-enum-util";
 import React, {useContext} from "react";
@@ -44,7 +44,7 @@ export const WeaponEditComponent = observer(function WeaponEditComponent({ data 
     return(<option key={cat} value={cat}>{n}</option>)
   });
 
-  const wp = $enum(WeaponProfiency).map((cat, n) => {
+  const wp = $enum(WeaponProficiency).map((cat, n) => {
     return(<option key={cat} value={cat}>{n}</option>)
   });
 

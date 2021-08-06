@@ -1,9 +1,9 @@
 import {observer} from "mobx-react";
 import {useContext, useState} from "react";
-import {StoreContext} from "../../store/StoreContext";
 import {Button, Divider, Intent} from "@blueprintjs/core";
-import {mAppState} from "../../store/mStore";
 import {DebugOut} from "../common/DebugOut";
+import {RootContext} from "../../store/RootStore";
+
 
 const DIM_BUTTONS = [
   'arrow-top-left',
@@ -43,8 +43,11 @@ function Panel({ active, handleClick, order }: PanelProps) {
 }
 
 export const MapDimensionsComponent = observer(function MapDimensionsComponent () {
-  const state = useContext(StoreContext);
-  const mapData = state.mapData;
+  const rootState = useContext(RootContext);
+  const mapState = rootState.mapStore;
+
+  const mapData = mapState.mapData;
+
   const w = mapData.length; // .length || 1;
   const h = (mapData.length > 0) ? mapData[0].length : 0; // [0].length || 1;
 
@@ -58,7 +61,7 @@ export const MapDimensionsComponent = observer(function MapDimensionsComponent (
 
   const handleAction = () => {
     console.log('a!:', panelMode, dimActive);
-    mAppState.mapExpand(panelMode, dimActive);
+    mapState.mapExpand(panelMode, dimActive);
 
     /*
     const a = (panelMode === 'expand') ? 'add' : 'del';

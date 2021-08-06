@@ -1,14 +1,13 @@
 import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
-import {mAppState} from "../store/mStore";
-import {StoreContext} from "../store/StoreContext";
 import {DebugOut} from "./common/DebugOut";
+import {RootContext} from "../store/RootStore";
 
 export const CellPalette = observer(function CellPalette() {
-  const state = useContext(StoreContext);
-  const tileUrl = state.tileUrl;
-  const tileDim = state.tileDim;
-  const palette = state.palette;
+  const rootState = useContext(RootContext);
+  const tileUrl = rootState.mapStore.tileUrl;
+  const tileDim = rootState.mapStore.tileDim;
+  const palette = rootState.paletteStore;
 
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
     '--tile-root': `url(${tileUrl})`,
@@ -22,7 +21,7 @@ export const CellPalette = observer(function CellPalette() {
     const id = parseInt(_id);
     console.log('tap', id, typeof id);
     if (!isNaN(id)) {
-      mAppState.paletteSelectTile(id);
+      palette.paletteSelectTile(id);
     }
   }
   /*
@@ -32,10 +31,11 @@ export const CellPalette = observer(function CellPalette() {
   })
    */
   const selected = (id: number) => (palette.selectedTile === id) ? 'selected' : '';
+
   const k = palette.data.map(item => {
     const t = item.type;
     return (<div key={`pal-cell-${item.cid}`} data-id={item.id}
-                 className={`cell cell-map ${t} ${selected(item.id)}`}
+                 className={`cell cell-map ${t} ${selected(item.id)} in-pal`}
 
         >{item.id}</div>
     )
@@ -47,8 +47,8 @@ export const CellPalette = observer(function CellPalette() {
         <div className="col">
           <div className="row" onClick={tapTile}>
             {k}
-            <div className="cell cell-map grass">A</div>
-            <div className="cell cell-map water">B</div>
+            <div className="cell cell-map grass in-pal">A</div>
+            <div className="cell cell-map water in-pal">B</div>
           </div>
           <div className="row">
             <DebugOut data={palette.data} />

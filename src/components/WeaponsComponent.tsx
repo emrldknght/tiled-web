@@ -18,6 +18,7 @@ const data: WItem[] = [
 ];
 export const myFilters = ['class', 'type', 'misc'];
 
+/*
 function getLongestEl(data: WItem[]) {
   const ol = data.map(el => Object.keys(el).length);
   console.log(ol);
@@ -32,6 +33,7 @@ function getLongestEl(data: WItem[]) {
   // console.log(`Max is ${max} on pos: ${indexOfMax}`);
   return data[indexOfMax];
 }
+ */
 
 export type FilterVal = null | string | boolean | number;
 export type Filters = {[key: string]: FilterVal}

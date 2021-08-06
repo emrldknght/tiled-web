@@ -2,9 +2,9 @@ import {TGridCell} from "./TGridCell";
 import {PalCell} from "../../types";
 import React, {useContext} from "react";
 import {observer} from "mobx-react";
-import {mAppState} from "../../store/mStore";
 import {StoreContext} from "../../store/StoreContext";
 import { newOrderedArray as getArray } from '../../lib/dimensions';
+import {RootContext} from "../../store/RootStore";
 
 export const removeIndex = (array: any[], index: number) => {
   delete array[index];
@@ -28,7 +28,10 @@ type Props = {
 export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
   const state = useContext(StoreContext);
   const tileSrc = state.tileSrc;
-  const palData = state.palette.data;
+
+  const rootState = useContext(RootContext);
+  const pal = rootState.paletteStore;
+  const palData = pal.data;
   const activeTiles = palData.map((item: PalCell) => item.cid).filter((i: string) => i);
 
   // const [activeTiles, setActiveTiles] = useState([cellKey(2, 0)]);
@@ -49,7 +52,7 @@ export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
     // console.log('set', i, j)
     if (isChecked(i, j)) {
       console.log('in array');
-      mAppState.paletteRemoveCell(cellKey(i, j));
+      pal.paletteRemoveCell(cellKey(i, j));
     } else {
       // console.log('addWith', JSON.stringify(palData));
       const ids = palData.map(item => item.id);
@@ -64,7 +67,7 @@ export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
         bg: ''
       }
 
-      mAppState.paletteAddCell(newCell)
+      pal.paletteAddCell(newCell)
     }
   }
 

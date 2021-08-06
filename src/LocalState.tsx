@@ -4,7 +4,8 @@ import React from "react";
 export enum LSKeys {
     Tab = 'tiled-active-tab',
     MapGrid = 'map-grid',
-    MapCellInfo = 'map-cell-info'
+    MapCellInfo = 'map-cell-info',
+    Map3DView = 'map-3d-view'
 }
 
 export function useLState(defaultValue: any, key: LSKeys) {

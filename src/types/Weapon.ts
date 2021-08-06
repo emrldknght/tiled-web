@@ -17,13 +17,13 @@ export enum WeaponCategory {
 
 // type WCategory = Record<WeaponCategory, string>; //'Unarmed' | 'Light' | 'One-Handed' | 'Two-Handed';
 
-export enum WeaponProfiency {
+export enum WeaponProficiency {
   Simple = 'simple',
   Martial = 'martial',
   Exotic = 'exotic'
 }
 
-// type WProfiency = Record<WeaponProfiency, string>; // 'Simple' | 'Martial' | 'Exotic';
+// type WProficiency = Record<WeaponProficiency, string>; // 'Simple' | 'Martial' | 'Exotic';
 
 
 type WGroup = 'Close'

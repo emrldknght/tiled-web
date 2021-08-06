@@ -5,12 +5,17 @@ import {Helmet} from "react-helmet";
 import {gs} from "./lib/genStyles";
 import React, {useContext} from "react";
 import {observer} from "mobx-react";
-import {StoreContext} from "./store/StoreContext";
+import {RootContext} from "./store/RootStore";
+
+if('paintWorklet' in CSS) {
+  // @ts-ignore
+  CSS.paintWorklet.addModule('./header-highlight.js');
+}
 
 
 export const App = observer(function App() {
-  const state = useContext(StoreContext);
-  const pal = state.palette.data
+  const state = useContext(RootContext);
+  const pal = state.paletteStore.data
 
   return (
     <div className="App">

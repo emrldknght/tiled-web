@@ -16,6 +16,8 @@ import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/ma
 import {LSKeys, useLState} from "./LocalState";
 import {MapEditorComponent} from "./components/MapEditorComponent";
 
+import {RootContext} from "./store/RootStore";
+
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
 
@@ -25,6 +27,9 @@ export const Editor = observer(function Editor() {
   const state = useContext(StoreContext);
   const [loading, setLoading] = useState(false);
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
+
+  const rootStore = useContext(RootContext);
+  const map = rootStore.mapStore;
 
   useEffect(() => {
     /*
@@ -52,12 +57,14 @@ export const Editor = observer(function Editor() {
      */
     // init();
     // fetchMapFileA();
+    map.fetchMapFile('map1')
     setLoading(true);
-    mAppState.fetchMapFile('map1')
-      .then(() => {
-        setLoading(false);
-      })
-  }, [])
+    // map.setMap(mockMap);
+    // map.setTileDim(48);
+
+    // mAppState.setMap(mockMap);
+    mAppState.setTileDim(48);
+  }, [map])
 
   const setActiveTab = (e: string) => {
     // console.log(e);
@@ -76,9 +83,10 @@ export const Editor = observer(function Editor() {
   // const saveMapFileW = () => mAppState.saveMapFile();
 
   return (
-    <div className="col">
+    <div className={`col ${loading ? 'loading' : ''}`}>
       <div className="error">{state.error}</div>
       <div className="row">
+        <RootContext.Provider value={rootStore}>
         <FileExplorer/>
           {!(state.error) ?
             <div className="col">
@@ -139,6 +147,7 @@ export const Editor = observer(function Editor() {
             </div>  :
             ''
           }
+        </RootContext.Provider>
       </div>
     </div>
   )

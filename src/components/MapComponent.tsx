@@ -1,18 +1,31 @@
 import {MapRow} from "./map/MapRow";
 import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
-import {mAppState} from "../store/mStore";
-import {StoreContext} from "../store/StoreContext";
-import {LSKeys, useLState} from "../LocalState";
+import {ToolPaletteContext} from "./ToolPalette";
+import {RootContext} from "../store/RootStore";
+import {MapControls, MCContext} from "./map/MapControls";
+
 
 export const MapComponent = observer(function MapComponent() {
-  const state = useContext(StoreContext);
-  const tileUrl = state.tileUrl;
-  const tileDim = state.tileDim;
-  const mapData = state.mapData;
-  const brushId =  state.palette.selectedTile;
-  const x = state.curX;
-  const y = state.curY;
+
+  const rootState = useContext(RootContext);
+
+  const mapState = rootState.mapStore;
+
+  const tileUrl = mapState.tileUrl;
+  const tileDim = mapState.tileDim;
+
+  // const mapData = state.mapData;
+
+  const brushId = rootState.paletteStore.selectedTile;
+  const x = mapState.curX;
+  const y = mapState.curY;
+
+  const tools = useContext(ToolPaletteContext);
+  const currentTool = tools.currentTool;
+
+
+  const mapData2 = mapState.mapData;
 
   // const u = props.tileUrl ? `--tile-root: url(${props.tileUrl});` : '';
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
@@ -20,10 +33,10 @@ export const MapComponent = observer(function MapComponent() {
     '--tile-dim': `${tileDim}px`,
   };
 
-  const [showGrid, setShowGrid] = useLState(true, LSKeys.MapGrid);
-  const [showCellInfo, setShowCellInfo] = useLState(true, LSKeys.MapCellInfo);
+  const mcState = useContext(MCContext);
+  const { showGrid, showCellInfo, show3D } = mcState;
 
-  const tm = mapData.map((row, y) =>
+  const tm = mapData2.map((row, y) =>
       <MapRow
           key={`mr_${y}`}
           data={row} y={y}
@@ -42,44 +55,52 @@ export const MapComponent = observer(function MapComponent() {
       t = c as HTMLElement;
     }
 
-    let {x, y} = t.dataset;
-    const _x = parseInt(x || '');
-    const _y = parseInt(y || '');
-    console.log('poke', e.target, _x, _y, brushId);
-    if (!isNaN(_x) && !isNaN(_y)) {
-      mAppState.setMapTile(_x, _y, brushId);
+    let {x: xS, y: yS} = t.dataset;
+    console.log(xS, yS);
+    if(xS === undefined || yS === undefined) return;
+
+    const x = parseInt(xS);
+    const y = parseInt(yS);
+
+    const applyPencil = (x:number, y: number) => {
+      // const _x = parseInt(x || '');
+      // const _y = parseInt(y || '');
+      console.log('poke', e.target, x, y, brushId);
+      // if (!isNaN(_x) && !isNaN(_y)) {
+      // mAppState.setMapTile(x, y, brushId);
+      mapState.setMapTile(x ,y, brushId);
+      // }
+    }
+    // console.log('ct', currentTool);
+
+    switch (currentTool) {
+      case "Pencil":
+        applyPencil(x, y);
+        break;
+      case "Bucket":
+        console.log('will fill');
+        mapState.pokeCell(x, y);
+        break;
     }
   }
 
   const showGridK = () => (showGrid) ? 'show-grid' : '';
-  const toggleShowGrid = () => setShowGrid(!showGrid);
-
-  const toggleShowCellInfo = () => setShowCellInfo(!showCellInfo);
+  const show3DK = () => (show3D) ? 'show-3d' : '';
 
   return (
-      <div className={`map ${showGridK()}`}
+      <div className={`map ${showGridK()} ${show3DK()}`}
            style={p}
       >
         <div className="col">
           <b>Map Editor</b>
-          <div className="row">
-            <label>
-              <input type="checkbox" checked={showGrid}
-                     onChange={toggleShowGrid}/>Show Grid
-            </label>
-            <label>
-              <input type="checkbox" checked={showCellInfo}
-                     onChange={toggleShowCellInfo}/>Show Info
-            </label>
-            <div>x: {x} y: {y}</div>
-            {/*
-          BID: {brushId}
-          <button onClick={setTile}>Set!</button>
-          From store{JSON.stringify(mapData)}
-           */}
-          </div>
+          {/* <DebugOut data={JSON.stringify(mapData2)} />
+          <DebugOut data={JSON.stringify(mapState.selection)} /> */}
+          <MapControls x={x} y={y} />
         </div>
-        <div className={`mapWrapper`} onClick={pokeTile}>{tm}</div>
+        <div className={`mapWrapper`} onClick={pokeTile}>
+          {tm}
+        </div>
       </div>
   )
 })
+

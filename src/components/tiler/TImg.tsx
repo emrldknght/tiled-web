@@ -2,11 +2,16 @@ import {observer} from "mobx-react";
 import {useContext} from "react";
 import {mAppState} from "../../store/mStore";
 import {StoreContext} from "../../store/StoreContext";
+import {RootContext} from "../../store/RootStore";
 
 export const TImg = observer(function TImg() {
 
   const state = useContext(StoreContext);
-  const tileUrl = state.tileUrl;
+
+  const rootState = useContext(RootContext);
+  const mapState = rootState.mapStore
+
+  const tileUrl = mapState.tileUrl;
   const tileDim = state.tileDim;
   const tileSrc = state.tileSrc;
 

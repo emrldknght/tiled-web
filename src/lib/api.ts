@@ -4,12 +4,14 @@ import {Weapon} from "../types/Weapon";
 import {ItemP} from "../types/Item";
 import {Armor} from "../types/Armor";
 
-export const Path = (process.env.NODE_ENV !== 'production') ? 'http://localhost/sq' : '/server';
+export const Path = 'http://localhost/sq';
 export const Files = `${Path}/list-files`;
 
 export const fetchPath = (path: string): Promise<never> => {
   return new Promise(resolve => {
-    fetch(path)
+    fetch(path, {
+
+    })
       .then(r => r.json())
       .then(j => resolve(j));
   })
