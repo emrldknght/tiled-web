@@ -119,7 +119,7 @@ export class MapEntity {
                     // console.log(_x, _y, 'v', isV, notH);
 
                     if (isV && notH && notCenter) {
-                        console.log('set!');
+                        // console.log('set!');
                         self.setHLC(_x, _y, v);
                         getSur(ctx, _x, _y, v);
                     }

@@ -4,7 +4,7 @@ import {Weapon} from "../types/Weapon";
 import {ItemP} from "../types/Item";
 import {Armor} from "../types/Armor";
 
-export const Path = 'http://oyba.xenn.xyz/server';
+export const Path = 'http://localhost/sq';
 export const Files = `${Path}/list-files`;
 
 export const fetchPath = (path: string): Promise<never> => {

@@ -3,7 +3,6 @@ import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
 import {ToolPaletteContext} from "./ToolPalette";
 import {RootContext} from "../store/RootStore";
-import {Player} from "./Player";
 import {MapControls, MCContext} from "./map/MapControls";
 
 
@@ -99,7 +98,6 @@ export const MapComponent = observer(function MapComponent() {
           <MapControls x={x} y={y} />
         </div>
         <div className={`mapWrapper`} onClick={pokeTile}>
-          <Player />
           {tm}
         </div>
       </div>

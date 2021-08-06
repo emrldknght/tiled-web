@@ -7,6 +7,11 @@ import React, {useContext} from "react";
 import {observer} from "mobx-react";
 import {RootContext} from "./store/RootStore";
 
+if('paintWorklet' in CSS) {
+  // @ts-ignore
+  CSS.paintWorklet.addModule('./header-highlight.js');
+}
+
 
 export const App = observer(function App() {
   const state = useContext(RootContext);

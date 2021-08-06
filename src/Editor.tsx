@@ -15,7 +15,7 @@ import {TopControlPanel} from "./TopControlPanel";
 import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
 import {LSKeys, useLState} from "./LocalState";
 import {MapEditorComponent} from "./components/MapEditorComponent";
-import {mockMap} from "./mockMap";
+
 import {RootContext} from "./store/RootStore";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
@@ -57,10 +57,10 @@ export const Editor = observer(function Editor() {
      */
     // init();
     // fetchMapFileA();
-    // map.fetchMapFile('map1')
+    map.fetchMapFile('map1')
     setLoading(true);
-    map.setMap(mockMap);
-    map.setTileDim(48);
+    // map.setMap(mockMap);
+    // map.setTileDim(48);
 
     // mAppState.setMap(mockMap);
     mAppState.setTileDim(48);

@@ -13,12 +13,6 @@ import {
   TILER_SELECT_CELL, TILER_UPDATE_CELL
 } from "./actionTypes";
 
-const prepareData = (state: AppState) => JSON.stringify({
-  mapData: state.mapData,
-  tileDim: state.tileDim,
-  tileUrl: state.tileUrl
-});
-
 export type ReducerActions = {
   [p: string]: (state: AppState, action: any) => AppState
 }
