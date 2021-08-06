@@ -5,6 +5,7 @@ import {prepareData} from "../lib/prepareData";
 import {saveJson} from "../lib/saveJson";
 import {PaletteStore} from "./PaletteStore";
 import {PalToolType} from "../components/ToolPalette";
+import {PalCell} from "../types";
 
 export class RootStore {
     public userStore: UserStore;
@@ -46,6 +47,17 @@ export class RootStore {
                 break;
             default:
                 break;
+        }
+    }
+
+    @action
+    tilerUpdateCell(cid: string, data: { k: string ; v: string | number; }) {
+        const ind = this.paletteStore.data.findIndex(i => i.cid === cid);
+        if(ind !== -1) {
+            const k = data.k as keyof PalCell;
+            const v = data.v
+            const l = this.paletteStore.data[ind];
+            (l[k] as string | number) = v;
         }
     }
 }
