@@ -1,11 +1,10 @@
 import {action, makeObservable, observable} from "mobx";
-import {palData} from "./palData";
 import {RootStore} from "./RootStore";
 import {PalCell} from "../types";
 
 export class PaletteStore {
     @observable public selectedTile: number = -1;
-    @observable public data = palData;
+    @observable public data: PalCell[] = [];
     public rootStore?: RootStore;
 
     constructor(rootStore: RootStore) {
@@ -31,5 +30,20 @@ export class PaletteStore {
         if(ind !== -1) {
             this.data.splice(ind, 1);
         }
+    }
+
+    @action
+    tilerUpdateCell(cid: string, data: { k: string ; v: string | number; }) {
+        const ind = this.data.findIndex(i => i.cid === cid);
+        if(ind !== -1) {
+            const k = data.k as keyof PalCell;
+            const v = data.v
+            const l = this.data[ind];
+            (l[k] as string | number) = v;
+        }
+    }
+
+    @action setData(data: PalCell[]) {
+        this.data = data;
     }
 }

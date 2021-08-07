@@ -7,6 +7,8 @@ import {saveJson} from "../lib/saveJson";
 import {createContext} from "react";
 import {prepareData} from "../lib/prepareData";
 
+type MapLayer = number[][];
+
 export class MapEntity {
     public rootStore: any;
 
@@ -19,7 +21,7 @@ export class MapEntity {
 
     @observable error: string = '';
 
-    @observable mapData: number[][] = [];
+    @observable mapData: MapLayer = [];
     @observable selection: number[][] = [];
 
     @action
@@ -67,7 +69,11 @@ export class MapEntity {
     @observable tileDim: number | null = null;
 
     @action
-    setTileUrl(url: string) {
+    setTileUrl(url: string, relative = false) {
+        if(relative) {
+            this.tileUrl = url;
+            return;
+        }
         this.tileUrl = `${Path}/tilesets/${url}`;
     }
 

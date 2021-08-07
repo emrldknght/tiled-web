@@ -3,22 +3,20 @@ import {TGrid, cellKey} from "./tiler/TGrid";
 import React, {CSSProperties, useContext} from "react";
 import {CellEditor} from "./CellEditor";
 import {observer} from "mobx-react";
-import {mAppState} from "../store/mStore";
-import {StoreContext} from "../store/StoreContext";
 import {DebugOut} from "./common/DebugOut";
-import {RootContext, RootStore} from "../store/RootStore";
+import {RootContext} from "../store/RootStore";
 
 export const TilerComponent = observer(function TilerComponent() {
 
-  const state = useContext(StoreContext);
-
   const rootState = useContext(RootContext);
   const mapState = rootState.mapStore
+  const tilerState = rootState.tilerStore;
 
   const tileUrl = mapState.tileUrl;
-  const tileDim = state.tileDim;
-  const tileSrc = state.tileSrc;
-  const palette = state.palette.data;
+  const tileDim = mapState.tileDim;
+  const tileSrc = tilerState.tileSrc;
+
+  const palette = rootState.paletteStore.data;
   // { tilerSelectCell }: Props
 
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
@@ -30,7 +28,8 @@ export const TilerComponent = observer(function TilerComponent() {
     const cid = cellKey(x, y);
     console.log(`select it: ${cid}`);
     // tilerSelectCell(cid);
-    mAppState.tilerSelectCell(cid);
+    tilerState.tilerSelectCell(cid);
+    // mAppState.tilerSelectCell(cid);
   }
 
   // const cellTemplate = { id: -2, }
@@ -39,7 +38,8 @@ export const TilerComponent = observer(function TilerComponent() {
     <div className="tiler" style={p}>
       <b>Tiler</b>
       <div>
-        <DebugOut data={palette} />
+        <DebugOut data={tilerState.selectedCell} />
+        <DebugOut data={JSON.stringify(palette)} />
       </div>
       <input type="checkbox"/>
       <div className="row">

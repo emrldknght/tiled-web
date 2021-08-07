@@ -1,19 +1,16 @@
 import {observer} from "mobx-react";
 import {useContext} from "react";
-import {mAppState} from "../../store/mStore";
-import {StoreContext} from "../../store/StoreContext";
 import {RootContext} from "../../store/RootStore";
 
 export const TImg = observer(function TImg() {
 
-  const state = useContext(StoreContext);
-
   const rootState = useContext(RootContext);
   const mapState = rootState.mapStore
+  const tilerState = rootState.tilerStore;
 
   const tileUrl = mapState.tileUrl;
-  const tileDim = state.tileDim;
-  const tileSrc = state.tileSrc;
+  const tileDim = mapState.tileDim;
+  const tileSrc = tilerState.tileSrc;
 
   // if(!tileSrc.loaded) return(<div>Image Loading...</div>);
 
@@ -34,7 +31,7 @@ export const TImg = observer(function TImg() {
       loaded: true
     };
     const updateData = async () => {
-      mAppState.setTileSrcR(newState);
+      tilerState.setTileSrcR(newState);
     }
     await updateData();
   }

@@ -2,7 +2,6 @@ import {TGridCell} from "./TGridCell";
 import {PalCell} from "../../types";
 import React, {useContext} from "react";
 import {observer} from "mobx-react";
-import {StoreContext} from "../../store/StoreContext";
 import { newOrderedArray as getArray } from '../../lib/dimensions';
 import {RootContext} from "../../store/RootStore";
 
@@ -26,10 +25,10 @@ type Props = {
 }
 
 export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
-  const state = useContext(StoreContext);
-  const tileSrc = state.tileSrc;
-
   const rootState = useContext(RootContext);
+  const tilerState = rootState.tilerStore;
+  const tileSrc = tilerState.tileSrc;
+
   const pal = rootState.paletteStore;
   const palData = pal.data;
   const activeTiles = palData.map((item: PalCell) => item.cid).filter((i: string) => i);
@@ -76,6 +75,7 @@ export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
   const cells = (j: number) => getArray(tileSrc.wc)
       .map((i: number) => <TGridCell i={i} j={j} key={`grid_cell_${i}_${j}`}
                            isChecked={isChecked(i, j)} handleChange={handleChange} selectTile={selectTile}
+        selected={cellKey(i, j) === tilerState.selectedCell}
       />)
 
 

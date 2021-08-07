@@ -3,7 +3,6 @@ import {TabsK} from "./components/Tabs";
 import {TilerComponent} from "./components/TilerComponent";
 import FileExplorer from "./FileExplorer";
 import {Tabs, Tab} from "@blueprintjs/core";
-import {mAppState} from "./store/mStore";
 import {observer} from "mobx-react";
 import {StoreContext} from "./store/StoreContext";
 import {CharComponent} from "./components/CharComponent";
@@ -15,8 +14,9 @@ import {TopControlPanel} from "./TopControlPanel";
 import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
 import {LSKeys, useLState} from "./LocalState";
 import {MapEditorComponent} from "./components/MapEditorComponent";
-
+import {mockMap} from "./mock/mockMap";
 import {RootContext} from "./store/RootStore";
+import {palData} from "./store/palData";
 
 // const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
 
@@ -30,6 +30,8 @@ export const Editor = observer(function Editor() {
 
   const rootStore = useContext(RootContext);
   const map = rootStore.mapStore;
+  const tiler = rootStore.tilerStore;
+  const pal = rootStore.paletteStore;
 
   useEffect(() => {
     /*

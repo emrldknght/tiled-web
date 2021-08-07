@@ -25,22 +25,23 @@ export enum WeaponProficiency {
 
 // type WProficiency = Record<WeaponProficiency, string>; // 'Simple' | 'Martial' | 'Exotic';
 
-
+/*
 type WGroup = 'Close'
   | 'Hammers' | 'Flails' | 'Spears' | 'Polearms'
   | 'Axes' | 'Light Blades' | 'Thrown' | 'Monk' | 'Double'
-  | 'Tribal' ;
+  | 'Tribal' ; */
 
 // Melee | Ranged + reach / double / thrown / projectile / ammunition
 
 // range increment
+/*
 type WSpecial =
   'Non Lethal' |
   'Fragile' |
   'Monk' | 'Double' |
   'Attached' |
   'Disarm' | 'Grapple' |
-  'Trip' | 'Brace' | 'Reach' ;
+  'Trip' | 'Brace' | 'Reach' ; */
 
 // export type Weapon = Item & {
 export interface Weapon extends Item {
