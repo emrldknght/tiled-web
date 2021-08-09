@@ -1,3 +1,5 @@
+// TODO - refactoring needed
+
 import React from "react";
 import { FiltersComponent } from "./weapons/FiltersComponent";
 
@@ -41,6 +43,8 @@ export type WCState = {[key: string]: FilterVal | Filters | undefined, filters: 
 
 const filterFunction = (val: FilterVal, key: string, el: WItem) => (val) ? ((el[key as keyof WItem]) === val) : true;
 
+export type ItemFiltersState = { a: boolean; b: string; filters: Filters }
+
 export function WeaponsComponent() {
   const initial: Filters = {}
 
@@ -51,14 +55,12 @@ export function WeaponsComponent() {
   }, initial);
   console.log(_f);
 
-  const initState = {a: true, b: 'sample', filters: _f};
-  const [ff, setff] = React.useState(initState);
-
-
+  const initState: ItemFiltersState = {a: true, b: 'sample', filters: _f};
+  const [ff, setFf] = React.useState(initState);
 
   const filters: ((el: WItem) => boolean)[] = []; //[fClass, fType];
   const addFilter = (key: string) => {
-    const kv = ff.filters[key] as FilterVal;
+    const kv: FilterVal = ff.filters[key] as FilterVal;
     const newFilter = filterFunction.bind(null, kv, key);
     filters.push(newFilter);
   }
@@ -79,7 +81,7 @@ export function WeaponsComponent() {
   return (
     <div className="weapons-ed col">
       <div>{JSON.stringify(ff)}</div>
-      <FiltersComponent ff={ff} setff={setff} data={data}/>
+      <FiltersComponent ff={ff} setFf={setFf} data={data}/>
       <div className="col">
         {itemList}
       </div>

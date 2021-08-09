@@ -6,13 +6,14 @@ import {isApiError} from "../types";
 import {saveJson} from "../lib/saveJson";
 import {createContext} from "react";
 import {prepareData} from "../lib/prepareData";
+import {RootStore} from "./RootStore";
 
 type MapLayer = number[][];
 
 export class MapEntity {
-    public rootStore: any;
+    public rootStore: RootStore | undefined;
 
-    constructor(rootStore?: any) {
+    constructor(rootStore?: RootStore) {
         if(rootStore) {
             this.rootStore = rootStore;
         }

@@ -1,8 +1,9 @@
 import {observer} from "mobx-react";
 import {useContext, useState} from "react";
-import {Button, Divider, Intent} from "@blueprintjs/core";
+import {Button, Divider, Intent, } from "@blueprintjs/core";
 import {DebugOut} from "../common/DebugOut";
 import {RootContext} from "../../store/RootStore";
+import {IconName} from "@fortawesome/fontawesome";
 
 
 const DIM_BUTTONS = [
@@ -28,7 +29,7 @@ function Panel({ active, handleClick, order }: PanelProps) {
       <div className="dim-buttons">
         {
           order.map((b, i) => {
-            const iconName = (DIM_BUTTONS[b] as any);
+            const iconName:  IconName = (DIM_BUTTONS[b] as never);
             return (
               <Button intent={(i === active) ? Intent.PRIMARY : undefined}
                       icon={iconName} key={`bd_${i}`} small

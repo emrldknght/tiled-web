@@ -14,7 +14,7 @@ export const repeatF = (action: Function, times: number) => {
   const na = newArray(times);
   na.forEach(() => action());
 }
-export const combineF = (data: any, ...actions: Function[]): Function => {
+export const combineF = <T>(data: T, ...actions: Function[]): Function => {
   return () => {
     actions.forEach((action: Function) => {
       console.log(action);
@@ -99,21 +99,21 @@ export const getAction = (dimActive: number, mode: PanelMode): Function => {
   const c = (actions as ColActions)['col'];
   switch (dimActive) {
     case 0:
-      return (data: any) => combineF(data, r['top'], c['left'])();
+      return <T>(data: T) => combineF(data, r['top'], c['left'])();
     case 1:
       return r['top'];
     case 2:
-      return (data: any) => combineF(data, r['top'], c['right'])();
+      return <T>(data: T) => combineF(data, r['top'], c['right'])();
     case 5:
       return c['right'];
     case 3:
       return c['left'];
     case 6:
-      return (data: any) => combineF(data, r['bottom'], c['left'])();
+      return <T>(data: T) => combineF(data, r['bottom'], c['left'])();
     case 7:
       return r['bottom'];
     case 8:
-      return (data: any) => combineF(data, r['bottom'], c['right'])();
+      return <T>(data: T) => combineF(data, r['bottom'], c['right'])();
     default:
       return () => {}
   }

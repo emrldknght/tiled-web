@@ -8,7 +8,7 @@ export enum LSKeys {
     Map3DView = 'map-3d-view'
 }
 
-export function useLState(defaultValue: any, key: LSKeys) {
+export function useLState<T>(defaultValue: T, key: LSKeys) {
     const [value, setValue] = React.useState(() => {
         const kept = localStorage.getItem(key);
         return kept !== null

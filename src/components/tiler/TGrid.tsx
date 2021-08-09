@@ -5,7 +5,8 @@ import {observer} from "mobx-react";
 import { newOrderedArray as getArray } from '../../lib/dimensions';
 import {RootContext} from "../../store/RootStore";
 
-export const removeIndex = (array: any[], index: number) => {
+type RI = <T>(array: T[], index: number) => T[]
+export const removeIndex: RI = (array, index) => {
   delete array[index];
   array = array.filter(function (element) {
     return element !== undefined
