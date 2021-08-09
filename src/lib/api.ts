@@ -1,4 +1,4 @@
-import {ApiAnswer, ApiError, ApiOk, MapFile} from "../types";
+import {ApiAnswer, ApiError, ApiOk, MapFile, PalCell} from "../types";
 import {Character} from "../types/Character";
 import {Weapon} from "../types/Weapon";
 import {ItemP} from "../types/Item";
@@ -19,7 +19,7 @@ export const fetchPath = (path: string): Promise<never> => {
 
 // type PostDataType<T> = (path: string, data: T) => Promise<T>;
 
-export const postData = (path: string, data: any): Promise<ApiAnswer> => {
+export const postData = <T>(path: string, data: T): Promise<ApiAnswer<T>> => {
   // console.log(path, data);
   // return axios.post(path, data);
   return  new Promise(resolve => {
@@ -39,24 +39,27 @@ export const postData = (path: string, data: any): Promise<ApiAnswer> => {
   })
 }
 
-export const fetchFileList = (): Promise<string[] | ApiError> =>
+export const FetchPalette = (name: string): Promise<ApiAnswer<PalCell[]>> => fetchPath(`${Path}/palette/${name}`);
+
+export const fetchFileList = (): Promise<ApiAnswer<string[]>> =>
   fetchPath(Files);
 
-export const fetchMap = (mapId: string): Promise<MapFile | ApiError> =>
+export const fetchMap = (mapId: string): Promise<ApiAnswer<MapFile>> =>
   fetchPath(`${Path}/map-file/${mapId}`) as Promise<MapFile | ApiError>;
-export const fetchChar = (id: number): Promise<Character | ApiError> =>
+
+export const fetchChar = (id: number): Promise<ApiAnswer<Character>> =>
   fetchPath(`${Path}/char/${id}`);
 
-export const fetchItems = (): Promise<ItemP[] | ApiError> =>
+export const fetchItems = (): Promise<ApiAnswer<ItemP[]>> =>
   fetchPath(`${Path}/items`);
 
-export const fetchWeapon = (id: number): Promise<Weapon | ApiError> =>
+export const fetchWeapon = (id: number): Promise<ApiAnswer<Weapon>> =>
   fetchPath(`${Path}/weapon/${id}`);
 
-export const fetchArmor = (id: number): Promise<Armor | ApiError> =>
+export const fetchArmor = (id: number): Promise<ApiAnswer<Armor>> =>
   fetchPath(`${Path}/armor/${id}`);
 
-export const addEmptyItem = (type: string): Promise<ApiOk | ApiError> =>
+export const addEmptyItem = (type: string): Promise<ApiAnswer<ApiOk>> =>
   fetchPath(`${Path}/item-add/${type}`);
 
 export const addNewWeapon = () => addEmptyItem('weapon');

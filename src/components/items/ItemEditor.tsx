@@ -160,13 +160,13 @@ class ItemEditorState {
     console.log('Save Item', this.selectedItem, data);
 
     if(this.selectedItemData && isWeapon(this.selectedItemData)) {
-      postData(`${Path}/weapon/${id}`, data)
+      postData(`${Path}/weapon/${id}`, (data as Weapon))
         .then((j) => {
           console.log('from fetch', j)
         })
     }
     if(this.selectedItemData && isArmor(this.selectedItemData)) {
-      postData(`${Path}/armor/${id}`, data)
+      postData(`${Path}/armor/${id}`, (data as Armor))
         .then((j) => {
           console.log('from fetch', j)
         })

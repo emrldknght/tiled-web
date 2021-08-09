@@ -45,7 +45,7 @@ export class SEState  { // implements Spell
         const id = this.spellId;
         const data = toJS(this.spell);
         console.log('Save Item', id, data);
-        postData(`${Path}/spell/${id}`, data)
+        postData(`${Path}/spell/${id}`, (data as Spell))
           .then((j) => {
               console.log('from fetch', j)
           })

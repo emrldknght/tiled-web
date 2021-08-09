@@ -1,6 +1,6 @@
 import {action, computed, makeObservable, observable} from "mobx";
 import {createContext} from "react";
-import {ApiError, isApiError} from "../types";
+import {isApiError} from "../types";
 import {fetchChar, Path, postData} from "../lib/api";
 import {Character} from "../types/Character";
 import {CharStats} from "../types/CharStats";
@@ -105,7 +105,7 @@ export class CharAppState implements Character {
   }
 
   async fetchCharFile(charId: number) {
-    const cd: Character | ApiError = await fetchChar(charId);
+    const cd = await fetchChar(charId);
     if(isApiError(cd)) {
       console.warn(cd.error)
       return;
@@ -152,11 +152,11 @@ export const charAppState = new CharAppState();
 
 export const CharContext = createContext<Character>(initCharState);
 
-export function getProps<T>(o: T): string[] {
+export function getProps<T extends object>(o: T): string[] {
   const p = [];
   for(const k in o) {
     // console.log('->', k);
-    p.push(k);
+    if(o.hasOwnProperty(k)) { p.push(k); }
   }
   return p;
 }

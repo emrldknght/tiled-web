@@ -1,8 +1,3 @@
-import {Character} from "./types/Character";
-import {Weapon} from "./types/Weapon";
-import {ItemP} from "./types/Item";
-import {Armor} from "./types/Armor";
-
 export type MapData = number[][];
 export type PalCell = {
   id: number,
@@ -54,11 +49,12 @@ export type ApiError = ApiRequestResult & {
   error: string
 }
 
-export type ApiAnswer = ApiError | ApiOk | MapFile | Character | string[] | ItemP[] | Weapon | Armor;
+export type ApiAnswer<T> = ApiError | T;
 
-export function isApiError(answer: ApiAnswer): answer is ApiError {
+export function isApiError<T>(answer: ApiAnswer<T>): answer is ApiError {
   return (answer as ApiError).error !== undefined;
 }
+/*
 export function isApiOk(answer: ApiAnswer): answer is ApiOk {
   return (answer as ApiOk).status === 'ok';
-}
+} */

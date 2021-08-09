@@ -2,7 +2,7 @@ import {action, makeObservable, observable, toJS} from "mobx";
 import {PanelMode} from "../components/map/MapDimensions";
 import {getAction} from "../lib/dimensions";
 import {fetchMap, Path} from "../lib/api";
-import {ApiError, isApiError, MapFile} from "../types";
+import {isApiError} from "../types";
 import {saveJson} from "../lib/saveJson";
 import {createContext} from "react";
 import {prepareData} from "../lib/prepareData";
@@ -136,7 +136,7 @@ export class MapEntity {
     }
 
     async fetchMapFile(mapId: string) {
-        const md: MapFile | ApiError = await fetchMap(mapId);// fetchMapFile();
+        const md = await fetchMap(mapId);// fetchMapFile();
         console.log('mda', md);
         if(isApiError(md)) {
             this.error = md.error;
