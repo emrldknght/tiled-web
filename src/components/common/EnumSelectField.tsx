@@ -9,7 +9,7 @@ type ESFProps =  {
   noDefault?: boolean,
 }
 export function EnumSelectField({name, value, en, handleChange, noDefault } : ESFProps) {
-  const _default = !(typeof noDefault !== 'undefined');
+  const _default = typeof noDefault === 'undefined';
 
   const v = (value) ? value : 'none';
   const o = $enum(en).map((item, n) => {
