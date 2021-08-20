@@ -15,7 +15,6 @@ export const MapComponent = observer(function MapComponent() {
   const tileUrl = mapState.tileUrl;
   const tileDim = mapState.tileDim;
 
-  // const mapData = state.mapData;
 
   const brushId = rootState.paletteStore.selectedTile;
   const x = mapState.curX;
@@ -27,7 +26,7 @@ export const MapComponent = observer(function MapComponent() {
 
   const mapData2 = mapState.mapData;
 
-  // const u = props.tileUrl ? `--tile-root: url(${props.tileUrl});` : '';
+
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
     '--tile-root': `url(${tileUrl})`,
     '--tile-dim': `${tileDim}px`,
@@ -36,14 +35,21 @@ export const MapComponent = observer(function MapComponent() {
   const mcState = useContext(MCContext);
   const { showGrid, showCellInfo, show3D } = mcState;
 
-  const tm = mapData2.map((row, y) =>
+  const tm = mapData2.map((row, ry) =>
       <MapRow
-          key={`mr_${y}`}
-          data={row} y={y}
+          key={`mr_${ry}`}
+          data={row} y={ry}
           showCellInfo={showCellInfo}
       />);
 
-  // const setTile = () => { setMapTile(2, 2, 0); }
+  const applyPencil = (e: React.MouseEvent<HTMLDivElement>, cx: number, cy: number) => {
+
+    console.log('poke', e.target, cx, cy, brushId);
+
+    mapState.setMapTile(x ,y, brushId);
+
+  }
+
 
   const pokeTile = (e: React.MouseEvent<HTMLDivElement>) => {
     let t = e.target as HTMLElement;
@@ -59,27 +65,24 @@ export const MapComponent = observer(function MapComponent() {
     console.log(xS, yS);
     if(xS === undefined || yS === undefined) return;
 
-    const x = parseInt(xS);
-    const y = parseInt(yS);
-
-    const applyPencil = (x:number, y: number) => {
-      // const _x = parseInt(x || '');
-      // const _y = parseInt(y || '');
-      console.log('poke', e.target, x, y, brushId);
-      // if (!isNaN(_x) && !isNaN(_y)) {
-      // mAppState.setMapTile(x, y, brushId);
-      mapState.setMapTile(x ,y, brushId);
-      // }
-    }
-    // console.log('ct', currentTool);
+    const tx = parseInt(xS);
+    const ty = parseInt(yS);
 
     switch (currentTool) {
       case "Pencil":
-        applyPencil(x, y);
+        applyPencil(e, tx, ty);
         break;
-      case "Bucket":
-        console.log('will fill');
-        mapState.pokeCell(x, y);
+      case 'Bucket':
+        const clickInSelection = mapState.isHl(tx, ty);
+        if(clickInSelection) {
+          mapState.fillArea(brushId);
+        }
+        break;
+      case "Select":
+        if(!e.shiftKey) {
+          mapState.resetHl();
+        }
+        mapState.selectArea(tx, ty);
         break;
     }
   }
