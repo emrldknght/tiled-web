@@ -12,7 +12,6 @@ type Props = {
 }
 
 export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Props) {
-  // const appState = useContext(StoreContext);
 
   const rootState = useContext(RootContext);
 
@@ -20,18 +19,14 @@ export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Pro
 
   const types = rootState.paletteStore.data;
   const ct = getCT(types, id);
-  // const surroundingCells = JSON.stringify(appState.getCellR(x, y));
 
   const onCell = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // console.log('on', e.currentTarget);
     mapState.setXY(x ,y);
-    // state.setHl(x, y);
   }
 
   const pokeCell = (e: React.MouseEvent) => {
-    // e.stopPropagation()
-    // state.pokeCell(x, y);
+    console.log('pokeCell', e);
   }
 
   const isHl = (mapState.isHl(x ,y)) ? 'hl' : '';
