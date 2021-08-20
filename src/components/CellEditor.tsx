@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {PalCell} from "../types";
 import {observer} from "mobx-react";
 import {RootContext} from "../store/RootStore";
-
+import {DebugOut} from "./common/DebugOut";
 
 export const CellEditor = observer(function CellEditor() {
 
@@ -13,7 +13,7 @@ export const CellEditor = observer(function CellEditor() {
 
     const selectedCellData = (palette: PalCell[], selected: string | null) => {
         const f = palette.filter(cell => cell.cid === selected);
-        // if(!tilerSelectedCell) return {}
+
         return f[0] ?? null;
     }
     const cd = () => selectedCellData(palette, tilerSelectedCell);
@@ -21,8 +21,6 @@ export const CellEditor = observer(function CellEditor() {
     const handleKey = (e: React.ChangeEvent<HTMLInputElement>) => {
         const t = e.target;
         console.log('handle', t);
-
-        // const nd = {...cd()};
 
         const nv = parseInt(t.value) || t.value;
 
@@ -33,9 +31,10 @@ export const CellEditor = observer(function CellEditor() {
     return (
         <div className="pal-cell-editor col">
             <b>Cell editor:</b>
+            <button onClick={() => rootState.paletteStore.saveData()}>Save</button>
             <span>selected: {tilerSelectedCell}</span>
             <span>
-            {JSON.stringify(cd())}
+            <DebugOut data={cd()} />
           </span>
             {(cd()) ? (
                 <div className="col inputs">
