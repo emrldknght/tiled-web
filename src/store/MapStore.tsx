@@ -27,16 +27,14 @@ export class MapEntity {
 
     @action
     setMap(data: number[][]) {
-        this.mapData = data as number[][];
+        this.mapData = data;
 
-        // console.log('will  reset hl');
         this.resetHl();
     }
 
     @action resetHl() {
         const hl = this.mapData.map(row => row.map(() => -1));
-        this.selection = hl as number[][];
-        // console.log(JSON.stringify(this.selection))
+        this.selection = hl;
     }
 
     @action
@@ -96,7 +94,7 @@ export class MapEntity {
     }
 
     @action
-    pokeCell(x: number, y: number) {
+    selectArea(x: number, y: number) {
         //set hl
         const v = this.mapData[y][x];
 
@@ -134,6 +132,18 @@ export class MapEntity {
             }
         }
         getSur(this, x, y, v)
+    }
+
+    @action
+    fillArea(brushId: number) {
+        console.log(JSON.stringify(this.selection));
+        this.selection.forEach((row, y) => {
+            row.forEach((cell, x) => {
+                if(cell !== -1) {
+                    this.setMapTile(x ,y, brushId);
+                }
+            })
+        })
     }
 
     async fetchMapFile(mapId: string) {
