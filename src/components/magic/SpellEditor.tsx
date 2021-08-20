@@ -45,7 +45,7 @@ export class SEState  { // implements Spell
         const id = this.spellId;
         const data = toJS(this.spell);
         console.log('Save Item', id, data);
-        postData(`${Path}/spell/${id}`, (data as Spell))
+        postData(`${Path}/spell/${id}`, data)
           .then((j) => {
               console.log('from fetch', j)
           })
@@ -60,7 +60,7 @@ export const SpellEditor = observer(function SpellEditor() {
 
     useEffect(() => {
         state.selectItem(1);
-        // state.setSVal('savingThrow', '');
+
     }, [state])
 
     const handleChange = (e: React.ChangeEvent) => {
@@ -69,10 +69,36 @@ export const SpellEditor = observer(function SpellEditor() {
         const val = t.value;
 
         console.log(e, key, val);
+        state.setSVal(key, val);
 
-        // if(state.isKey(key)) {
-            state.setSVal(key, val);
-        // }
+    }
+
+    const getComponents = (spell: Spell) => (typeof spell.components === 'string')
+        ? spell.components.split(',')
+        : spell.components
+
+    const addSpell = (spell: Spell | null, k: string) => {
+        if(spell && spell.components) {
+            const components = getComponents(spell);
+            if(!components) return;
+
+            components.push(k)
+            const nv = components.join(',');
+            state.setSVal('components', nv)
+        }
+    }
+
+    const removeSpell = (spell: Spell | null, k: string) => {
+        if(spell && spell.components) {
+            const components = getComponents(spell);
+            if(!components) return;
+
+            const index = components.indexOf(k)
+            components.splice(index, 1)
+
+            const nv = components.join(',');
+            state.setSVal('components', nv)
+        }
     }
 
     const handleChangeB = (k: keyof typeof SpellComponentE) => (e: React.ChangeEvent) => {
@@ -83,31 +109,11 @@ export const SpellEditor = observer(function SpellEditor() {
         console.log(e, key, val, k);
         if(val) {
             // add
-            if(spell && spell.components) {
-                const components = (typeof spell.components === 'string')
-                  ? spell.components.split(',')
-                  : spell.components
-                components.push(k)
-                const nv = components.join(',');
-                state.setSVal('components', nv)
-            }
+            addSpell(spell, k)
         } else {
             // remove
-            if(spell && spell.components) {
-                const components = (typeof spell.components === 'string')
-                  ? spell.components.split(',')
-                  : spell.components
-
-                const index = components.indexOf(k)
-                components.splice(index, 1)
-
-                const nv = components.join(',');
-                state.setSVal('components', nv)
-            }
+            removeSpell(spell, k)
         }
-        // if(state.isKey(key)) {
-        // state.setSVal(key, val);
-        // }
     }
 
     const hasComp = (k: SpellComponent ) => spell?.components?.includes(k);
