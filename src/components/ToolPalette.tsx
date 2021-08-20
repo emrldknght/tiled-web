@@ -1,13 +1,15 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFill, faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import {faFill, faPen, faWindowClose, faHandPointUp, faVectorSquare } from "@fortawesome/free-solid-svg-icons";
 import React, {createContext, useContext} from "react";
 import {observer} from "mobx-react";
 import {action, makeObservable, observable} from "mobx";
 import {rootStore} from "../store/RootStore";
+import {ToolButton} from "./ToolPalette/ToolButton";
 
 export enum PalTools {
+    Pointer = 'pointer',
     Pencil = 'pencil',
     Bucket = 'bucket',
+    Select = 'select',
     Deselect = 'deselect',
 }
 export type PalToolType = keyof typeof PalTools;
@@ -56,25 +58,16 @@ export const ToolPalette = observer(function ToolPalette() {
         <div className="tools-palette">
             <b>Tools:</b>
             <div className="row">
-                <div className={`tool-icon ${(at === 'Pencil') ? 'active' : ''}`} data-tool={'Pencil'}
-                     onClick={handleChange}
-
-                >
-                    <FontAwesomeIcon icon={faPen} size="2x"/>
-                    <span className="name">Pencil</span>
-                </div>
-                <div className={`tool-icon ${(at === 'Bucket') ? 'active' : ''}`} data-tool={'Bucket'}
-                     onClick={handleChange}
-                >
-                    <FontAwesomeIcon icon={faFill} size="2x"/>
-                    <span className="name">Bucket</span>
-                </div>
-                <div className={`tool-icon`} data-tool={'Deselect'}
-                    onClick={handleApply}
-                >
-                   <FontAwesomeIcon icon={faWindowClose} size="2x" />
-                   <span className="name">Deselect</span>
-                </div>
+                <ToolButton name="Pointer" tool={'Pointer'}
+                            activeTool={at} handle={handleChange} icon={faHandPointUp} />
+                <ToolButton name="Pencil" tool={'Pencil'}
+                            activeTool={at} handle={handleChange} icon={faPen} />
+                <ToolButton name="Bucket" tool={'Bucket'}
+                            activeTool={at} handle={handleChange} icon={faFill} />
+                <ToolButton name="Select" tool={'Select'}
+                            activeTool={at} handle={handleChange} icon={faVectorSquare} />
+                <ToolButton name="Deselect" tool={'Deselect'}
+                            activeTool={at} handle={handleApply} icon={faWindowClose} />
             </div>
         </div>
     )
