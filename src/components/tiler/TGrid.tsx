@@ -7,7 +7,7 @@ import {RootContext} from "../../store/RootStore";
 
 type RI = <T>(array: T[], index: number) => T[]
 export const removeIndex: RI = (array, index) => {
-  delete array[index];
+  array.splice(index, 1)
   array = array.filter(function (element) {
     return element !== undefined
   });
@@ -34,19 +34,7 @@ export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
   const palData = pal.data;
   const activeTiles = palData.map((item: PalCell) => item.cid).filter((i: string) => i);
 
-  // const [activeTiles, setActiveTiles] = useState([cellKey(2, 0)]);
-
-  // const activeTiles = palData.map(item => item.cid); // .filter((i) => i);
-  // const setActiveTiles = () => {};
-
   if (!tileSrc.loaded) return (<div>Grid Loading...</div>);
-
-  /*
-  useEffect(() => {
-    console.log('init grid', tileSrc);
-    // setActiveTiles(tt);
-  }, [tileSrc])
-  */
 
   const handleChange = (i: number, j: number) => {
     // console.log('set', i, j)
@@ -54,11 +42,10 @@ export const  TGrid = observer(function TGrid ({ selectTile }: Props) {
       console.log('in array');
       pal.paletteRemoveCell(cellKey(i, j));
     } else {
-      // console.log('addWith', JSON.stringify(palData));
+
       const ids = palData.map(item => item.id);
       let newId = Math.max(...ids);
       newId++;
-      // console.log('newId', newId);
 
       const newCell: PalCell = {
         cid: cellKey(i, j), x: i, y: j,
