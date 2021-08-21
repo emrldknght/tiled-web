@@ -2,7 +2,7 @@ import {action, makeObservable, observable} from "mobx";
 import {LSKeys} from "../../LocalState";
 import React, {createContext, useContext} from "react";
 import {observer} from "mobx-react";
-import {persist} from "../../lib/persist";
+import {persistStrict} from "../../lib/persist";
 
 class MapControlsState {
     @observable showGrid = false;
@@ -23,9 +23,9 @@ class MapControlsState {
 
     constructor() {
         makeObservable(this);
-        persist<MapControlsState>(this, 'showGrid', LSKeys.MapGrid);
-        persist<MapControlsState>(this, 'showCellInfo', LSKeys.MapCellInfo);
-        persist<MapControlsState>(this, 'show3D', LSKeys.Map3DView);
+        persistStrict<MapControlsState>(this, 'showGrid', 'setShowGrid', LSKeys.MapGrid);
+        persistStrict<MapControlsState>(this, 'showCellInfo', 'setShowCellInfo', LSKeys.MapCellInfo);
+        persistStrict<MapControlsState>(this, 'show3D', 'setShow3D', LSKeys.Map3DView);
     }
 
 }
