@@ -7,6 +7,8 @@ import {PaletteStore} from "./PaletteStore";
 import {PalToolType} from "../components/ToolPalette";
 import {Path, postData} from "../lib/api";
 import {TilerEntity} from "./TilerStore";
+import {mockMap} from "../mock/mockMap";
+import {palData} from "./palData";
 
 export class RootStore {
     public userStore: UserStore;
@@ -61,6 +63,18 @@ export class RootStore {
         }
     }
 
+    @action async initAll(mode: 'prod' | 'devH' | 'devW' = 'devW') {
+        if(mode === 'devW') {
+            this.mapStore.setMap(mockMap);
+            this.mapStore.setTileDim(48);
+            this.mapStore.setTileUrl('./World_A2.png', true);
+            this.paletteStore.setData(palData);
+        }
+        if(mode === 'prod') {
+            await this.mapStore.fetchMapFile('map1');
+        }
+    }
+
 }
 
 
@@ -68,8 +82,8 @@ export class RootStore {
 
 export class UserStore {
     private rootStore: RootStore;
-    constructor(rootStore: RootStore) {
-        this.rootStore = rootStore
+    constructor(rootStoreE: RootStore) {
+        this.rootStore = rootStoreE;
     }
 
     getTodos(user: string) {
@@ -84,9 +98,9 @@ class TodoStore {
     todos: Todo[] = []
     rootStore
 
-    constructor(rootStore: RootStore) {
+    constructor(rootStoreE: RootStore) {
         makeAutoObservable(this, { rootStore: false })
-        this.rootStore = rootStore
+        this.rootStore = rootStoreE;
     }
 }
 
