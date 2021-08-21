@@ -2,13 +2,11 @@ import {action, makeObservable, observable, toJS} from "mobx";
 import {PanelMode} from "../components/map/MapDimensions";
 import {getAction} from "../lib/dimensions";
 import {fetchMap, Path} from "../lib/api";
-import {isApiError} from "../types";
+import {isApiError, MapLayer} from "../types";
 import {saveJson} from "../lib/saveJson";
 import {createContext} from "react";
 import {prepareData} from "../lib/prepareData";
 import {RootStore} from "./RootStore";
-
-type MapLayer = number[][];
 
 export class MapEntity {
     public rootStore: RootStore | undefined;
@@ -22,14 +20,29 @@ export class MapEntity {
 
     @observable error: string = '';
 
-    @observable mapData: MapLayer = [];
+    @observable activeLayer: string = 'map';
+    @observable mapDataL: { [key: string] : MapLayer}  = {};
+
+    //  @observable mapData: MapLayer = [];
+
+    get mapData() {
+        return this.mapDataL[this.activeLayer] ?? [];
+    }
+
+    set mapData(val: MapLayer) {
+        this.mapDataL[this.activeLayer] = val;
+    }
+
     @observable selection: number[][] = [];
 
     @action
     setMap(data: number[][]) {
         this.mapData = data;
-
         this.resetHl();
+    }
+
+    @action setRow(y: number, row: number[]) {
+        this.mapData[y] = row;
     }
 
     @action resetHl() {
@@ -58,9 +71,19 @@ export class MapEntity {
 
     @action
     mapExpand(mode: PanelMode, dimActive: number) {
-        let action = getAction(dimActive, mode);
-        console.log(action, typeof action);
-        if(typeof action === 'function') action(this.mapData);
+
+        const action = getAction(dimActive, mode);
+
+        if(typeof action === 'function') {
+            const oldLayer = toJS(this.mapData);
+            const newLayer = action(oldLayer) as MapLayer;
+            if(newLayer) {
+                this.setMap(newLayer);
+            } else {
+                console.warn('extend layer empty')
+            }
+        }
+
         this.resetHl();
     }
 
