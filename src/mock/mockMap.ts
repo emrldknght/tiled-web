@@ -7,7 +7,7 @@ export const mockMap = [
     [1, 1, 1, 1, 1, 1, 1],
 ];
 
-export const Layer_2 = [
+export const layer2 = [
     [3, 0, 0, 0, 2, 1, 1],
     [1, 0, 0, 0, 2, 1, 1],
     [2, 0, 0, 0, 1, 1, 1],

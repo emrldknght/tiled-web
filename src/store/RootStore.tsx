@@ -7,7 +7,7 @@ import {PaletteStore} from "./PaletteStore";
 import {PalToolType} from "../components/ToolPalette";
 import {Path, postData} from "../lib/api";
 import {TilerEntity} from "./TilerStore";
-import {mockMap} from "../mock/mockMap";
+import {layer2, mockMap} from "../mock/mockMap";
 import {palData} from "./palData";
 
 export class RootStore {
@@ -69,6 +69,9 @@ export class RootStore {
             this.mapStore.setTileDim(48);
             this.mapStore.setTileUrl('./World_A2.png', true);
             this.paletteStore.setData(palData);
+
+            this.mapStore.setMapLayer('second', layer2);
+
         }
         if(mode === 'prod') {
             await this.mapStore.fetchMapFile('map1');

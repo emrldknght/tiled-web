@@ -35,6 +35,15 @@ export class MapEntity {
 
     @observable selection: number[][] = [];
 
+    @action setActiveLayer(name: string) {
+        this.activeLayer = name;
+    }
+
+    @action
+    setMapLayer(name: string, data: MapLayer) {
+        this.mapDataL[name] = data;
+    }
+
     @action
     setMap(data: number[][]) {
         this.mapData = data;

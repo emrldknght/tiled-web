@@ -112,7 +112,10 @@
       outline: 1px solid pink;
     }
 
-    &.selected { outline-color: yellow }
+    &.selected {
+      outline: 1px solid yellow;
+      outline-offset: -4px;
+    }
 
     &-map {
       background-image: var(--tile-root);
@@ -246,6 +249,14 @@
     }
   }
 
+  .map-layers {
+    border: @common-border;
+    .selected {
+      background-color: black;
+      color: white;
+    }
+  }
+
 
   .tiler {
     border: @common-border;
@@ -300,6 +311,7 @@
   }
   .pal-cell-editor {
     background-color: moccasin;
+    min-width: 25em;
     .inputs {
       display: grid;
       grid-template-columns: 1fr 3fr;
