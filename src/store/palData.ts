@@ -2,7 +2,7 @@ import {PalCell} from "../types";
 
 export const palData: PalCell[] = [
   {
-    id: -1,
+    id: 0,
     type: 'empty',
     cid: 'xEyE',
     x: -1,
@@ -10,7 +10,7 @@ export const palData: PalCell[] = [
     bg: 'none'
   },
   {
-    id: 0,
+    id: 1,
     type: 'grass',
     x: 1,
     y: 0,
@@ -18,7 +18,7 @@ export const palData: PalCell[] = [
     cid: 'x1y0'
   },
   {
-    id: 1,
+    id: 2,
     type: 'road',
     x: 1,
     y: 3,
@@ -26,13 +26,21 @@ export const palData: PalCell[] = [
     cid: 'x1y3'
   },
   {
-    id: 2,
+    id: 3,
     type: 'random',
     x: 2,
     y: 4,
     bg: 'red',
     cid: 'x2y4'
   },
+  {
+    id: 4,
+    type: 'tree_green',
+    x: 8,
+    y: 6,
+    bg: 'none',
+    cid: 'x8y6'
+  }
 ]
 
 
