@@ -1,5 +1,7 @@
-import {MapData} from "../types";
+import {MapLayer} from "../types";
 import {PanelMode} from "../components/map/MapDimensions";
+
+const EMPTY = 0;
 
 const newArray = (n: number): undefined[] => [...Array(n)];
 
@@ -8,7 +10,7 @@ const newArray = (n: number): undefined[] => [...Array(n)];
  */
 export const newOrderedArray = (n: number): number[] => [...Array(n).keys()];
 
-const newRow = (l: number): Array<-1> => newArray(l).map(() => -1);
+const newRow = (l: number): Array<typeof EMPTY> => newArray(l).map(() => EMPTY);
 
 export const repeatF = (action: Function, times: number) => {
   const na = newArray(times);
@@ -16,43 +18,50 @@ export const repeatF = (action: Function, times: number) => {
 }
 export const combineF = <T>(data: T, ...actions: Function[]): Function => {
   return () => {
+    let _data = data;
     actions.forEach((action: Function) => {
-      console.log(action);
-      action(data)
+      _data = action(_data)
     });
+    return _data;
   }
 }
 
-const addTopRow = (data: MapData) => {
+const addTopRow = (data: MapLayer) : MapLayer => {
   const l = data[0].length;
   const nr = newRow(l);
-  // console.log(newRow);
-  return data.unshift(nr);
+  data.unshift(nr);
+  return data;
 }
-const deleteTopRow = (data: MapData): void => {
+const deleteTopRow = (data: MapLayer): MapLayer => {
   data.shift();
+  return data;
 }
-const addBotRow = (data: MapData): void => {
+const addBotRow = (data: MapLayer): MapLayer => {
   const l = data[0].length;
   const nr = newRow(l);
-  // console.log(newRow);
   data.push(nr);
+  return data;
 }
-const deleteBotRow = (data: MapData): void => {
+const deleteBotRow = (data: MapLayer): MapLayer => {
   data.pop();
+  return data;
 }
 
-const addLeftCol = (data: MapData): void => {
-  data.forEach(row => row.unshift(-1));
+const addLeftCol = (data: MapLayer): MapLayer => {
+  data.forEach(row => row.unshift(EMPTY));
+  return data;
 }
-const deleteLeftCol = (data: MapData): void => {
+const deleteLeftCol = (data: MapLayer): MapLayer => {
   data.forEach(row => row.shift());
+  return data;
 }
-const addRightCol = (data: MapData): void => {
-  data.forEach(row => row.push(-1));
+const addRightCol = (data: MapLayer): MapLayer => {
+  data.forEach(row => row.push(EMPTY));
+  return data;
 }
-const deleteRightCol = (data: MapData) => {
+const deleteRightCol = (data: MapLayer): MapLayer => {
   data.forEach(row => row.pop());
+  return data;
 }
 
 export type DimActions = {
@@ -115,6 +124,6 @@ export const getAction = (dimActive: number, mode: PanelMode): Function => {
     case 8:
       return <T>(data: T) => combineF(data, r['bottom'], c['right'])();
     default:
-      return () => {}
+      return <T>(data: T) => data;
   }
 }
