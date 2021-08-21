@@ -1,4 +1,4 @@
-export type MapData = number[][];
+export type MapLayer = number[][];
 export type PalCell = {
   id: number,
   type: string,
