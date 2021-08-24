@@ -1,7 +1,10 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization");
-header("Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Max-Age: 1000");
+header("Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding");
+header("Access-Control-Allow-Methods: PUT, POST, GET, OPTIONS, DELETE");
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -12,6 +15,7 @@ use SteamQ\RestApi\ApiError;
 use SteamQ\RestApi\Api;
 use SteamQ\RestApi\ApiOk;
 use SteamQ\RestApi\User;
+use SteamQ\Spell;
 use SteamQ\Weapon;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -19,9 +23,10 @@ require __DIR__ . '/../vendor/autoload.php';
 Api::$User = new User();
 
 $path = Api::processPath();
-// print_r($path);
-$root = $path[0];
-$action = $path[1];
+
+$root = $path[1];
+$action = $path[2];
+
 $requestType = $_SERVER['REQUEST_METHOD'];
 // var_dump($requestType);
 
@@ -49,13 +54,14 @@ $cb = function () use ($args) {
 */
 // $cb();
 
+const MAPS_DIR = __DIR__.'/maps';
 
 DBEntity::init();
 
 $data = '';
 
 Api::get('list-files', function () {
-    $path = __DIR__.'/maps';
+    $path = MAPS_DIR;
     $files = scandir($path);
     $files = array_diff($files, array('.', '..'));
     $files = array_values($files);
@@ -66,8 +72,8 @@ Api::get('list-files', function () {
     return $files;
 });
 
-function getItems(): array
-{
+Api::get('items', function () {
+
     $q = DBEntity::$pdo->prepare("SELECT `id`, `name` FROM weapon");
     $q->execute();
     $data = $q->fetchAll();
@@ -83,22 +89,18 @@ function getItems(): array
     }
 
     return $items;
-}
-Api::get('items', function () {
-    return getItems();
 });
 
-function getWeapon(int $id): Weapon
-{
+Api::get('weapon', function () use ($path) {
+    $id = $path[3];
     $q = DBEntity::$pdo->prepare("SELECT * FROM weapon WHERE `id` = ?");
     $q->execute([$id]);
     $data = $q->fetch(PDO::FETCH_ASSOC);
 
-    return new Weapon($data);
-}
-Api::get('weapon', function () use ($path) {
-    $id = $path[2];
-    return getWeapon($id);
+    return (gettype($data) === 'array')
+        ? new Weapon($data)
+        : null
+        ;
 });
 Api::post('weapon' , function () use ($path) {
     $id = $path[2];
@@ -139,7 +141,7 @@ Api::get('armor', function () use ($path) {
 });
 
 Api::get('char', function () use ($path) {
-    $id = $path[2] ?? 0;
+    $id = $path[3] ?? 0;
 
     if($id === 0) {
         return new ApiError('id is empty');
@@ -148,6 +150,8 @@ Api::get('char', function () use ($path) {
     $q = DBEntity::$pdo->prepare("SELECT * FROM char_data WHERE `id` = ?");
     $q->execute([$id]);
     $data = $q->fetch(PDO::FETCH_ASSOC);
+
+    if(gettype($data) !== 'array') { return null; }
 
     $char = new Character($data);
 
@@ -167,15 +171,13 @@ Api::post('char', function () use ($path) {
         'data' => $id
     ];
 
-    $j = json_encode($answer);
-
-    return $j;
+    return json_encode($answer);
 
 });
 
 Api::get('map-file', function () use ($path) {
 
-    $fPath = __DIR__.'/maps';
+    $fPath = MAPS_DIR;
     $name = $path[2];
 
     try {
@@ -188,7 +190,7 @@ Api::get('map-file', function () use ($path) {
 });
 
 Api::post('map-file', function () use ($path) {
-    $fPath = __DIR__.'/maps';
+    $fPath = MAPS_DIR;
     $name = $path[2];
 
     $body = file_get_contents('php://input');
@@ -207,8 +209,23 @@ Api::post('map-file', function () use ($path) {
 });
 
 Api::get('spell', function () use($path) {
-    $id = $path[2];
-    return $id;
+    $id = $path[3];
+    $q = DBEntity::$pdo->prepare("SELECT * FROM spell WHERE `id` = ?");
+    $q->execute([$id]);
+    $data = $q->fetch(PDO::FETCH_ASSOC);
+
+    return (gettype($data) === 'array')
+        ? new Spell($id, $data)
+        : null
+        ;
+});
+
+Api::get('test', function () {
+    return 'test';
+});
+
+Api::post('test', function () {
+    return json_decode(file_get_contents('php://input'));
 });
 
 if(Api::hasAction($action, $requestType)) {
