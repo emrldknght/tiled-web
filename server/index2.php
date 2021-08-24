@@ -8,6 +8,7 @@ header("Access-Control-Allow-Methods: PUT, POST, GET, OPTIONS, DELETE");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+use SteamQ\Armor;
 use SteamQ\Character;
 use SteamQ\CharSlot;
 use SteamQ\DBEntity;
@@ -28,31 +29,6 @@ $root = $path[1];
 $action = $path[2];
 
 $requestType = $_SERVER['REQUEST_METHOD'];
-// var_dump($requestType);
-
-/*
-$path1 = '/armor/{id}/{count}';
-$path1 = explode('/', $path1);
-$path1 = array_filter($path1);
-// print_r($path1);
-
-$args = [];
-foreach ($path1 as $k=>$p) {
-    preg_match('/\{.+\}/', $p, $m);
-    // print_r($k);
-    // print_r($m);
-    if(!empty($m)) {
-        $n = substr($m[0], 1, strlen($m[0]) - 2);
-        // var_dump($n);
-        $args[$n] = $path[$k];
-    }
-}
-
-$cb = function () use ($args) {
-    var_dump($args);
-};
-*/
-// $cb();
 
 const MAPS_DIR = __DIR__.'/maps';
 
@@ -65,11 +41,9 @@ Api::get('list-files', function () {
     $files = scandir($path);
     $files = array_diff($files, array('.', '..'));
     $files = array_values($files);
-    $files = array_map(function ($file) {
+    return array_map(function ($file) {
         return basename($file, ".json");
     }, $files);
-
-    return $files;
 });
 
 Api::get('items', function () {
@@ -130,14 +104,15 @@ Api::post('weapon' , function () use ($path) {
 });
 
 Api::get('armor', function () use ($path) {
-    $id = $path[2];
+    $id = $path[3];
     $q = DBEntity::$pdo->prepare("SELECT * FROM armor WHERE `id` = ?");
     $q->execute([$id]);
     $data = $q->fetch(PDO::FETCH_ASSOC);
 
-    var_dump($data);
-
-    // return new Weapon($data);
+    return (gettype($data) === 'array')
+        ? new Armor($data)
+        : null
+        ;
 });
 
 Api::get('char', function () use ($path) {
