@@ -55,36 +55,33 @@ class Api {
         ];
     }
 
+    private static function checkRestrictions($restrictions): array
+    {
+        $data = [];
+        if ($restrictions['auth'] && !self::$User->IsAuthorized()) {
+                $data['error'] = 'Not authorized!';
+        }
+        if ($restrictions['admin'] && !self::$User->IsAdmin()) {
+                $data['error'] = 'Insufficient rights!';
+        }
+        return $data;
+    }
+
     public static function callAction(string $action, string $type)
     {
-        // global $USER;
         $data = [];
 
-        // print_r(self::$paths);
         if (!self::hasAction($action, $type)) {
             $error = "API: action $action not supported!";
             $data['error'] = $error;
-            // print_r($error);
             return $data;
         }
 
         $handler = self::$paths[$type][$action];
 
         $restrictions = $handler['rest'];
-        if ($restrictions['auth']) {
-            // var_dump('checking auth');
-            if (!self::$User->IsAuthorized()) {
-                $data['error'] = 'Not authorized!';
-                return $data;
-            }
-        }
-        if ($restrictions['admin']) {
-            // var_dump('checking admin');
-            if (!self::$User->IsAdmin()) {
-                $data['error'] = 'Insufficient rights!';
-                return $data;
-            }
-        }
+        if(!empty(self::checkRestrictions($restrictions)['error'])) { return $data; }
+
         return $handler['cb']();
     }
 }
