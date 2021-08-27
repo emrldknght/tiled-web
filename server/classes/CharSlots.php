@@ -23,9 +23,6 @@ class CharSlots
 
     use MapArrToProps;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function __construct(array $arr)
     {
         $this->map($this, $arr);

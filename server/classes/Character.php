@@ -12,7 +12,6 @@ class Character
     /**
      * Character constructor.
      * @param $arr array
-     * @throws \ReflectionException
      */
     public function __construct(array $arr)
     {

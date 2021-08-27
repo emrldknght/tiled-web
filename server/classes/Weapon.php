@@ -1,10 +1,11 @@
 <?php
 
-
 namespace SteamQ;
 
 class Weapon
 {
+    use MapArrToProps;
+
     public int $id;
     public string $name;
     public string $damage;
@@ -17,14 +18,9 @@ class Weapon
     public int $weight;
     public int $cost;
     public string $itemType = 'Weapon';
+
     public function __construct(array $arr)
     {
-        $r = new \ReflectionClass(self::class);
-        foreach ($r->getProperties() as $prop) {
-            $name = $prop->name;
-            $n = strtolower($prop->name);
-            // var_dump($n);
-            if(empty($this->$name)) $this->$name = $arr[$n];
-        }
+        $this->map($this, $arr);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace SteamQ;
 
-use ReflectionClass;
-
 class Armor
 {
+    use MapArrToProps;
+
     public int $id;
     public string $name;
 
@@ -23,13 +23,6 @@ class Armor
 
     public function __construct(array $arr)
     {
-        $r = new ReflectionClass(self::class);
-        foreach ($r->getProperties() as $prop) {
-            $name = $prop->name;
-            $n = strtolower($prop->name);
-            if(empty($this->$name) && !empty($arr[$n])) {
-                $this->$name = $arr[$n];
-            }
-        }
+        $this->map($this, $arr);
     }
 }
