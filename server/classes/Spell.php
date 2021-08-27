@@ -26,11 +26,4 @@ class Spell {
     {
         $this->map($this, $data);
     }
-    static public function getFL(): string {
-        $r = new ReflectionClass(self::class);
-        $k =  count($r->getProperties());
-        $defV = str_repeat("default, ", $k -1)."default";
-        return "INSERT INTO spell VALUES ($defV);";
-    }
-
 }
