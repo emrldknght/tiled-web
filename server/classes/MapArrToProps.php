@@ -2,6 +2,7 @@
 
 namespace SteamQ;
 
+use Exception;
 use ReflectionClass;
 
 trait MapArrToProps
@@ -13,7 +14,7 @@ trait MapArrToProps
     public function map(object $ctx, $arr)
     {
         try {
-            $r = new \ReflectionClass(get_class($ctx));
+            $r = new ReflectionClass(get_class($ctx));
 
             foreach ($r->getProperties() as $prop) {
                 $name = $prop->name;
@@ -23,7 +24,7 @@ trait MapArrToProps
                 }
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             var_dump($e->getMessage());
         }
     }
@@ -37,7 +38,7 @@ trait MapArrToProps
 
             $k = strtolower($r->getShortName());
             return "INSERT INTO $k VALUES ($defV);";
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             var_dump($e->getMessage());
             return  '';
         }
