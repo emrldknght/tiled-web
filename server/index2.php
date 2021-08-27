@@ -8,18 +8,21 @@ header("Access-Control-Allow-Methods: PUT, POST, GET, OPTIONS, DELETE");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-use SteamQ\Armor;
-use SteamQ\Character;
-use SteamQ\CharSlot;
 use SteamQ\DBEntity;
 use SteamQ\RestApi\ApiError;
 use SteamQ\RestApi\Api;
 use SteamQ\RestApi\ApiOk;
 use SteamQ\RestApi\User;
-use SteamQ\Spell;
-use SteamQ\Weapon;
+use SteamQ\RestApiHooks;
+
 
 require __DIR__ . '/../vendor/autoload.php';
+
+const EXT_JSON = '.json';
+
+function getPostInput() {
+    return file_get_contents('php://input');
+}
 
 Api::$User = new User();
 
@@ -42,43 +45,24 @@ Api::get('list-files', function () {
     $files = array_diff($files, array('.', '..'));
     $files = array_values($files);
     return array_map(function ($file) {
-        return basename($file, ".json");
+        return basename($file, EXT_JSON);
     }, $files);
 });
 
 Api::get('items', function () {
 
-    $q = DBEntity::$pdo->prepare("SELECT `id`, `name` FROM weapon");
-    $q->execute();
-    $data = $q->fetchAll();
-
     $items = [];
-
-    foreach ($data as $v) {
-        $items[] = [
-            'id' => $v['id'],
-            'name' => $v['name'],
-            'itemType' => 'Weapon'
-        ] ; // new Weapon($v);
-    }
-
-    return $items;
+    $items = array_merge($items, RestApiHooks::getWeaponsList());
+    return array_merge($items, RestApiHooks::getArmorList());
 });
 
 Api::get('weapon', function () use ($path) {
     $id = $path[3];
-    $q = DBEntity::$pdo->prepare("SELECT * FROM weapon WHERE `id` = ?");
-    $q->execute([$id]);
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-
-    return (gettype($data) === 'array')
-        ? new Weapon($data)
-        : null
-        ;
+    return RestApiHooks::weaponGet($id);
 });
 Api::post('weapon' , function () use ($path) {
     $id = $path[2];
-    $body = file_get_contents('php://input');
+    $body = getPostInput();
     $data = json_decode($body, true);
 
     $name = $data['name'];
@@ -105,37 +89,15 @@ Api::post('weapon' , function () use ($path) {
 
 Api::get('armor', function () use ($path) {
     $id = $path[3];
-    $q = DBEntity::$pdo->prepare("SELECT * FROM armor WHERE `id` = ?");
-    $q->execute([$id]);
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-
-    return (gettype($data) === 'array')
-        ? new Armor($data)
-        : null
-        ;
+    return RestApiHooks::armorGet($id);
 });
 
 Api::get('char', function () use ($path) {
     $id = $path[3] ?? 0;
-
     if($id === 0) {
         return new ApiError('id is empty');
     }
-
-    $q = DBEntity::$pdo->prepare("SELECT * FROM char_data WHERE `id` = ?");
-    $q->execute([$id]);
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-
-    if(gettype($data) !== 'array') { return null; }
-
-    $char = new Character($data);
-
-    $char->Slots->mainHand = new CharSlot([
-        'itemId' => 1,
-        'itemData' => getWeapon(1)
-    ]);
-
-    return $char;
+    return RestApiHooks::charGet($id);
 });
 
 Api::post('char', function () use ($path) {
@@ -156,7 +118,7 @@ Api::get('map-file', function () use ($path) {
     $name = $path[2];
 
     try {
-        $content = json_decode(file_get_contents($fPath . '/' . $name.".json"));
+        $content = json_decode(file_get_contents($fPath . '/' . $name.EXT_JSON));
     } catch (Exception $e) {
         $content = new ApiError("file `$name` not found" );
     }
@@ -168,13 +130,13 @@ Api::post('map-file', function () use ($path) {
     $fPath = MAPS_DIR;
     $name = $path[2];
 
-    $body = file_get_contents('php://input');
+    $body = getPostInput();
 
     $j = json_decode($body, true);
     print_r($j);
 
     try {
-        file_put_contents($fPath . '/' . $name.".json", $j);
+        file_put_contents($fPath . '/' . $name.EXT_JSON, $j);
     } catch (Exception $e) {
         return new ApiError($e->getMessage());
     }
@@ -185,14 +147,7 @@ Api::post('map-file', function () use ($path) {
 
 Api::get('spell', function () use($path) {
     $id = $path[3];
-    $q = DBEntity::$pdo->prepare("SELECT * FROM spell WHERE `id` = ?");
-    $q->execute([$id]);
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-
-    return (gettype($data) === 'array')
-        ? new Spell($id, $data)
-        : null
-        ;
+    return RestApiHooks::spellGet($id);
 });
 
 Api::get('test', function () {
@@ -200,7 +155,7 @@ Api::get('test', function () {
 });
 
 Api::post('test', function () {
-    return json_decode(file_get_contents('php://input'));
+    return json_decode(getPostInput());
 });
 
 if(Api::hasAction($action, $requestType)) {
@@ -209,7 +164,6 @@ if(Api::hasAction($action, $requestType)) {
     $data = new ApiError("action not found");
 }
 
-// $answer = [ 'action' => $action, 'data' => $data ];
 $answer = $data;
 
 echo json_encode($answer, JSON_UNESCAPED_UNICODE);
