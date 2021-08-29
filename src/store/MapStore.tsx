@@ -151,7 +151,13 @@ export class MapEntity {
             return;
         }
         if(md) {
-            this.setMap(md.mapData)
+            md.mapData.forEach(layer => {
+                console.log('L->', layer.name);
+                this.setActiveLayer(layer.name);
+                this.setMap(layer.data);
+            })
+            // this.setMap(md.mapData[0].data)
+
             this.setTileUrl(md.tileUrl);
             this.setTileDim(md.tileDim);
         }

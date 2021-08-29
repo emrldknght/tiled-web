@@ -1,7 +1,13 @@
-import {AppState, MapFile} from "../types";
+import {AppState, MapFile, MapLayer} from "../types";
 
 export const getMapDataFromState = (data: AppState): MapFile => {
   let { tileUrl, tileDim, mapData } = data;
 
-  return { tileUrl: tileUrl || '', tileDim: tileDim || 1, mapData: mapData }
+  const md = {
+    name: 'test',
+    order: 0,
+    data: mapData as MapLayer
+  }
+
+  return { tileUrl: tileUrl || '', tileDim: tileDim || 1, mapData: [ md ] }
 }

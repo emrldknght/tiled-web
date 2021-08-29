@@ -29,10 +29,13 @@ export type AppState = {
     selectedCell: string | null
   }
 }
+
+type MapLayerObject = { name: string, data: MapLayer, order: number }
+
 export type MapFile = {
   tileUrl: string,
   tileDim: number,
-  mapData: number[][]
+  mapData: MapLayerObject[]
 }
 
 
