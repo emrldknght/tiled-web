@@ -3,7 +3,7 @@ import {RootStore} from "./RootStore";
 import {PalCell} from "../types";
 
 export class PaletteStore {
-    @observable public selectedTile: number = -1;
+    @observable public selectedTile: number = 0;
     @observable public data: PalCell[] = [];
     public rootStore?: RootStore;
 
