@@ -89,6 +89,26 @@
 
   @cell-outline: .02em solid rgba(255, 0, 0, .4);
 
+  nav {
+    div {
+      a {
+        --mc: lightgray;
+        background-color: var(--mc);
+        display: block;
+        padding: .2em 1em;
+        border-bottom: 4px solid var(--mc);
+        margin: .2em;
+        text-decoration: none;
+        &:hover {
+          filter: brightness(105%);
+        }
+        &.selected {
+          border-color: black;
+        }
+      }
+    }
+  }
+
   .mapWrapper {
     overflow: hidden;
   }

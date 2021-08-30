@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
-import {TabsK} from "./components/Tabs";
+
 import {TilerComponent} from "./components/TilerComponent";
 import FileExplorer from "./FileExplorer";
-import {Tabs, Tab} from "@blueprintjs/core";
+
 import {observer} from "mobx-react";
 import {StoreContext} from "./store/StoreContext";
 import {CharComponent} from "./components/CharComponent";
@@ -12,18 +12,16 @@ import {Col} from "./components/Col";
 import {IEContext, ItemEditor, itemEditorState} from "./components/items/ItemEditor";
 import {TopControlPanel} from "./TopControlPanel";
 import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
-import {LSKeys, useLState} from "./LocalState";
+
 import {MapEditorComponent} from "./components/MapEditorComponent";
 import {mockMap} from "./mock/mockMap";
 import {RootContext} from "./store/RootStore";
-import {palData} from "./store/palData";
-
-// const initialTileSrc = {w:0, wc: 0, h: 0, hc:0, loaded: false}
-
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {Nav} from "./components/router/Nav";
+import {Routes} from "./components/router/Routes";
 
 export const Editor = observer(function Editor() {
-  const [tab, setTab] = useLState(TabsK.spellEditor, LSKeys.Tab);
+
   const state = useContext(StoreContext);
   const [loading, setLoading] = useState(false);
   // const [tileSrc, setTileSrc] = useState(initialTileSrc);
@@ -93,59 +91,39 @@ export const Editor = observer(function Editor() {
           {!(state.error) ?
             <div className="col">
               <TopControlPanel />
-              {/*
-              <div className="row">
-                <Button icon="floppy-disk" text="Save" small onClick={saveDataW}/>
-                <Button icon="download" text="Save Local File" small onClick={saveMapFileW}/>
-                <div style={{flexGrow: 1}}>&nbsp;</div>
-                <Button icon="log-out" text="Quit" small onClick={logoutW}/>
-              </div>
-              */}
-              <Tabs id="mainTabs" onChange={setActiveTab} selectedTabId={tab}>
-                <Tab id={TabsK.mapEditor} title="Map Editor" panel={
-                  (tab === TabsK.mapEditor)
-                    ?
-                    <MapEditorComponent />
-                    : undefined
-                }/>
-                <Tab id={TabsK.tiler} title="Tiler" panel={
-                  (tab === TabsK.tiler)
-                    ?
-                    <div className="col">
-                      <TilerComponent />
-                    </div>
-                    : undefined
-                }/>
-                <Tab id={TabsK.charEditor} title="Char Editor" panel={
-                  (tab === TabsK.charEditor)
-                    ?
-                    <div className="col">
-                      <CharContext.Provider value={charAppState}>
-                        <CharComponent />
-                      </CharContext.Provider>
-                      <WeaponsComponent />
-                    </div>
-                    : undefined
-                } />
-                <Tab id={TabsK.itemEditor} title="Item Editor" panel={
-                  (tab === TabsK.itemEditor)
-                    ?
-                    <Col>
-                      <IEContext.Provider value={itemEditorState}>
-                        <ItemEditor />
-                      </IEContext.Provider>
-                    </Col>
-                    : undefined
-                } />
-                <Tab id={TabsK.spellEditor} title="Spell Editor" panel = {
-                    (tab === TabsK.spellEditor)
-                    ?
-                    <SpellEditorContext.Provider value={spellEditorState}>
-                        <SpellEditor />
-                    </SpellEditorContext.Provider>
-                    : undefined
-                } />
-              </Tabs>
+              <Router>
+                <Nav />
+                <Switch>
+                  <Route path={Routes.MapEditor}>
+                      <MapEditorComponent />
+                  </Route>
+                  <Route path={Routes.Tiler}>
+                      <div className="col">
+                        <TilerComponent />
+                      </div>
+                  </Route>
+                  <Route path={Routes.CharEditor}>
+                      <div className="col">
+                        <CharContext.Provider value={charAppState}>
+                          <CharComponent />
+                        </CharContext.Provider>
+                        <WeaponsComponent />
+                      </div>
+                  </Route>
+                  <Route path={Routes.ItemEditor}>
+                      <Col>
+                        <IEContext.Provider value={itemEditorState}>
+                          <ItemEditor />
+                        </IEContext.Provider>
+                      </Col>
+                  </Route>
+                  <Route path={Routes.SpellEditor}>
+                      <SpellEditorContext.Provider value={spellEditorState}>
+                          <SpellEditor />
+                      </SpellEditorContext.Provider>
+                  </Route>
+                </Switch>
+              </Router>
             </div>  :
             ''
           }

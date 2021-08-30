@@ -24,6 +24,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
+    "react-router-dom": "^5.2.1",
     "react-scripts": "4.0.3",
     "stylus": "^0.54.8",
     "ts-enum-util": "^4.0.2",
@@ -56,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.1.8",
     "express": "^4.17.1",
     "less": "^4.1.1",
     "node-hmr": "^1.2.0",
