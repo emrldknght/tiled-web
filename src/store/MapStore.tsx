@@ -45,6 +45,11 @@ export class MapEntity {
         this.mapDataL[name] = data;
     }
 
+    getMapLayer(name: string): MapLayer {
+        if(!this.mapDataL[name]) return []
+        return this.mapDataL[name];
+    }
+
     @action
     setMap(data: number[][]) {
         this.mapData = data;
@@ -144,7 +149,7 @@ export class MapEntity {
     }
 
     async fetchMapFile(mapId: string) {
-        const md = await fetchMap(mapId);// fetchMapFile();
+        const md = await fetchMap(mapId);//from fetchMapFile();
         console.log('mda', md);
         if(isApiError(md)) {
             this.error = md.error;
