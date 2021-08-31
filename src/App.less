@@ -34,6 +34,7 @@
     background-color: lightyellow;
     max-width: fit-content;
     word-break: break-all;
+    display: none;
   }
 
   /*
@@ -109,9 +110,17 @@
     }
   }
 
-  .mapWrapper {
-    overflow: hidden;
+  .mapLayersWrapper {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
   }
+
+  .mapLayerWrapper {
+    overflow: hidden;
+    border: 1px solid cyan;
+  }
+
   .cell {
     /* outline: @cell-outline; */
     outline-offset: -1px;

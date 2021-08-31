@@ -1,10 +1,10 @@
-import {MapRow} from "./map/MapRow";
 import React, {CSSProperties, useContext} from "react";
 import {observer} from "mobx-react";
 import {ToolPaletteContext} from "./ToolPalette";
 import {RootContext} from "../store/RootStore";
 import {MapControls, MCContext} from "./map/MapControls";
 
+import {MapLayerComponent} from "./map/MapLayerComponent";
 
 export const MapComponent = observer(function MapComponent() {
 
@@ -23,10 +23,6 @@ export const MapComponent = observer(function MapComponent() {
   const tools = useContext(ToolPaletteContext);
   const currentTool = tools.currentTool;
 
-
-  const mapData2 = mapState.mapData;
-
-
   const p: CSSProperties & { '--tile-root': string, '--tile-dim': string } = {
     '--tile-root': `url(${tileUrl})`,
     '--tile-dim': `${tileDim}px`,
@@ -34,13 +30,6 @@ export const MapComponent = observer(function MapComponent() {
 
   const mcState = useContext(MCContext);
   const { showGrid, showCellInfo, show3D } = mcState;
-
-  const tm = mapData2.map((row, ry) =>
-      <MapRow
-          key={`mr_${ry}`}
-          data={row} y={ry}
-          showCellInfo={showCellInfo}
-      />);
 
   const applyPencil = (e: React.MouseEvent<HTMLDivElement>, cx: number, cy: number) => {
 
@@ -100,8 +89,13 @@ export const MapComponent = observer(function MapComponent() {
           <DebugOut data={JSON.stringify(mapState.selection)} /> */}
           <MapControls x={x} y={y} />
         </div>
-        <div className={`mapWrapper`} onClick={pokeTile}>
-          {tm}
+        <div className="mapLayersWrapper">
+          {Object.keys(mapState.mapDataL).map(layerName =>
+              <MapLayerComponent mapLayerData={mapState.getMapLayer(layerName)}
+                                 showCellInfo={showCellInfo}
+                                 pokeTile={pokeTile}
+              />
+          )}
         </div>
       </div>
   )
