@@ -9,6 +9,53 @@ import {Path, postData} from "../lib/api";
 import {TilerEntity} from "./TilerStore";
 import {layer2, mockMap} from "../mock/mockMap";
 import {palData} from "./palData";
+import {MapLayer} from "../types";
+
+type MapLayerRaw = {
+    name: string,
+    data: MapLayer,
+    order: number
+}
+type MapFile = {
+    mapData: MapLayerRaw[],
+    tileDim: number,
+    tileUrl: string
+}
+
+function getMapFile(ctx: RootStore) {
+    const data: MapFile = {
+        "mapData":[
+            /*
+            {
+                "name": "one",
+                "data": toJS(this.mapStore.getMapLayer('one')),
+                "order": 0
+            },
+            {
+                "name": "two",
+                "data": toJS(this.mapStore.getMapLayer('one')),
+                "order": 1
+            }
+             */
+        ],
+        "tileDim": toJS(ctx.mapStore.tileDim) ?? 0,
+        "tileUrl": "World_A2.png" // toJS(ctx.mapStore.tileUrl) ?? ''
+    }
+
+    const layers = ctx.mapStore.mapDataL;
+    Object.keys(layers).forEach((layer, i) => {
+        const l = layers[layer];
+        const o: MapLayerRaw = {
+            name: layer,
+            data: l,
+            order: i
+        }
+        data.mapData.push(o)
+    })
+
+    return data;
+}
+
 
 export class RootStore {
     public userStore: UserStore;
@@ -41,10 +88,10 @@ export class RootStore {
     }
 
     async saveData() {
-        const content = prepareData(toJS(this.mapStore));
-        console.log('post->', content);
+        const data = getMapFile(this);
+        console.log('post->', data);
 
-        const a = await postData(`${Path}/map-file/map1`, content);
+        const a = await postData(`${Path}/map-file/map1`, data);
         console.log('answer', a);
     }
 
