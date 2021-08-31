@@ -12,13 +12,9 @@ export const MapComponent = observer(function MapComponent() {
 
   const mapState = rootState.mapStore;
 
-  const tileUrl = mapState.tileUrl;
-  const tileDim = mapState.tileDim;
-
+  const { tileUrl, tileDim, curX: x, curY: y } = mapState;
 
   const brushId = rootState.paletteStore.selectedTile;
-  const x = mapState.curX;
-  const y = mapState.curY;
 
   const tools = useContext(ToolPaletteContext);
   const currentTool = tools.currentTool;
