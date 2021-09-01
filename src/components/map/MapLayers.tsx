@@ -1,6 +1,7 @@
 import {observer} from "mobx-react";
 import React, {useContext} from "react";
 import {RootContext} from "../../store/RootStore";
+import {LayerSelector} from "./LayerSelector";
 
 export const MapLayers = observer(function MapLayers() {
     const rootStore = useContext(RootContext);
@@ -13,14 +14,18 @@ export const MapLayers = observer(function MapLayers() {
             <span className="active-layer">
                 <strong>{map.activeLayer}</strong>
             </span>
+            <span>{JSON.stringify(map.visibleLayers)}</span>
             <hr />
             {Object.keys(map.mapDataL).map(name => {
                 const selected = (name === map.activeLayer) ? 'selected' : '';
-                return (<span
-                    key={name}
-                    onClick={handleClick.bind(null, name)}
-                    className={selected}
-                >{name}</span> )
+                return (
+                    <LayerSelector
+                        key={name}
+                        name={name}
+                        handleClick={handleClick.bind(null, name)}
+                        selected={selected}
+                    />
+                )
             })}
         </div>
     )

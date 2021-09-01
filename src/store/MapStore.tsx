@@ -26,6 +26,11 @@ export class MapEntity {
 
     //  @observable mapData: MapLayer = [];
 
+    @observable visibleLayers: {[name: string]: boolean} = {}
+    @action setLayerVis(name: string, val: boolean) {
+        this.visibleLayers[name] = val;
+    }
+
     get mapData() {
         return this.mapDataL[this.activeLayer] ?? [];
     }
@@ -43,6 +48,7 @@ export class MapEntity {
     @action
     setMapLayer(name: string, data: MapLayer) {
         this.mapDataL[name] = data;
+        this.visibleLayers[name] = true;
     }
 
     getMapLayer(name: string): MapLayer {
@@ -158,12 +164,12 @@ export class MapEntity {
         if(md) {
             md.mapData.forEach(layer => {
                 console.log('L->', layer.name);
-                this.setActiveLayer(layer.name);
-                this.setMap(layer.data);
+                this.setMapLayer(layer.name, layer.data);
+
             })
             // this.setMap(md.mapData[0].data)
 
-            this.setTileUrl(md.tileUrl);
+            this.setTileUrl(md.tileUrl, true);
             this.setTileDim(md.tileDim);
         }
     }
