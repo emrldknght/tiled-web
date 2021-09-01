@@ -114,6 +114,7 @@
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
+    background-color: #2a2a34;
   }
 
   .mapLayerWrapper {
@@ -121,6 +122,7 @@
     border: 1px solid cyan;
     grid-column: 1 / 1;
     grid-row:  1 / 1;
+    width: fit-content;
   }
 
   .cell {
@@ -170,6 +172,7 @@
                 @empty-grad-color 20px) */
       ;
         --bg-color: none;
+        background-image: none;
       }
 
       &.grass {
@@ -204,7 +207,7 @@
         // down shift
         position: relative;
         top: 10px;
-        background-color: darkcyan;
+        // background-color: darkcyan;
       }
       &:not(.in-pal):not(.empty):before {
         content: '';
@@ -282,9 +285,22 @@
 
   .map-layers {
     border: @common-border;
-    .selected {
-      background-color: black;
-      color: white;
+    div {
+      padding: .2em;
+      min-width: 10em;
+      display: grid;
+
+      grid-template-rows: auto;
+      grid-template-columns: 23px auto;
+
+      &.selected {
+        background-color: black;
+        color: white;
+      }
+      .eye {
+        // background-color: pink;
+        cursor: pointer;
+      }
     }
   }
 
