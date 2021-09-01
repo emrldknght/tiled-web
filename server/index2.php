@@ -115,7 +115,7 @@ Api::post('char', function () use ($path) {
 Api::get('map-file', function () use ($path) {
 
     $fPath = MAPS_DIR;
-    $name = $path[2];
+    $name = $path[3];
 
     try {
         $content = json_decode(file_get_contents($fPath . '/' . $name.EXT_JSON));
@@ -128,20 +128,20 @@ Api::get('map-file', function () use ($path) {
 
 Api::post('map-file', function () use ($path) {
     $fPath = MAPS_DIR;
-    $name = $path[2];
+    $name = $path[3];
 
     $body = getPostInput();
 
     $j = json_decode($body, true);
-    print_r($j);
+
 
     try {
-        file_put_contents($fPath . '/' . $name.EXT_JSON, $j);
+        file_put_contents($fPath . '/' . $name.EXT_JSON, $body);
     } catch (Exception $e) {
         return new ApiError($e->getMessage());
     }
 
-    return  new ApiOk('saved');
+    return  new ApiOk('saved', [ $j ]);
 
 });
 
