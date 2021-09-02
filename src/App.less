@@ -721,6 +721,24 @@
   }
 }
 
+.chat-wrapper {
+  border: 1px dotted red;
+  width: fit-content;
+  .chat {
+    width: 20em;
+  }
+  .messages {
+    .message {
+      background-color: gray;
+      &:nth-child(2n + 1) {
+        background-color: lightgray;
+      }
+      display: grid;
+      grid-template-rows: auto;
+      grid-template-columns: 1fr 11fr;
+    }
+  }
+}
 
 .App-logo {
   height: 40vmin;
