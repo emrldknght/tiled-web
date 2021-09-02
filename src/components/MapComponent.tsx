@@ -86,10 +86,11 @@ export const MapComponent = observer(function MapComponent() {
           <MapControls x={x} y={y} />
         </div>
         <div className="mapLayersWrapper">
-          {Object.keys(mapState.mapDataL).map(layerName =>
+          {Object.keys(mapState.mapDataL).map((layerName, i) =>
               <MapLayerComponent mapLayerData={mapState.getMapLayer(layerName)}
                                  showCellInfo={showCellInfo}
                                  pokeTile={pokeTile}
+                                 key={`${layerName}_${i}`}
               />
           )}
         </div>
