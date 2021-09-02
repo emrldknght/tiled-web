@@ -21,7 +21,7 @@ export class MapEntity {
 
     @observable error: string = '';
 
-    @observable activeLayer: string = 'map';
+    @observable activeLayer: string | undefined = undefined;
     @observable mapDataL: { [key: string] : MapLayer}  = {};
 
     //  @observable mapData: MapLayer = [];
@@ -32,10 +32,12 @@ export class MapEntity {
     }
 
     get mapData() {
+        if(!this.activeLayer) return [];
         return this.mapDataL[this.activeLayer] ?? [];
     }
 
     set mapData(val: MapLayer) {
+        if(!this.activeLayer) return;
         this.mapDataL[this.activeLayer] = val;
     }
 
@@ -86,6 +88,7 @@ export class MapEntity {
 
     @action
     setMapTile(x: number, y: number, id: number) {
+        if(!this.activeLayer) return;
         console.log('smt', x, y, id);
         this.mapData[y][x] = id;
     }
@@ -93,11 +96,11 @@ export class MapEntity {
     @action
     mapExpand(mode: PanelMode, dimActive: number) {
 
-        const action = getAction(dimActive, mode);
+        const layerAction = getAction(dimActive, mode);
 
-        if(typeof action === 'function') {
+        if(typeof layerAction === 'function') {
             const oldLayer = toJS(this.mapData);
-            const newLayer = action(oldLayer) as MapLayer;
+            const newLayer = layerAction(oldLayer) as MapLayer;
             if(newLayer) {
                 this.setMap(newLayer);
             } else {
