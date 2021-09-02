@@ -12,6 +12,7 @@ use SteamQ\DBEntity;
 use SteamQ\RestApi\ApiError;
 use SteamQ\RestApi\Api;
 use SteamQ\RestApi\ApiOk;
+use SteamQ\RestApi\MapFile;
 use SteamQ\RestApi\User;
 use SteamQ\RestApiHooks;
 
@@ -112,36 +113,84 @@ Api::post('char', function () use ($path) {
 
 });
 
+
 Api::get('map-file', function () use ($path) {
 
-    $fPath = MAPS_DIR;
     $name = $path[3];
 
+    $id = getMapIdByName($name);
+    if (gettype($id) !== 'string') { return $id; }
+
     try {
-        $content = json_decode(file_get_contents($fPath . '/' . $name.EXT_JSON));
+        $sql = 'SELECT *FROM sq_map WHERE id = ?';
+        $q = DBEntity::$pdo->prepare($sql);
+        $q->execute([
+            $id
+        ]);
+        $res = $q->fetch();
+
+        return new MapFile($res);
+
     } catch (Exception $e) {
-        $content = new ApiError("file `$name` not found" );
+        return new ApiError("file `$name` not found" );
     }
-    return $content;
 
 });
 
+/**
+ * @param $name
+ * @return string | ApiError
+ */
+function getMapIdByName($name) {
+    try {
+        $sql = "SELECT id from sq_map WHERE name = ?";
+        $q = DBEntity::$pdo->prepare($sql);
+        $q->execute([$name]);
+
+        $res = $q->fetch();
+        $id = $res['id'];
+        if (empty($id)) { return new ApiError('map not found!'); }
+        return $id;
+    } catch (Exception $e) {
+        return new ApiError($e->getMessage());
+    }
+}
+
 Api::post('map-file', function () use ($path) {
-    $fPath = MAPS_DIR;
+
     $name = $path[3];
 
     $body = getPostInput();
 
     $j = json_decode($body, true);
 
+    $id = getMapIdByName($name);
+    if (gettype($id) !== 'string') { return $id; }
 
     try {
-        file_put_contents($fPath . '/' . $name.EXT_JSON, $body);
+
+        /* will add new map
+        if(empty($res)) {
+            $sql = "INSERT INTO sq_map VALUES (default, ?, default, default, '{}')";
+            $q->execute($sql);
+        }
+        */
+
+        $sql = 'UPDATE sq_map SET name = ?, tileDim = ?, tileUrl = ?, mapData = ? WHERE id = ?';
+        $q = DBEntity::$pdo->prepare($sql);
+        $q->execute([
+            $name,
+            $j['tileDim'],
+            $j['tileUrl'],
+            json_encode($j['mapData']),
+            $id
+        ]);
+
+        return  new ApiOk('saved', [ $name, gettype($id) ]);
+
     } catch (Exception $e) {
         return new ApiError($e->getMessage());
     }
-
-    return  new ApiOk('saved', [ $j ]);
 
 });
 
