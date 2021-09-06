@@ -8,21 +8,8 @@ class DBEntity
 {
     public static ?PDO $pdo = null;
 
-    /*
-    private static array $settings = [
-        "db" => [
-            "host" => "sql107.xenn.xyz",
-            "dbname" => "xnnx_28390194_sq",
-            "user" => "xnnx_28390194",
-            "pass" => "Emkni@666"
-        ],
-    ];
-    */
-
     public static function init(): void
     {
-        // global $settings;
-        // var_dump(self::$settings);
 
         self::$pdo = new PDO(
             "mysql:host=".Settings::$dbHost.";dbname=".Settings::$dbName,
