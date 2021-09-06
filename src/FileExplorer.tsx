@@ -11,7 +11,7 @@ export default function FileExplorer() {
   const [error, setError] = useState('Error! Error!');
 
   useEffect(() => {
-    // console.log('render files');
+
 
     async function getFileList() {
       const md = await fetchFileList();
