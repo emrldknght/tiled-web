@@ -1,4 +1,4 @@
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import React from "react";
 import {Routes} from "./Routes";
 
@@ -23,6 +23,9 @@ export function Nav() {
                 </div>
                 <div>
                     <NavLink to={Routes.SpellEditor} activeClassName="selected">Spell Ed</NavLink>
+                </div>
+                <div>
+                    <NavLink to={Routes.TestUI} activeClassName="selected">Test UI</NavLink>
                 </div>
             </nav>
         </div>

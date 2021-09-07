@@ -4,5 +4,6 @@ export const Routes = {
     Tiler: '/tiler',
     CharEditor: '/char-ed',
     ItemEditor: '/item-ed',
-    SpellEditor: '/spell-ed'
+    SpellEditor: '/spell-ed',
+    TestUI: '/test-ui'
 }

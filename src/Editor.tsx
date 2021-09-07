@@ -19,6 +19,7 @@ import {RootContext} from "./store/RootStore";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Nav} from "./components/router/Nav";
 import {Routes} from "./components/router/Routes";
+import {TestUI} from "./components/TestUI";
 
 export const Editor = observer(function Editor() {
 
@@ -121,6 +122,9 @@ export const Editor = observer(function Editor() {
                       <SpellEditorContext.Provider value={spellEditorState}>
                           <SpellEditor />
                       </SpellEditorContext.Provider>
+                  </Route>
+                  <Route path={Routes.TestUI}>
+                      <TestUI />
                   </Route>
                 </Switch>
               </Router>
