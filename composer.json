@@ -11,10 +11,6 @@
         "tuupola/cors-middleware": "^1.2",
         "cboden/ratchet": "^0.4"
     },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "3.*",
-        "vimeo/psalm": "^4.7"
-    },
     "autoload": {
         "psr-4": {
             "SteamQ\\": "server/classes",

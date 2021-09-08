@@ -25,7 +25,7 @@ export class PaletteStore {
     }
     @action
     paletteRemoveCell(cid: string) {
-        // const np = this.palette.data.filter(i => i.cid !== cid)
+
         const ind = this.data.findIndex(i => i.cid === cid);
         if(ind !== -1) {
             this.data.splice(ind, 1);
@@ -45,5 +45,24 @@ export class PaletteStore {
 
     @action setData(data: PalCell[]) {
         this.data = data;
+    }
+
+    @action saveData() {
+        fetch('http://oyba.xenn.xyz/server/test', {
+            method: 'GET',
+            // mode: 'no-cors',
+            headers: {
+               'Content-Type': 'text/plain'
+            },
+            // mode: 'cors',
+
+            /*
+            body: JSON.stringify({
+                test: 2
+            })
+             */
+        })
+            .then(r => r.text())
+            .then(j =>  console.log(j))
     }
 }

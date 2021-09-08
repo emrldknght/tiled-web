@@ -10,7 +10,7 @@ export function FilterComponent({ root , k, handleFilter, data }: Props) {
   const allKeys= getAllKeys(data, k as  keyof WItem);
 
   const checkActive = (i: string | null) => (i === act) ? 'active' : '';
-  // const filters = [null, 'first', 'second'];
+
   const filterButtons = allKeys.map((item, i) => {
     const text = (item !== null) ? `${k} ${(item || 'undefined').toString().toUpperCase()}` : 'Reset';
     return(

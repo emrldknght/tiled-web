@@ -4,14 +4,6 @@ import {DiceC} from "./DiceC";
 type PP = { val: string, update: (val: string) => void }
 export function DicesHolder({val, update} : PP) {
 
-  // console.log('vvv', val);
-  /*
-  const m = val.matchAll(/(\d{1,3})d(\d{1,3})/gm);
-  console.log(m);
-  for(const _t of m) {
-    console.log(':', _t);
-  }
-   */
 
   const [d1, setD1] = useState(1);
   const [d2, setD2] = useState(2);

@@ -6,22 +6,38 @@ import {Character} from "../types/Character";
 import {CharStats} from "../types/CharStats";
 import {CharSlots} from "../types/CharSlots";
 import {CharSlot} from "../types/CharSlot";
+import {Item} from "../types/Item";
+import {Weapon} from "../types/Weapon";
+
+const EmptyItem: Item = {
+  cost: 0,
+  id: 0,
+  itemType: 'Weapon',
+  name: "Empty weapon",
+  weight: 0
+
+}
+
+const emptySlot: CharSlot = {
+  itemId: 0,
+  itemData: EmptyItem as Weapon,
+}
 
 const emptySlots: CharSlots = {
-  head: undefined,
-  neck: undefined,
-  shoulders: undefined,
-  body: undefined,
+  head: emptySlot,
+  neck: emptySlot,
+  shoulders: emptySlot,
+  body: emptySlot,
 
-  hands: undefined,
-  ringLeft: undefined,
-  ringRight: undefined,
+  hands: emptySlot,
+  ringLeft: emptySlot,
+  ringRight: emptySlot,
 
-  mainHand: undefined,
-  offHand: undefined,
+  mainHand: emptySlot,
+  offHand: emptySlot,
 
-  girdle: undefined,
-  feet: undefined
+  girdle: emptySlot,
+  feet: emptySlot
 }
 
 const initCharState: Character = {
@@ -90,7 +106,7 @@ export class CharAppState implements Character {
   @action
   setParam(p: keyof CharStats, v: number): void {
     if(v < 1) return;
-    (this.Stats[p] as number) = v;
+    this.Stats[p] = v;
   }
   getParam(p: keyof CharStats): number {
     const v = this.Stats[p];

@@ -25,10 +25,6 @@ export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Pro
     mapState.setXY(x ,y);
   }
 
-  const pokeCell = (e: React.MouseEvent) => {
-    console.log('pokeCell', e);
-  }
-
   const isHl = (mapState.isHl(x ,y)) ? 'hl' : '';
 
   return (
@@ -36,7 +32,6 @@ export const MapCell = observer(function MapCell({id, x, y, showCellInfo } : Pro
          data-x={x} data-y={y}
          data-id={id}
          onMouseOver={onCell}
-         onClick={pokeCell}
     >
       {(showCellInfo)
         ? (

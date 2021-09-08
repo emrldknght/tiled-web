@@ -36,9 +36,8 @@ export const LoginForm = observer(function LoginForm ({children}: Props) {
 
   const doAuthW = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    // console.log(login, pass);
-    // console.log('ll', auth);
-    await mAppState.login(login, pass);
+
+    mAppState.login(login, pass);
   }
 
   return (

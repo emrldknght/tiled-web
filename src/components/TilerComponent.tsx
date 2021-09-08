@@ -39,7 +39,7 @@ export const TilerComponent = observer(function TilerComponent() {
       <b>Tiler</b>
       <div>
         <DebugOut data={tilerState.selectedCell} />
-        <DebugOut data={JSON.stringify(palette)} />
+        <DebugOut data={palette} />
       </div>
       <input type="checkbox"/>
       <div className="row">

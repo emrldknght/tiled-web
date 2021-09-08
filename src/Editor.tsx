@@ -14,7 +14,7 @@ import {TopControlPanel} from "./TopControlPanel";
 import {SpellEditor, SpellEditorContext, spellEditorState} from "./components/magic/SpellEditor";
 
 import {MapEditorComponent} from "./components/MapEditorComponent";
-import {mockMap} from "./mock/mockMap";
+
 import {RootContext} from "./store/RootStore";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Nav} from "./components/router/Nav";
@@ -25,63 +25,19 @@ export const Editor = observer(function Editor() {
 
   const state = useContext(StoreContext);
   const [loading, setLoading] = useState(false);
-  // const [tileSrc, setTileSrc] = useState(initialTileSrc);
+
 
   const rootStore = useContext(RootContext);
-  const map = rootStore.mapStore;
-  const tiler = rootStore.tilerStore;
-  const pal = rootStore.paletteStore;
 
   useEffect(() => {
-    /*
-    async function init() {
-      const md = await fetchMapFile();
-      // console.log('md', md);
-      if(md) {
-        // console.log('setting map data');
-        if(md.mapData) {
-          setMapData(md.mapData);
-          setMapDataR(md.mapData)
-        }
-        if(md.tileUrl) {
-          setTileUrl(md.tileUrl);
-          setTileUrlR(md.tileUrl);
-        }
-        if(md.tileDim) {
-          setTileDim(md.tileDim);
-          setTileDimR(md.tileDim);
-        }
-      } else {
-        console.warn('data error');
-      }
-    }
-     */
-    // init();
-    // fetchMapFileA();
+
     setLoading(true);
-    map.fetchMapFile('map1').then(() => setLoading(false));
-    // map.setMap(mockMap);
-    // map.setTileDim(48);
 
-    // mAppState.setMap(mockMap);
-    mAppState.setTileDim(48);
-  }, [map])
+    rootStore.initAll().then(() => {
+      setLoading(false)
+    })
 
-  const setActiveTab = (e: string) => {
-    // console.log(e);
-    setTab(e)
-    /*
-    return;
-    const t = e.target.dataset.tab;
-    console.log(t);
-    setTab(t);
-     */
-  }
-
-
-
-  // const saveDataW = () => mAppState.saveData()
-  // const saveMapFileW = () => mAppState.saveMapFile();
+  }, [rootStore])
 
   return (
     <div className={`col ${loading ? 'loading' : ''}`}>

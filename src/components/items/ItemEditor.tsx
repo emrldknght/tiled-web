@@ -41,12 +41,7 @@ class ItemEditorState {
       const a: Armor | null = armorDB[id];
       if(!a) return;
       this.setItemData(a);
-      /*
-      fetchArmor(id).then(r => {
-        if (isApiError(r)) return;
-        this.setItemData(r);
-      })
-       */
+
     }
   }
 
@@ -187,12 +182,13 @@ export const ItemEditor = observer(function ItemEditor() {
   const initState: ItemP[] = [];
   const [items, setItems] = useState(initState);
 
-  const getItemsList = () => {
-    fetchItems().then(r => {
-      if (isApiError(r)) return;
-      r = r.concat(armorPList);
-      setItems(r);
-    })
+  const getItemsList = async () => {
+    let r = await fetchItems();
+        // .then(r => {
+          if (isApiError(r)) return;
+          r = r.concat(armorPList);
+          setItems(r);
+        // })
   }
 
   useEffect(() => {
@@ -206,7 +202,7 @@ export const ItemEditor = observer(function ItemEditor() {
 
   const saveItem = () => itemEditorState.saveItem();
   const addItem = () => {
-    // itemEditorState.addItem();
+
     console.log('add item');
     addNewWeapon().then(j => {
       console.log(j);

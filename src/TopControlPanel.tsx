@@ -9,7 +9,7 @@ export function TopControlPanel() {
     const saveDataW = () => rootState.saveData();
     const saveMapFileW = () => rootState.saveMapFile();
     const logoutW = () => {
-        // logout();
+
         mAppState.logout();
     }
 

@@ -13,7 +13,7 @@ import {Field} from "./Field";
 
 export const CharComponent = observer(function CharComponent() {
   const state = useContext(CharContext);
-  // const Str = state.Stats.Strength;
+
   const ss = charAppState.selectedSlot;
   const ssd = charAppState.selectedSlotData;
 
@@ -42,7 +42,7 @@ export const CharComponent = observer(function CharComponent() {
 
   const stats = getProps(state.Stats).map((item: string) => {
     const val = state.Stats[item as keyof CharStats];
-    // if(typeof val === 'number') {
+
     const bonus = CharAppState.getParamBonus(val);
     return(
       <ParamCell item={item} val={val} bonus={bonus}
@@ -50,7 +50,7 @@ export const CharComponent = observer(function CharComponent() {
                  key={item}
       />
     )
-    // }
+
   })
 
   const saveData = async () => {

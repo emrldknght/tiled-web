@@ -60,7 +60,7 @@ export function WeaponsComponent() {
 
   const filters: ((el: WItem) => boolean)[] = []; //[fClass, fType];
   const addFilter = (key: string) => {
-    const kv: FilterVal = ff.filters[key] as FilterVal;
+    const kv: FilterVal = ff.filters[key];
     const newFilter = filterFunction.bind(null, kv, key);
     filters.push(newFilter);
   }

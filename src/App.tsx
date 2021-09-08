@@ -6,6 +6,7 @@ import {gs} from "./lib/genStyles";
 import React, {useContext} from "react";
 import {observer} from "mobx-react";
 import {RootContext} from "./store/RootStore";
+import {Chat} from "./Chat";
 
 if('paintWorklet' in CSS) {
   // @ts-ignore
@@ -31,6 +32,7 @@ export const App = observer(function App() {
           {/*<div>Styles:{JSON.stringify(gs(pal))}</div>*/}
           <Editor/>
         </LoginForm>
+        <Chat />
     </div>
   );
 })

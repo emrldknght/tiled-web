@@ -6,7 +6,7 @@ export enum ArmorTypeE {
   Heavy = 'Heavy'
 }
 
-export type ArmorType = keyof typeof ArmorTypeE; //'Light' | 'Medium' | 'Heavy';
+export type ArmorType = keyof typeof ArmorTypeE;
 
 export interface Armor extends Item {
   // id: number,

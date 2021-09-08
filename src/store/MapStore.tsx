@@ -69,8 +69,7 @@ export class MapEntity {
     }
 
     @action resetHl() {
-        const hl = this.mapData.map(row => row.map(() => -1));
-        this.selection = hl;
+        this.selection = this.mapData.map(row => row.map(() => -1));
     }
 
     @action

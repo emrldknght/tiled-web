@@ -24,12 +24,7 @@ export const CellPalette = observer(function CellPalette() {
       palette.paletteSelectTile(id);
     }
   }
-  /*
-  const k = Object.keys(props.data).map(item => {
-    const t = props.data[item].type;
-    return(<div key={`pal-cell-${item}`} data-id={item} className={`cell cell-map ${t}`}>{item}</div>)
-  })
-   */
+
   const selected = (id: number) => (palette.selectedTile === id) ? 'selected' : '';
 
   const k = palette.data.map(item => {

@@ -24,7 +24,12 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "strictNullChecks": true,
+    "allowUnreachableCode": false,
+
+    "noImplicitOverride": true,
+    "noImplicitReturns": true
   },
   "include": [
     "src/**/*"

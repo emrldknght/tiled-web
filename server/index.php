@@ -293,7 +293,7 @@ $app->post('/armor/{id}', function (Request $request, Response $response, $args)
     $weight = $data['weight'];
     $cost = $data['cost'];
 
-    $sql = "UPDATE weapon SET name = ?, type = ?, `armorBonus` = ?, `maxDexBonus` = ?, `armorCheckPenalty` = ?, `arcaneSpellFailureChance` = ?, speed = ?, weight = ?, cost = ? WHERE id = $id";
+    $sql = "UPDATE armor SET name = ?, type = ?, `armorBonus` = ?, `maxDexBonus` = ?, `armorCheckPenalty` = ?, `arcaneSpellFailureChance` = ?, speed = ?, weight = ?, cost = ? WHERE id = $id";
     try {
         $q = DBEntity::$pdo->prepare($sql);
         $q->execute([$name, $type, $armorBonus, $maxDexBonus, $armorCheckPenalty, $arcaneSpellFailureChance, $speed, $weight, $cost]);
@@ -353,7 +353,7 @@ $app->get('/item-add/{type}', function (Request  $request, Response $response, $
         $sql = "INSERT INTO weapon VALUES (default, default, default, default, default, default, default, default, default, default, default);";
     }
     if($type === 'armor') {
-        $sql = "INSERT INTO armor VALUES (default, default, default, default, default, default, default, default, default);";
+        $sql = "INSERT INTO armor VALUES (default, default, default, default, default, default, default, default, default, default);";
     }
     if(!empty($sql)) {
         try {
@@ -432,9 +432,9 @@ $app->post('/spell/{id}', function (Request $request, Response $response, $args)
     $savingThrow = $data['savingThrow']; // varchar(32) default '',
     $spellResistance = $data['spellResistance']; // varchar(16) default ''
 
-    $sql = "UPDATE spell SET nameOf = ?, type = ?, description = ?, school = ?, elementalSchool = ?, castingTime = ?,".
+    $sql = "UPDATE spell SET name = ?, type = ?, description = ?, school = ?, elementalSchool = ?, castingTime = ?,".
         " components = ?, `range` = ?, area = ?, targets = ?, effect = ?, duration = ?, savingThrow = ?,".
-        " spellResistance = ? WHERE id = $id";
+        " resistance = ? WHERE id = $id";
     try {
         $q = DBEntity::$pdo->prepare($sql);
         $q->execute([

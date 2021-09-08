@@ -17,11 +17,10 @@ export const fetchPath = (path: string): Promise<never> => {
   })
 }
 
-// type PostDataType<T> = (path: string, data: T) => Promise<T>;
+
 
 export const postData = <T>(path: string, data: T): Promise<ApiAnswer<T>> => {
-  // console.log(path, data);
-  // return axios.post(path, data);
+
   return  new Promise(resolve => {
     fetch(path, {
       method: 'POST',
@@ -32,7 +31,7 @@ export const postData = <T>(path: string, data: T): Promise<ApiAnswer<T>> => {
       body: JSON.stringify(data),
     })
       .then(r => {
-        // console.log(r);
+
         return r.json()
       })
       .then(j => resolve(j))
