@@ -18,6 +18,18 @@ class RestApiHooks {
             : null
             ;
     }
+    public static function weaponGetByCode(string $code): ? Weapon
+    {
+        $q = DBEntity::$pdo->prepare("SELECT * FROM weapon WHERE `code` = ?");
+        $q->execute([$code]);
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+
+        return (gettype($data) === 'array')
+            ? new Weapon($data)
+            : null
+            ;
+
+    }
     public static function armorGet($id): ?Armor
     {
         $q = DBEntity::$pdo->prepare("SELECT * FROM armor WHERE `id` = ?");
@@ -40,6 +52,41 @@ class RestApiHooks {
             : null
             ;
     }
+
+    /**
+     * @return array<string, Weapon | Armor>
+     */
+    public static function getItemDict(array $slotsData): array
+    {
+        $slotsRaw = '(' . implode(',', array_map(function ($item) {
+                return "'".$item."'";
+            } ,$slotsData)) . ')';
+        $q = DBEntity::$pdo->prepare("SELECT * FROM weapon WHERE weapon.code IN $slotsRaw");
+        $q->execute();
+        $wData = $q->fetchAll();
+
+        $itemList = [];
+        foreach ($wData as $w) {
+            $itemList[$w['code']] = new Weapon($w);
+        }
+        return $itemList;
+    }
+
+    public static function addSlot(Character $char, array $itemList, array $slotsData, string $slot) {
+        if(!array_key_exists($slot, $slotsData)) { return; }
+        $itemCode = $slotsData[$slot];
+
+        if(!array_key_exists($itemCode, $itemList)) { return; }
+        $data = $itemList[$itemCode];
+
+        if(!empty($data)) {
+            $char->Slots->$slot = new CharSlot([
+                'itemId' => $data->id,
+                'itemData' => $data
+            ]);
+        }
+    }
+
     public static function charGet($id): ?Character {
         $q = DBEntity::$pdo->prepare("SELECT * FROM char_data WHERE `id` = ?");
         $q->execute([$id]);
@@ -47,12 +94,17 @@ class RestApiHooks {
 
         if(gettype($data) !== 'array') { return null; }
 
+        $slotsData = [
+            'mainHand' => $data['slotMainHand'],
+            'offHand' => $data['slotOffHand']
+        ];
+
         $char = new Character($data);
 
-        $char->Slots->mainHand = new CharSlot([
-            'itemId' => 1,
-            'itemData' => self::weaponGet(5)
-        ]);
+        $itemList = self::getItemDict($slotsData);
+
+        self::addSlot($char, $itemList, $slotsData, 'mainHand');
+        self::addSlot($char, $itemList, $slotsData, 'offHand');
 
         return $char;
     }
