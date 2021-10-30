@@ -12,7 +12,11 @@ export const MapComponent = observer(function MapComponent() {
 
   const mapState = rootState.mapStore;
 
-  const { tileUrl, tileDim, curX: x, curY: y } = mapState;
+  const { tileUrl, tileDim, curX: x, curY: y , visibleLayers} = mapState;
+
+  const isVisible = (key: string): boolean => {
+    return visibleLayers[key] ?? true;
+  }
 
   const brushId = rootState.paletteStore.selectedTile;
 
@@ -87,10 +91,12 @@ export const MapComponent = observer(function MapComponent() {
         </div>
         <div className="mapLayersWrapper">
           {Object.keys(mapState.mapDataL).map((layerName, i) =>
-              <MapLayerComponent mapLayerData={mapState.getMapLayer(layerName)}
+              <MapLayerComponent name={layerName}
+                mapLayerData={mapState.getMapLayer(layerName)}
                                  showCellInfo={showCellInfo}
                                  pokeTile={pokeTile}
                                  key={`${layerName}_${i}`}
+                                 visible={isVisible(layerName)}
               />
           )}
         </div>

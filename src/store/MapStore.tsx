@@ -182,6 +182,13 @@ export class MapEntity {
         saveJson(content);
     }
 
+    @observable characters: CharsData = {};
+    @action
+    async setCharDataAll() {
+        const cd = await fetchCharsData();
+        this.characters = cd;
+    }
+
 }
 export const mapEntity = new MapEntity();
 export const MapContext = createContext<MapEntity>(mapEntity);
