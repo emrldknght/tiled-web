@@ -3,6 +3,7 @@ import {Character} from "../types/Character";
 import {Weapon} from "../types/Weapon";
 import {ItemP} from "../types/Item";
 import {Armor} from "../types/Armor";
+import {CharsData} from "../types/CharsData";
 
 export const Path = process.env.REACT_APP_API; //'http://localhost/sq'; || 'http://oyba.xenn/server'
 export const Files = `${Path}/list-files`;
@@ -37,6 +38,8 @@ export const postData = <T>(path: string, data: T): Promise<ApiAnswer<T>> => {
       .then(j => resolve(j))
   })
 }
+
+export const fetchCharsData = (): Promise<CharsData> => fetchPath(`${Path}/chars-data`)
 
 export const FetchPalette = (name: string): Promise<ApiAnswer<PalCell[]>> => fetchPath(`${Path}/palette/${name}`);
 

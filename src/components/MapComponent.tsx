@@ -5,6 +5,7 @@ import {RootContext} from "../store/RootStore";
 import {MapControls, MCContext} from "./map/MapControls";
 
 import {MapLayerComponent} from "./map/MapLayerComponent";
+import {CharLayer} from "./map/CharLayer";
 
 export const MapComponent = observer(function MapComponent() {
 
@@ -90,6 +91,7 @@ export const MapComponent = observer(function MapComponent() {
           <MapControls x={x} y={y} />
         </div>
         <div className="mapLayersWrapper">
+          <CharLayer />
           {Object.keys(mapState.mapDataL).map((layerName, i) =>
               <MapLayerComponent name={layerName}
                 mapLayerData={mapState.getMapLayer(layerName)}

@@ -110,6 +110,19 @@
     }
   }
 
+  .charLayerWrapper {
+    background-color: rgba(0, 100, 0, .5);
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+    z-index: 999;
+    position: relative;
+    .tip {
+      position: absolute;
+      background-color: rgba(245, 245, 245, 1);
+      z-index: 12;
+    }
+  }
+
   .mapLayersWrapper {
     display: grid;
     grid-template-rows: 1fr;

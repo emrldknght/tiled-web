@@ -1,13 +1,15 @@
 import {action, makeObservable, observable, toJS} from "mobx";
 import {PanelMode} from "../components/map/MapDimensions";
 import {getAction} from "../lib/dimensions";
-import {fetchMap, Path} from "../lib/api";
+import {fetchCharsData, fetchMap, Path} from "../lib/api";
 import {isApiError, MapLayer} from "../types";
 import {saveJson} from "../lib/saveJson";
 import {createContext} from "react";
 import {prepareData} from "../lib/prepareData";
 import {RootStore} from "./RootStore";
 import {selectMapArea} from "../components/map/selectMapArea";
+import {CharsData} from "../types/CharsData";
+
 
 export class MapEntity {
     public rootStore: RootStore | undefined;
